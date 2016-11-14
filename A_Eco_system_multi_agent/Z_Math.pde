@@ -578,7 +578,7 @@ void primitive(Vec3 pos, float radius, int summits, float orientation, Vec2 dir)
     */
     // matrix_3D_start(pos, dir) ;
     for (int i = 0 ; i < summits ; i++) points[i] = polygon_2D(summits, orientation)[i].copy() ;
-    // matrix_end() ;
+    // stop_matrix() ;
   } else {
     for (int i = 0 ; i < summits ; i++) points[i] = polygon_2D(summits, orientation)[i].copy() ;
   }
@@ -612,7 +612,7 @@ void draw_primitive (Vec3 pos, Vec2 dir, float radius, Vec3 [] pts) {
   // special one because we have direction for the polygone, so we must use the matrix system until have a good algorithm for the cartesian direction
   if(renderer_P3D()) matrix_3D_start(pos, dir) ; else matrix_2D_start(Vec2(pos.x, pos.y), 0) ;
   draw_primitive (radius, pts) ;
-  matrix_end() ;
+  stop_matrix() ;
 }
 
 // main draw primitive

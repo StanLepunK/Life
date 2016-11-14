@@ -1,48 +1,52 @@
 /**
-RPE Costume 0.0.5
+RPE Costume 0.1.1
+* @author Stan le Punk
+* @see https://github.com/StanLepunK/Costume
 */
-final int POINT_RPE = 0 ;
-final int ELLIPSE_RPE = 1 ;
-final int RECT_RPE = 2 ;
+final int POINT_ROPE = 0 ;
+final int ELLIPSE_ROPE = 1 ;
+final int RECT_ROPE = 2 ;
 
 
-final int TRIANGLE_RPE = 13 ;
-final int SQUARE_RPE = 14 ;
-final int PENTAGON_RPE = 15 ;
-final int HEXAGON_RPE = 16 ;
-final int HEPTAGON_RPE = 17 ;
-final int OCTOGON_RPE = 18 ;
-final int NONAGON_RPE = 19 ;
-final int DECAGON_RPE = 20 ;
+final int TRIANGLE_ROPE = 13 ;
+final int SQUARE_ROPE = 14 ;
+final int PENTAGON_ROPE = 15 ;
+final int HEXAGON_ROPE = 16 ;
+final int HEPTAGON_ROPE = 17 ;
+final int OCTOGON_ROPE = 18 ;
+final int NONAGON_ROPE = 19 ;
+final int DECAGON_ROPE = 20 ;
 
-final int CROSS_2_RPE = 52 ;
-final int CROSS_3_RPE = 53 ;
+final int CROSS_2_ROPE = 52 ;
+final int CROSS_3_ROPE = 53 ;
 
-final int SPHERE_RPE = 100 ;
-final int TETRAHEDRON_RPE = 103 ;
-final int BOX_RPE = 104 ;
+final int SPHERE_LOW_ROPE = 100 ;
+final int SPHERE_MEDIUM_ROPE = 101 ;
+final int SPHERE_HIGH_ROPE = 102 ;
+final int TETRAHEDRON_ROPE = 103 ;
+final int BOX_ROPE = 104 ;
 
 
-void costume(Vec3 pos, int size_int,  int which_costume)  {
+void costume_rope(Vec3 pos, int size_int,  int which_costume)  {
 	Vec3 dir_null = Vec3() ;
 	Vec3 size = Vec3(size_int) ;
-	costume(pos, size, dir_null, which_costume) ;
+	costume_rope(pos, size, dir_null, which_costume) ;
 }
 
-void costume(Vec3 pos, Vec3 size,  int which_costume)  {
+void costume_rope(Vec3 pos, Vec3 size,  int which_costume)  {
 	Vec3 dir_null = Vec3() ;
-	costume(pos, size, dir_null, which_costume) ;
+	costume_rope(pos, size, dir_null, which_costume) ;
 }
 
-void costume(Vec2 pos, int size_int,  int which_costume)  {
+void costume_rope(Vec2 pos, int size_int,  int which_costume)  {
 	Vec3 dir_null = Vec3() ;
 	Vec3 size = Vec3(size_int) ;
-	costume(Vec3(pos.x,pos.y,0), size, dir_null, which_costume) ;
+	costume_rope(Vec3(pos.x,pos.y,0), size, dir_null, which_costume) ;
 }
 
-void costume(Vec2 pos, Vec3 size,  int which_costume)  {
+void costume_rope(Vec2 pos, Vec3 size,  int which_costume)  {
 	Vec3 dir_null = Vec3() ;
-	costume(Vec3(pos.x,pos.y,0), size, dir_null, which_costume) ;
+	costume_rope(Vec3(pos.x,pos.y,0), size, dir_null, which_costume) ;
 }
 
 /**
@@ -51,19 +55,19 @@ case
 and 
 break
 */
-void costume(Vec3 pos, Vec3 size, Vec3 dir, int which_costume) {
+void costume_rope(Vec3 pos, Vec3 size, Vec3 dir, int which_costume) {
 	if (which_costume == 0 ) {
 		point(pos) ;
 	}  else if (which_costume == 1 ) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		ellipse(0,0, size.x, size.y) ;
-		matrix_end() ;
+		stop_matrix() ;
 	}  else if (which_costume == 2 ) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		rect(0,0, size.x, size.y) ;
-		matrix_end() ;
+		stop_matrix() ;
 	}  
 
 
@@ -90,64 +94,76 @@ void costume(Vec3 pos, Vec3 size, Vec3 dir, int which_costume) {
 
 
 		else if (which_costume == 52) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		cross_2(size) ;
-		matrix_end() ;
+		stop_matrix() ;
 	} else if (which_costume == 53) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		cross_3(size) ;
-		matrix_end() ;
+		stop_matrix() ;
 	}
 
 
 
 
 		else if (which_costume == 100) {
-		matrix_start() ;
+		start_matrix() ;
+		translate(pos) ;
+		sphereDetail(5);
+		sphere(size.x) ;
+		stop_matrix() ;
+	} else if (which_costume == 101) {
+		start_matrix() ;
+		translate(pos) ;
+		sphereDetail(12);
+		sphere(size.x) ;
+		stop_matrix() ;
+	}else if (which_costume == 102) {
+		start_matrix() ;
 		translate(pos) ;
 		sphere(size.x) ;
-		matrix_end() ;
-	}  else if (which_costume == 103) {
-		matrix_start() ;
+		stop_matrix() ;
+	} else if (which_costume == 103) {
+		start_matrix() ;
 		translate(pos) ;
 		tetrahedron((int)size.x) ;
-		matrix_end() ;
+		stop_matrix() ;
 	} else if (which_costume == 104) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		box(size) ;
-		matrix_end() ;
+		stop_matrix() ;
 	} 
 
 
 
 		else if (which_costume == 1001) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		polyhedron("TETRAHEDRON","LINE", (int)size.x) ;
-		matrix_end() ;
+		stop_matrix() ;
 	} else if (which_costume == 1002) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		polyhedron("CUBE","LINE", (int)size.x) ;
-		matrix_end() ;
+		stop_matrix() ;
 	} else if (which_costume == 1003) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		polyhedron("OCTOHEDRON","LINE", (int)size.x) ;
-		matrix_end() ;
+		stop_matrix() ;
 	} else if (which_costume == 1004) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		polyhedron("RHOMBIC COSI DODECAHEDRON SMALL","LINE", (int)size.x) ;
-		matrix_end() ;
+		stop_matrix() ;
 	} else if (which_costume == 1005) {
-		matrix_start() ;
+		start_matrix() ;
 		translate(pos) ;
 		polyhedron("ICOSI DODECAHEDRON","LINE", (int)size.x) ;
-		matrix_end() ;
+		stop_matrix() ;
 	}
 }
 

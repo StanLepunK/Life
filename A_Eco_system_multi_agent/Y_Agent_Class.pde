@@ -30,7 +30,10 @@ interface Agent {
   /**
   aspect
   */
-  void costume_agent(int which) ;
+  void costume(int which) ;
+  void costume() ;
+  void set_costume(int which) ;
+  
   void aspect(Vec4 f, Vec4 s, float t) ;
   Vec4 get_fill() ;
   Vec4 get_stroke() ;
@@ -133,6 +136,8 @@ abstract class Agent_model implements Agent {
   Vec4 colour_fill = Vec4(0,0,0,g.colorModeA) ;
   Vec4 colour_stroke = Vec4(0,0,0,g.colorModeA) ;
   float thickness = 1 ;
+
+  int costume = 0 ; // costume 0 is point in Z_costume_rope library
   /**
   pos
   */
@@ -371,12 +376,22 @@ abstract class Agent_model implements Agent {
   }
 
 
+
+
   /**
   COSTUME
 
   */
-  void costume_agent(int ID_costume) {
-    costume(pos, size, ID_costume) ;
+  void costume() {
+    costume_rope(pos, size, costume) ;
+  }
+
+  void costume(int costume) {
+    costume_rope(pos, size, costume) ;
+  }
+
+  void set_costume(int costume) {
+    this.costume = costume ;
   }
 
 
@@ -1453,16 +1468,16 @@ SEARCHING for PICK of HUNT
   void info_visual(Vec4 colour) {
     Vec3 pos_temp = Vec3(0) ;
     aspect(Vec4(0), colour_info(colour, satiate, pregnant, fertility), 1) ;
-    matrix_start() ;
+    start_matrix() ;
     translate(pos) ;
     ellipse(pos_temp.x, pos_temp.y, size *2, size *2) ;
-    matrix_end() ;
+    stop_matrix() ;
   }
 
   void info_text(Vec4 colour, int size_text) {
     aspect(colour_info(colour, satiate, pregnant, fertility), colour_info(colour, satiate, pregnant, fertility), 1) ;
     Vec2 pos_text = Vec2(0) ;
-    matrix_start() ;
+    start_matrix() ;
     translate(pos) ;
     textSize(size_text) ;
     textAlign(CENTER) ;
@@ -1487,7 +1502,7 @@ SEARCHING for PICK of HUNT
         text("I'm carrion", pos_text.x, pos_text.y +(size_text *space[3])) ; 
       }
     }
-    matrix_end() ;
+    stop_matrix() ;
   }
 
   /**
@@ -1774,7 +1789,7 @@ abstract class Agent_static extends Agent_model {
   void info_text(Vec4 colour, int size_text) {
     aspect(colour, colour, 1) ;
     Vec2 pos_text = Vec2(0) ;
-    matrix_start() ;
+    start_matrix() ;
     translate(pos) ;
     textSize(size_text) ;
     textAlign(CENTER) ;
@@ -1786,7 +1801,7 @@ abstract class Agent_static extends Agent_model {
     } else {
       text("I'm dead", pos_text.x, pos_text.y +(size_text *2.4) ) ;
     }
-    matrix_end() ;
+    stop_matrix() ;
   }
 }
 /**

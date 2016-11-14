@@ -711,31 +711,26 @@ END GENETIC
 
 
 
-
-
-
-
 /**
 
-SHOW
+SHOW / COSTUME
 
 */
-void show_agent_dynamic(ArrayList<Agent> list, boolean info, int which_costume) {
-  if(info) {
-    info_agent(list) ;
-    info_agent_track_line(list) ;
-  } else {
-    update_aspect(list, original_carnivore_aspect, fill_colour_carnivore, stroke_colour_carnivore, thickness_carnivore, which_costume) ;
+void set_costume_agent(int which_costume, ArrayList<Agent>... all_list) {
+  for(ArrayList<Agent> list : all_list) {
+    for(Agent a : list) {
+      a.set_costume(which_costume) ; 
+    }
   }
 }
 
-void show_agent_dynamic(boolean info, int which_costume, ArrayList<Agent>... all_list ) {
+void show_agent_dynamic(boolean info, ArrayList<Agent>... all_list ) {
   for(ArrayList list : all_list) {
     if(info) {
       info_agent(list) ;
       info_agent_track_line(list) ;
     } else {
-      update_aspect(list, original_carnivore_aspect, fill_colour_carnivore, stroke_colour_carnivore, thickness_carnivore, which_costume) ;
+      update_aspect(list, original_carnivore_aspect, fill_colour_carnivore, stroke_colour_carnivore, thickness_carnivore) ;
     }
   }
 }
@@ -744,10 +739,11 @@ void show_agent_dynamic(boolean info, int which_costume, ArrayList<Agent>... all
 /**
 Aspect
 */
-void update_aspect(ArrayList<Agent> list, boolean original_aspect, Vec4 new_fill, Vec4 new_stroke, float thickness, int which_costume) {
+void update_aspect(ArrayList<Agent> list, boolean original_aspect, Vec4 new_fill, Vec4 new_stroke, float thickness) {
   for(Agent a : list) {
-    if(original_aspect) a.aspect(a.get_fill(), a.get_stroke(), 1)  ; else a.aspect(new_fill, new_stroke, thickness) ;
-    a.costume_agent(which_costume) ; 
+    if(original_aspect) a.aspect(a.get_fill(), a.get_stroke(), 1) ; else a.aspect(new_fill, new_stroke, thickness) ;
+    a.costume() ;
+
   }
 }
 /**

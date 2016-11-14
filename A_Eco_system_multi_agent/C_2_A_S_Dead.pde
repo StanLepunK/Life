@@ -90,11 +90,11 @@ void dead_update(ArrayList<Agent> list) {
   if(LOG_ECOSYSTEM) update_log(list, FRAME_RATE_LOG) ;
 }
 
-void show_dead(ArrayList<Agent> list_dead, boolean info, int which_costume) {
+void show_dead(ArrayList<Agent> list_dead, boolean info) {
   if(info) {
     info_agent(list_dead) ;
   } else {
-    dead_aspect(list_dead, which_costume) ;
+    dead_aspect(list_dead) ;
   }
 }
 
@@ -117,7 +117,7 @@ void dead_remove(ArrayList<Agent> list) {
 }
 
 
-void dead_aspect(ArrayList<Agent> list, int which_costume) {
+void dead_aspect(ArrayList<Agent> list) {
   for(Agent dead : list) {
     // aspect
     if(original_corpse_aspect) {
@@ -125,7 +125,7 @@ void dead_aspect(ArrayList<Agent> list, int which_costume) {
     } else {
       dead.aspect(fill_colour_corpse, stroke_colour_corpse, thickness_corpse) ;
     }
-    dead.costume_agent(which_costume) ; 
+    dead.costume() ; 
   }
 }
 
@@ -209,13 +209,13 @@ class Dead extends Agent_static {
    void info_visual(Vec4 colour) {
       Vec3 pos_temp = Vec3(0) ;
       aspect(Vec4(), colour_info(colour), 1) ;
-      matrix_start() ;
+      start_matrix() ;
       translate(pos) ;
 
       strokeWeight(2) ;
       point(pos_temp) ;
  
-      matrix_end() ;
+      stop_matrix() ;
    }
    
    

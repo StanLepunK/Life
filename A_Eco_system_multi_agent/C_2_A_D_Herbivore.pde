@@ -195,12 +195,12 @@ class Herbivore extends Agent_dynamic {
   void info_visual(Vec4 colour) {
     aspect(Vec4(),colour_info(colour, satiate, pregnant, fertility), 1) ;
     Vec3 pos_temp = Vec3(0) ;
-    matrix_start() ;
+    start_matrix() ;
     translate(pos) ;
     ellipse(pos_temp.x, pos_temp.y, sense_range*2, sense_range*2) ;
     ellipse(pos_temp.x, pos_temp.y, eat_zone *2, eat_zone *2) ;
     ellipse(pos_temp.x, pos_temp.y, size *2, size *2) ;
-    matrix_end() ;
+    stop_matrix() ;
   }
   
   // print

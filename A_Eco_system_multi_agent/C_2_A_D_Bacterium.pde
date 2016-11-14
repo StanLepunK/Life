@@ -81,9 +81,9 @@ void bacterium_update(ArrayList<Agent> list, ArrayList<Agent> list_dead_body, Bi
 /**
 show bacterium specific method
 */
-void show_bacterium(Biomass biomass, boolean info, int which_costume, ArrayList<Agent>... all_list) {
+void show_bacterium(Biomass biomass, boolean info, ArrayList<Agent>... all_list) {
   for(ArrayList list : all_list) {
-    if(!info) update_aspect(list, original_bacterium_aspect, fill_colour_bacterium, stroke_colour_bacterium, thickness_bacterium, which_costume) ;
+    if(!info) update_aspect(list, original_bacterium_aspect, fill_colour_bacterium, stroke_colour_bacterium, thickness_bacterium) ;
     if(info) {
       info_agent(list) ;
       info_agent_track_line(list) ;
@@ -291,12 +291,12 @@ End bacterium
     void info_visual(Vec4 colour) {
       aspect(Vec4(), colour_info(colour, satiate, pregnant, fertility), 1) ;
       Vec3 pos_temp = Vec3 (0) ;
-      matrix_start() ;
+      start_matrix() ;
       translate(pos) ;
       ellipse(pos_temp.x, pos_temp.y, sense_range*2, sense_range*2) ;
       ellipse(pos_temp.x, pos_temp.y, eat_zone *2, eat_zone *2) ;
       ellipse(pos_temp.x, pos_temp.y, size *2, size *2) ;
-      matrix_end() ;
+      stop_matrix() ;
     }
 
 

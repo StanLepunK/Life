@@ -89,8 +89,8 @@ void flora_update(ArrayList<Agent> list_f, Biomass b) {
   flora_update_opacity(list_f) ;
 }
 
-void flora_show(ArrayList<Agent> list_f, boolean info, int which_costume) {
-  if(!info) flora_update_aspect(list_f, which_costume) ;
+void flora_show(ArrayList<Agent> list_f, boolean info) {
+  if(!info) flora_update_aspect(list_f) ;
   if(info) info_agent(list_f) ;
 }
 /**
@@ -154,7 +154,7 @@ void flora_update_opacity(ArrayList<Agent> list_f) {
 
 
 
-void flora_update_aspect(ArrayList<Agent> list_f, int which_costume) {
+void flora_update_aspect(ArrayList<Agent> list_f) {
   for(Agent a : list_f) {
     if(a instanceof Flora) {
       Flora f = (Flora) a ;
@@ -163,7 +163,7 @@ void flora_update_aspect(ArrayList<Agent> list_f, int which_costume) {
       } else {
         f.aspect(fill_colour_flora, stroke_colour_flora, thickness_flora) ;
       }
-      f.costume_agent(which_costume) ; 
+      f.costume() ; 
     }
   }
 }
@@ -252,13 +252,13 @@ class Flora extends Agent_static {
    void info_visual(Vec4 colour) {
       Vec3 pos_temp = Vec3(0) ;
       aspect(Vec4(), colour_info(colour), 1) ;
-      matrix_start() ;
+      start_matrix() ;
       translate(pos) ;
       // info feed
       strokeWeight(2) ;
       point(pos_temp) ;
       // info reproduction
-      matrix_end() ;
+      stop_matrix() ;
    }
    
    void info_print_flora() {

@@ -206,7 +206,7 @@ class Carnivore extends Agent_dynamic {
   void info_visual(Vec4 colour) {
     Vec3 pos_temp = Vec3(0) ;
     aspect(Vec4(), colour_info(colour, satiate, pregnant, fertility), 1) ;
-    matrix_start() ;
+    start_matrix() ;
     translate(pos) ;
     // info feed
     ellipse(pos_temp.x, pos_temp.y, sense_range*2, sense_range*2) ;
@@ -214,7 +214,7 @@ class Carnivore extends Agent_dynamic {
     ellipse(pos_temp.x, pos_temp.y, eat_zone *2, eat_zone *2) ;
     ellipse(pos_temp.x, pos_temp.y, size *2, size *2) ;
     // info reproduction
-    matrix_end() ;
+    stop_matrix() ;
   }
 
   // print
