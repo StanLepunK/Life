@@ -1,0 +1,392 @@
+
+======================
+ECO-SYSTEM 0.0.5
+=====================
+Guide to build your own agent
+
+
+
+
+BUILD
+---------
+void build_environment(Vec3 pos, Vec3 size, Biomass biomass)
+void build_environment(Vec2 pos, Vec2 size, Biomass biomass)
+> with Vec2, the world will be in 2D, with Vec3 it will be in 3D
+
+
+
+
+CLEAR
+-----------
+void clear_ecosytem()
+> empty all the list of the ecosytem
+
+
+
+
+
+
+UPDATE
+--------------
+
+> set aspect, fill, stroke and thickness ( strokeWeight) of your agent
+set_aspect_flora(Vec4 fill, Vec4 stroke, float thickness) ;
+set_aspect_herbivore(Vec4 fill, Vec4 stroke, float thickness) ;
+set_aspect_carnivore(Vec4 fill, Vec4 stroke, float thickness) ;
+set_aspect_bacterium(Vec4 fill, Vec4 stroke, float thickness) ;
+set_aspect_corpse(Vec4 fill, Vec4 stroke, float thickness) ;
+
+
+> scale the size of the sub class agent
+void scale_flora(ArrayList<Flora> list_f, float scale) ;
+void scale_herbivore(ArrayList<Herbivore> list_h, float scale) ;
+void scale_carnivore(ArrayList<Carnivore> list_c, float scale) ;
+void scale_bacterium(ArrayList<Bacterium> list_b, float scale) ;
+void scale_corpse(ArrayList<Agent_dynamic> list_body, float scale) ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======================
+CLASS
+=======================
+
+interface Agent
+int CLOCK
+> a high value slowest the time...
+@ this var can change the speed_feeding, hunger...
+
+
+
+
+
+--------------------
+Class Agent_dynamic implements Agent
+-----------------------------------------------
+Constructor
+-------------
+Agent(Vec3 pos, int size, int velocity, int life, String name)
+
+
+
+
+variable
+-----------
+boolean watching  ;
+boolean alive  ;
+boolean carrion ;
+boolean satiate ;
+boolean eating ;
+
+Vec3 pos, motion, direction ;
+Vec3 velocity_xyz ;
+int velocity ;
+
+String name ;
+int ID ;
+
+int size ;
+int life ;
+
+Vec4 colour_fill ;
+Vec4 colour_stroke ;
+float thickness ;
+
+int hunger  ;
+float gourmet ;
+
+
+int greed 
+@by default is 180 *SPEED_TIME
+
+
+
+set methode
+----------
+Set food behavior
+--
+set_hunger(int hunger) 
+> hunger = 0 by default, your agent start in life very hungry :)
+
+set_step_hunger(float step_hunger) 
+by default spep hunger is calculated on this formula :
+step_hunger = (size + life)/2 *((life_expectancy -age)/life_expectancy) ;
+where a default age = 0 ;
+and life_expectancy = 1 ;
+
+when you set step_hunger the result is life *step_hunger 
+For axample if you choice 2 and the life is 10, your agent be angry if he don't 20 units, so it can be an eternal hunter :)
+
+void set_speed_feeding(int calories) 
+> speed_feeding = 1 by default
+
+void set_starving(int starving)
+> speed the starving statement of the agent
+
+void set_greed(int greed) 
+> this.greed = int(greed *SPEED_TIME) ;
+
+void set_gourmet(int gourmet) 
+> this.gourmet = gourmet*1.1 ;
+@ gourmet set the attitude with the Flora or meet, 0 the Agent is very gourmet and want the best part of the Flora, for the higher value the Agent became step by step a scavenger
+
+void set_digestion(int digestion)
+> set the speed of digestion "1" is very fast. 
+value from 1 or more !
+
+
+set misc
+--
+void set_fill(Vec4 colour_fill) 
+> colour_fill = Vec4(0,0,0,max_color_environment_value) is colour by default
+
+void set_stroke(Vec4 colour_stroke) 
+> colour_stroke = Vec4(0,0,0,max_color_environment_value) is colour by default
+
+void set_thickness(float thickness)
+> thickness = 1 by default > thickness is strokeWeight
+
+void set_nutrient_quality(int nutrient_quality) 
+> nutrient_quality = 1 by default
+
+void set_watching(int  max_watching) 
+> time in frame before the creature change target, time if frame by second
+
+void set_alive(boolean alive) 
+> dead or alive agent
+
+void set_size(Vec3 size) 
+
+
+
+
+
+
+
+
+
+
+motion method
+---------------
+void rebound(float top, float bottom, float left, float right)
+void motion() ;
+
+statement method
+-
+int hunger_speed
+void hunger(hunger_speed)
+
+boolean carrion(int ratio_carrion) 
+update the statement body of the agent
+
+
+
+
+
+
+
+
+Class Carnivor extends Agent_dynamic
+------------------------------------
+Variable
+--------
+int kill_zone
+int max_time_track = 300 ; 
+
+
+Constructor
+--------------
+Carnivor(Vec2 pos, int size, int velocity, int stamina, String name, int sense_range)
+
+Set
+------
+void set_kill_zone(int radius) 
+> Default the value : int(size *2) +size ;
+
+void set_max_time_track(int seconds)
+> Default the value : int(max_time_track *clock) ;
+
+void set_attack(int attack)
+> Default value : 1 
+@ speed to kill the target
+
+
+
+
+Hunt and Flora method
+--------------------------
+void watch(Agent_dynamic target)
+void kill(Agent_dynamic  target) 
+void eat(Agent_dynamic  target) 
+void hunt(Agent_dynamic  target) 
+boolean hunting() 
+
+
+
+
+
+
+
+Class Herbivor extends Agent_dynamic
+-------------------------------------
+Carnivor(Vec2 pos, int size, int velocity, int stamina, String name, int sense_range)
+
+Variable
+--------
+int sense_range
+@ the final sense_range is the result of : size *sense_range
+
+Method
+---------
+same than agent plus :
+void watch(Flora f)
+void eat(Flora f) 
+void pick(Flora f) 
+boolean picking() 
+
+
+
+
+
+
+Class Bacterium extends Agent_dynamic
+-------------------------------------
+Var
+-------
+float humus_prod ;
+
+Constructor
+---------------
+Bacterium(Vec2 pos, int radius, int velocity, int stamina, String name, int sense_range)
+
+Set
+------
+void set_humus_prod(float prod)
+> by default float humus_prod = .25 ;
+
+
+Variable
+--------
+int sense_range
+@ the final sense_range is the result of : size *sense_range
+
+Method
+---------
+same than agent plus :
+void watch(Agent a)
+void eat(Agent a) 
+void pick(Agent a) 
+boolean picking() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------
+CLASS AGENT STATIC
+-------------------------------
+Class Agent_static implements Agent
+-----------------------------------------------
+Constructor
+-------------
+Agent_static(Vec3 pos, int size, String name)
+
+Set
+--
+void set_fill(Vec4 colour) ;
+> colour_fill = Vec4(0,0,0,max8value) is colour by default
+
+void set_stroke(Vec4 colour) ;
+> colour_stroke = Vec4(0,0,0,max8value) is colour by default
+
+void set_thickness(float thivkness) ;
+> float thivkness by default = 1 > it's strokeWeight in Processing
+
+void set_size(int size) ;
+
+void set_nutrient_quality(int nutrient_quality) 
+> by default nutrient_quality = 1 ;
+
+
+
+Variable
+--------
+Vec3 pos 
+int size
+String name
+
+
+
+
+
+
+
+SUB CLASS AGENT STATIC
+------------------------------------
+Class Flora extends Agent_static
+-----------------------------------
+Flora(Vec2 pos, int size, String name)
+
+
+
+
+
+void set_growth(int speed)
+> by default is 1
+
+void set_need( float need)
+> by default is .1 ;
+@ it's quantity of humus to each unit growth
+
+
+Variable
+--------
+int Flora_quality
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------
+Class Humus
+-----------------
+Humus(Vec2 pos)
+
+Set
+---
+void set_colour(Vec4 colour) 
+> colour = Vec4(0,0,0,max8value) is colour by default
+
