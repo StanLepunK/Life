@@ -1,10 +1,6 @@
-  /**
-Build HERBIVORE 0.0.1
-
-
-
+/**
+Build Omnivore 0.0.1
 */
-
 void build_omnivore(ArrayList<Agent> list, Info_dict carac, Vec4 colour, int num) {
   int gender = 0 ;
   for(int i = 0 ; i < num ; i++) {
@@ -38,18 +34,6 @@ void add_omnivore(ArrayList<Agent> list, Vec3 pos, Info_dict carac, int gender, 
 /**
 local method
 */
-/**
-set colour omnivore
-boolean original_herbivore_aspect = true ;
-Vec4 fill_colour_herbivore, stroke_colour_herbivore ;
-float thickness_herbivore ; 
-
-void set_aspect_herbivore(Vec4 fill_colour, Vec4 stroke_colour, float thickness) {
-  original_herbivore_aspect = false ;
-  if(fill_colour_herbivore == null) fill_colour_herbivore = Vec4(fill_colour) ; else fill_colour_herbivore.set(fill_colour) ;
-  if(stroke_colour_herbivore == null) stroke_colour_herbivore = Vec4(stroke_colour) ; else stroke_colour_herbivore.set(stroke_colour) ;
-  thickness_herbivore = thickness ;
-}
 /**
 set
 */

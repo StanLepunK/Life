@@ -170,7 +170,7 @@ void add_log_eco_resume(Table table, float humus, float humus_max, ArrayList... 
     String name = "nobody" ;
     for(Object obj : list) {
       if(obj instanceof Agent) {
-        Agent_method a = (Agent_method) obj ;
+        Agent_model a = (Agent_model) obj ;
         units = list.size() ;
         max += a.stamina_ref ;
         quantity += a.stamina ;
