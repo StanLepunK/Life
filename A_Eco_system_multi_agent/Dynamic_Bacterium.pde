@@ -7,43 +7,48 @@ METHOD BACTERIUM
 /**
 BUILD BACTERIUM 0.1.0
 */
-void build_bacterium(ArrayList<Agent> list, Info_dict carac, Vec4 colour, int num) {
+void build_bacterium(ArrayList<Agent> list, Info_dict carac, Info_obj style, int num) {
   for(int i = 0 ; i < num ; i++) {
     String name = "bacterium" ;
     if(ENVIRONMENT == 2 ) {
       Vec2 pos = Vec2("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d) ;
-      add_bacterium(list, pos, carac, colour) ;
+      add_bacterium(list, pos, carac, style) ;
     } else {
       Vec3 pos = Vec3("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d, (int)LIMIT.e, (int)LIMIT.f) ;
-      add_bacterium(list, pos, carac, colour) ;
+      add_bacterium(list, pos, carac, style) ;
     }
   }
 }
 
-void add_bacterium(ArrayList<Agent> list, Vec2 pos, Info_dict carac, Vec4 colour) {
+void add_bacterium(ArrayList<Agent> list, Vec2 pos, Info_dict carac, Info_obj style) {
   Vec3 final_pos = Vec3(pos) ; // in case 2D world
-  add_bacterium(list, final_pos, carac, colour) ;
+  add_bacterium(list, final_pos, carac, style) ;
 }
 
-void add_bacterium(ArrayList<Agent> list, Vec3 pos, Info_dict carac, Vec4 colour) {
+void add_bacterium(ArrayList<Agent> list, Vec3 pos, Info_dict carac, Info_obj style) {
   int gender = 0 ;
-  Agent b = new Bacterium(carac, gender) ;
+  Agent b = new Bacterium(carac, style, gender) ;
   list.add(b) ;
-  set_bacterium(b, pos, carac, colour) ;
+  set_bacterium(b, pos, carac, style) ;
 }
 
 
 
 
-void set_bacterium(Agent c, Vec3 pos, Info_dict carac, Vec4 colour) {
-  float digestion = (float) carac.get("digestion")[0].catch_a() ;
-  int starving = (int) carac.get("starving")[0].catch_a() ;
-  c.set_pos(pos) ;
-  c.set_fill(colour) ;
-  c.set_stroke(colour) ;
+void set_bacterium(Agent b, Vec3 pos, Info_dict carac, Info_obj style) {
+  float digestion = (float) carac.get("digestion")[0].catch_obj(0) ;
+  int starving = (int) carac.get("starving")[0].catch_obj(0) ;
+  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_obj(0) ;
+  
+  b.set_costume((int)style.catch_obj(0)) ;
+  b.set_fill((Vec4)style.catch_obj(1)) ;
+  b.set_stroke((Vec4)style.catch_obj(2)) ;
+  b.set_thickness((float)style.catch_obj(3)) ;
+  b.set_pos(pos) ;
+  b.set_nutrient_quality(nutrient_quality) ;
 
-  if(c instanceof Agent_dynamic) {
-    Agent_dynamic a_d = (Agent_dynamic) c ;
+  if(b instanceof Agent_dynamic) {
+    Agent_dynamic a_d = (Agent_dynamic) b ;
     a_d.set_digestion(digestion) ;
     a_d.set_starving(starving) ;
   }
@@ -81,12 +86,13 @@ void bacterium_update(ArrayList<Agent> list, ArrayList<Agent> list_dead_body, Bi
 /**
 show bacterium specific method
 */
-void show_bacterium(Biomass biomass, boolean info, ArrayList<Agent>... all_list) {
+void show_bacterium(Biomass biomass, Info_obj style, ArrayList<Agent>... all_list) {
   for(ArrayList list : all_list) {
-    if(!info) update_aspect(list, original_bacterium_aspect, fill_colour_bacterium, stroke_colour_bacterium, thickness_bacterium) ;
-    if(info) {
+    if(INFO_DISPLAY_AGENT) {
       info_agent(list) ;
       info_agent_track_line(list) ;
+    } else {
+      update_aspect(style, list) ;
     }
   }
 }
@@ -225,8 +231,8 @@ End bacterium
     Bacterium(int size, int stamina, int life_expectancy, int velocity, int sense_range, String name, int gender) {
       super(size, stamina, life_expectancy, velocity, sense_range, name, Vec2(), gender) ;
       */
-    Bacterium(Info_dict carac, int gender) {
-      super(carac, gender) ;
+    Bacterium(Info_dict carac, Info_obj style, int gender) {
+      super(carac, style, gender) ;
       set_kill_skill(size) ;
     }
     

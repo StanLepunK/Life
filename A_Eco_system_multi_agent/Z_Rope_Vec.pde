@@ -1,5 +1,5 @@
 /**
-CLASS OPE VEC 1.5.3
+CLASS OPE VEC 1.5.4
 Rope – Romanesco Processing Environment – 2015 – 2016
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Vec
@@ -3365,31 +3365,31 @@ void matrix_3D_start(Vec3 pos, Vec3 dir_cart) {
   if (Float.isNaN(radius)) radius = 0 ;
   rotateX(latitude) ;
   rotateY(longitude) ;
-  println("Deprecated method matrix_3D_start(Vec3 arg, Vec3 cartesian_dir) is deprecated instead use start_matrix(Vec3 arg, Vec3 cartesian_dir)") ;
+  System.err.println("Deprecated method matrix_3D_start(Vec3 arg, Vec3 cartesian_dir) is deprecated instead use start_matrix_3D(Vec3 arg, Vec3 cartesian_dir)") ;
 }
 
 void matrix_3D_start(Vec3 pos, Vec2 dir_polar) {
   pushMatrix() ;
   translate(pos) ;
   rotateXY(dir_polar) ;
-  println("Deprecated method matrix_3D_start(Vec3 arg, Vec3 polar_dir) is deprecated instead use start_matrix(Vec3 arg, Vec3 polar_dir)") ;
+  System.err.println("Deprecated method matrix_3D_start(Vec3 arg, Vec3 polar_dir) is deprecated instead use start_matrix_3D(Vec3 arg, Vec2 polar_dir)") ;
 }
 
 void matrix_2D_start(Vec2 pos, float orientation) {
   pushMatrix() ;
   translate(pos) ;
   rotate(orientation) ;
-  println("Deprecated method matrix_2D_start(Vec2 pos, float orientation) is deprecated instead use start_matrix(Vec2 pos, float orientation)") ;
+  System.err.println("Deprecated method matrix_2D_start(Vec2 pos, float orientation) is deprecated instead use start_matrix_2D(Vec2 pos, float orientation)") ;
 }
 
 void matrix_end() {
   popMatrix() ;
-  println("Deprecated method matrix_end() is deprecated instead use stop_matrix()") ;
+  System.err.println("Deprecated method matrix_end() is deprecated instead use stop_matrix()") ;
 }
 
 void matrix_start() {
   pushMatrix() ;
-  println("Deprecated method matrix_start() is deprecated instead use start_matrix()") ;
+  System.err.println("Deprecated method matrix_start() is deprecated instead use start_matrix()") ;
 }
 
 

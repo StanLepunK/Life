@@ -344,13 +344,13 @@ DELIVERY
 */
 int num_by_pregnancy = 1 ;
 
-void delivery(Agent_dynamic deliver, Genome mother, Genome father, ArrayList<Agent> list_child, Info_dict carac) {
+void delivery(Agent_dynamic deliver, Genome mother, Genome father, ArrayList<Agent> list_child, Info_dict carac, Info_obj style) {
   // check for heterozygote
   num_babies(deliver.multiple_pregnancy) ;
   Agent [] babies = new Agent [num_by_pregnancy] ;
   babies = babies(deliver, num_by_pregnancy, mother, father) ;
   for(int i = 0 ; i < num_by_pregnancy ; i++) {
-    set_baby(deliver, babies[i], list_child, carac) ;
+    set_baby(deliver, babies[i], list_child, carac, style) ;
     if(PRINT_BORN_AGENT_DYNAMIC) print_born_agent_dynamic (babies[i]) ;
   }
   deliver.num_pregnancy ++ ;
@@ -358,7 +358,7 @@ void delivery(Agent_dynamic deliver, Genome mother, Genome father, ArrayList<Age
 }
 
 // local
-void set_baby(Agent_dynamic deliver, Agent baby, ArrayList<Agent> list_child, Info_dict carac) {
+void set_baby(Agent_dynamic deliver, Agent baby, ArrayList<Agent> list_child, Info_dict carac, Info_obj style) {
   if(baby instanceof Agent_dynamic) {
     Agent_dynamic n = (Agent_dynamic) baby ;
     // clean the uterus of mother
@@ -373,9 +373,9 @@ void set_baby(Agent_dynamic deliver, Agent baby, ArrayList<Agent> list_child, In
 
     // all data from mother
     // Must add this part in the genome for the future,
-    if(baby instanceof Carnivore) set_carnivore(n, deliver.pos, carac, deliver.colour_fill) ;
-    if(baby instanceof Herbivore) set_herbivore(n, deliver.pos, carac, deliver.colour_fill) ;
-    if(baby instanceof Omnivore) set_omnivore(n, deliver.pos, carac, deliver.colour_fill) ; 
+    if(baby instanceof Carnivore) set_carnivore(n, deliver.pos, carac, style) ;
+    if(baby instanceof Herbivore) set_herbivore(n, deliver.pos, carac, style) ;
+    if(baby instanceof Omnivore) set_omnivore(n, deliver.pos, carac, style) ; 
 
     n.set_ID( (short) Math.round(random(Short.MAX_VALUE))) ;
     list_child.add(n) ;
@@ -386,16 +386,16 @@ void set_baby(Agent_dynamic deliver, Agent baby, ArrayList<Agent> list_child, In
 Agent [] babies(Agent_dynamic deliver, int num, Genome mother, Genome father) {
   Agent [] b = new Agent [num] ;
   // re-init for the pregnancy
-  String monster_message = "The mother deliver a genetic monster, and the 'Nature of Code' kill it because is not a baby from a Authorized Class" ;
+  String monster_message = "The mother deliver is a genetic monster, and the 'Nature of Code' kill it because is not a baby from an Authorized Class" ;
 
   for(int i = 0 ; i < b.length ; i++) {
     // check for homozygous
     if(b.length > 1 && i <  b.length -1 && random(3) < 1) {
       deliver.num_children += 2 ;
       deliver.num_homozygous += 2 ;
-      if(deliver instanceof Herbivore ) b[i] = new Herbivore(mother, father) ;
-      else if(deliver instanceof Omnivore ) b[i] = new Omnivore(mother, father) ;
-      else if(deliver instanceof Carnivore ) b[i] = new Carnivore(mother, father) ;
+      if(deliver instanceof Herbivore ) b[i] = new Herbivore(mother, father, deliver.style) ;
+      else if(deliver instanceof Omnivore ) b[i] = new Omnivore(mother, father, deliver.style) ;
+      else if(deliver instanceof Carnivore ) b[i] = new Carnivore(mother, father, deliver.style) ;
       else println(monster_message) ;
       i++ ;
       if(deliver instanceof Herbivore ) b[i] = b[i -1] ;
@@ -405,9 +405,9 @@ Agent [] babies(Agent_dynamic deliver, int num, Genome mother, Genome father) {
     } else {
       deliver.num_children++ ;
       if(b.length > 1) deliver.num_heterozygous++ ;
-      if(deliver instanceof Herbivore ) b[i] = new Herbivore(mother, father) ;
-      else if(deliver instanceof Omnivore ) b[i] = new Omnivore(mother, father) ;
-      else if(deliver instanceof Carnivore ) b[i] = new Carnivore(mother, father) ;
+      if(deliver instanceof Herbivore ) b[i] = new Herbivore(mother, father, deliver.style) ;
+      else if(deliver instanceof Omnivore ) b[i] = new Omnivore(mother, father, deliver.style) ;
+      else if(deliver instanceof Carnivore ) b[i] = new Carnivore(mother, father, deliver.style) ;
       else println(monster_message) ;
     }
   }
@@ -724,13 +724,23 @@ void set_costume_agent(int which_costume, ArrayList<Agent>... all_list) {
   }
 }
 
-void show_agent_dynamic(boolean info, ArrayList<Agent>... all_list ) {
+
+/**
+Info_obj info
+* boolean info = (boolean)info.catch_obj(0) ;
+* boolean original = (boolean)info.catch_obj(1) ;
+* int costume_ID = (int)info.catch_obj(2) ;
+* Vec4 fill = (Vec4)info.catch_obj(3) ;
+* Vec4 stroke = (Vec4)info.catch_obj(4) ; 
+* float thickness = (float)info.catch_obj(5) ;
+*/ 
+void show_agent_dynamic(Info_obj style, ArrayList<Agent>... all_list) {
   for(ArrayList list : all_list) {
-    if(info) {
+    if(INFO_DISPLAY_AGENT) {
       info_agent(list) ;
       info_agent_track_line(list) ;
     } else {
-      update_aspect(list, original_carnivore_aspect, fill_colour_carnivore, stroke_colour_carnivore, thickness_carnivore) ;
+      update_aspect(style, list) ;
     }
   }
 }
@@ -739,15 +749,33 @@ void show_agent_dynamic(boolean info, ArrayList<Agent>... all_list ) {
 /**
 Aspect
 */
-void update_aspect(ArrayList<Agent> list, boolean original_aspect, Vec4 new_fill, Vec4 new_stroke, float thickness) {
-  for(Agent a : list) {
-    if(original_aspect) a.aspect(a.get_fill(), a.get_stroke(), 1) ; else a.aspect(new_fill, new_stroke, thickness) ;
-    a.costume() ;
+void update_aspect(Info_obj style, ArrayList<Agent> list) {
+  int costume_ID = (int)style.catch_obj(0) ;
+  Vec4 fill_vec = (Vec4)style.catch_obj(1) ;
+  Vec4 stroke_vec = (Vec4)style.catch_obj(2) ; 
+  float thickness = (float)style.catch_obj(3) ;
 
+  for(Agent a : list) {
+    boolean original_aspect = true ;
+    if(costume_ID != a.get_costume() || fill_vec != a.get_fill() || stroke_vec != a.get_stroke() || thickness != a.get_thickness()) {
+      original_aspect = false ;
+    }
+    if(original_aspect) {
+      // printTempo(60, "aspect original") ;
+      a.aspect(a.get_fill(), a.get_stroke(), a.get_thickness()) ;
+      a.costume() ;
+
+    } else {
+      a.aspect(fill_vec, stroke_vec, thickness) ;
+      if(costume_ID != a.get_costume()) {
+        a.costume(costume_ID) ; 
+      } else {
+        a.costume() ;
+      }
+    } 
   }
 }
 /**
-
 END SHOW
 
 */

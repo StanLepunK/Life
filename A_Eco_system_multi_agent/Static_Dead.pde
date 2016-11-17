@@ -24,33 +24,40 @@ void set_aspect_corpse(Vec4 fill_colour, Vec4 stroke_colour, float thickness) {
 
 
 
-void build_dead(ArrayList<Agent> list, Info_dict carac, Vec4 colour, int num) {
+void build_dead(ArrayList<Agent> list, Info_dict carac, Info_obj style, int num) {
   for(int i = 0 ; i < num ; i++) {
     if(ENVIRONMENT == 2 ) {
       Vec2 pos = Vec2("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d) ;
-      add_dead(list, pos, carac, colour) ;
+      add_dead(list, pos, carac, style) ;
     } else {
       Vec3 pos = Vec3("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d, (int)LIMIT.e, (int)LIMIT.f) ;
-      add_dead(list, pos, carac, colour) ;
+      add_dead(list, pos, carac, style) ;
     }
   }
 }
 
 
 
-void add_dead(ArrayList<Agent> list, Vec pos, Info_dict carac, Vec4 colour) {
+void add_dead(ArrayList<Agent> list, Vec pos, Info_dict carac, Info_obj style) {
   int gender = (int)round(random(1));
-  Agent dead = new Dead(carac, gender) ;
-  set_dead(dead, pos, carac, colour) ;
+  Agent dead = new Dead(carac, style, gender) ;
+  set_dead(dead, pos, carac, style) ;
   DEAD_LIST.add(dead) ;
 
 }
 
 
-void set_dead(Agent a, Vec pos, Info_dict carac, Vec4 colour) {
+void set_dead(Agent d, Vec pos, Info_dict carac, Info_obj style) {
 
-  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_a() ;
+  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_obj(0) ;
 
+  d.set_costume((int)style.catch_obj(0)) ;
+  d.set_fill((Vec4)style.catch_obj(1)) ;
+  d.set_stroke((Vec4)style.catch_obj(2)) ;
+  d.set_thickness((float)style.catch_obj(3)) ;
+  d.set_pos(pos) ;
+  d.set_nutrient_quality(nutrient_quality) ;
+   /*
   if(a instanceof Agent_static) {
     Agent_static a_s = (Agent_static) a ;
     a_s.set_pos(pos) ;
@@ -58,6 +65,7 @@ void set_dead(Agent a, Vec pos, Info_dict carac, Vec4 colour) {
     a_s.set_fill(colour) ;
     a_s.set_stroke(colour) ;
   }
+  */
 }
 
 
@@ -90,11 +98,12 @@ void dead_update(ArrayList<Agent> list) {
   if(LOG_ECOSYSTEM) update_log(list, FRAME_RATE_LOG) ;
 }
 
-void show_dead(ArrayList<Agent> list_dead, boolean info) {
-  if(info) {
+void show_dead(Info_obj style, ArrayList<Agent> list_dead) {
+  if(INFO_DISPLAY_AGENT) {
     info_agent(list_dead) ;
   } else {
-    dead_aspect(list_dead) ;
+    // dead_aspect(list_dead) ;
+    update_aspect(style, list_dead) ;
   }
 }
 
@@ -117,21 +126,10 @@ void dead_remove(ArrayList<Agent> list) {
 }
 
 
-void dead_aspect(ArrayList<Agent> list) {
-  for(Agent dead : list) {
-    // aspect
-    if(original_corpse_aspect) {
-      dead.aspect(dead.get_fill(), dead.get_stroke(), dead.get_thickness()) ; 
-    } else {
-      dead.aspect(fill_colour_corpse, stroke_colour_corpse, thickness_corpse) ;
-    }
-    dead.costume() ; 
-  }
-}
 
 
 
-  void carrion_update(ArrayList<Agent> list) {
+void carrion_update(ArrayList<Agent> list) {
   for(Agent dead : list) {
     if(dead instanceof Agent_static) {
       Agent_static corpse = (Agent_static) dead ;
@@ -198,8 +196,8 @@ class Dead extends Agent_static {
 
 	}
 
-   Dead(Info_dict carac, int gender) {
-      super(carac, gender) ;
+   Dead(Info_dict carac, Info_obj style, int gender) {
+      super(carac, style, gender) ;
       this.alive = false ;
    }
 

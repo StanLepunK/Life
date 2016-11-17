@@ -9,55 +9,58 @@ METHOD
 CARNIVORE build 0.1.0
 */
 
-void build_carnivore(ArrayList<Agent> list, Info_dict carac, Vec4 colour, int num) {
+void build_carnivore(ArrayList<Agent> list, Info_dict carac, Info_obj style, int num) {
   int gender = 0 ;
   for(int i = 0 ; i < num ; i++) {
     if(gender > 1) gender = 0 ;
     String name = "ALIEN" ;
     if(ENVIRONMENT == 2 ) {
       Vec2 pos = Vec2("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d) ;
-      add_carnivore(list, pos, carac, gender, colour) ;
+      add_carnivore(list, pos, carac, gender, style) ;
     } else {
       Vec3 pos = Vec3("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d, (int)LIMIT.e, (int)LIMIT.f) ;
-      add_carnivore(list, pos, carac, gender, colour) ;
+      add_carnivore(list, pos, carac, gender, style) ;
     }
     gender++ ;
   }
 }
 
-void add_carnivore(ArrayList<Agent> list, Vec2 pos, Info_dict carac, int gender, Vec4 colour) {
+void add_carnivore(ArrayList<Agent> list, Vec2 pos, Info_dict carac, int gender, Info_obj style) {
    Vec3 final_pos = Vec3(pos) ;
-   add_carnivore(list, final_pos, carac, gender, colour) ;
+   add_carnivore(list, final_pos, carac, gender, style) ;
 }
-void add_carnivore(ArrayList<Agent> list, Vec3 pos, Info_dict carac, int gender, Vec4 colour) {
+void add_carnivore(ArrayList<Agent> list, Vec3 pos, Info_dict carac, int gender, Info_obj style) {
     // recover data
     /*
-  String name = (String) carac.get("name")[0].catch_a() ;
-  int size = (int) carac.get("size")[0].catch_a() ;
-  int stamina = (int)carac.get("stamina")[0].catch_a() ;
-  int velocity = (int)carac.get("velocity")[0].catch_a() ;
-  int sense_range = (int) carac.get("sense_range")[0].catch_a() ;
-  int life_expectancy =(int) carac.get("life_expectancy")[0].catch_a() ;
-  Vec2 sex_appeal = (Vec2)carac.get("sex_appeal")[0].catch_a() ;
+  String name = (String) carac.get("name")[0].catch_obj(0) ;
+  int size = (int) carac.get("size")[0].catch_obj(0) ;
+  int stamina = (int)carac.get("stamina")[0].catch_obj(0) ;
+  int velocity = (int)carac.get("velocity")[0].catch_obj(0) ;
+  int sense_range = (int) carac.get("sense_range")[0].catch_obj(0) ;
+  int life_expectancy =(int) carac.get("life_expectancy")[0].catch_obj(0) ;
+  Vec2 sex_appeal = (Vec2)carac.get("sex_appeal")[0].catch_obj(0) ;
   */
   // send data to constructor
   // Agent c = new Carnivore(size, stamina, life_expectancy, velocity, sense_range, name, sex_appeal, gender) ;
-  Agent c = new Carnivore(carac, gender) ;
+  Agent c = new Carnivore(carac, style, gender) ;
   list.add(c) ;
-  set_carnivore(c, pos, carac, colour) ;
+  set_carnivore(c, pos, carac, style) ;
 
 }
 
-void set_carnivore(Agent c, Vec3 pos, Info_dict carac, Vec4 colour) {
-  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_a() ;
-  int attack = (int) carac.get("attack")[0].catch_a() ;
-  float gourmet = (float) carac.get("gourmet")[0].catch_a() ;
-  int starving = (int) carac.get("starving")[0].catch_a() ;
-  float digestion = (float) carac.get("digestion")[0].catch_a() ;
+void set_carnivore(Agent c, Vec3 pos, Info_dict carac, Info_obj style) {
+  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_obj(0) ;
+  int attack = (int) carac.get("attack")[0].catch_obj(0) ;
+  float gourmet = (float) carac.get("gourmet")[0].catch_obj(0) ;
+  int starving = (int) carac.get("starving")[0].catch_obj(0) ;
+  float digestion = (float) carac.get("digestion")[0].catch_obj(0) ;
+
+  c.set_costume((int)style.catch_obj(0)) ;
+  c.set_fill((Vec4)style.catch_obj(1)) ;
+  c.set_stroke((Vec4)style.catch_obj(2)) ;
+  c.set_thickness((float)style.catch_obj(3)) ;
   c.set_pos(pos) ;
   c.set_nutrient_quality(nutrient_quality) ;
-  c.set_fill(colour) ;
-  c.set_stroke(colour) ;
 
   if(c instanceof Agent_dynamic) {
     Agent_dynamic a_d = (Agent_dynamic) c ;
@@ -98,7 +101,7 @@ void scale_carnivore(ArrayList<Carnivore> list_c, float scale) {
 /**
 Female Reproduction
 */
-void reproduction_female_carnivore(ArrayList<Agent> list_female, ArrayList<Agent> list_male, ArrayList<Agent> list_child, Info_dict carac) {
+void reproduction_female_carnivore(ArrayList<Agent> list_female, ArrayList<Agent> list_male, ArrayList<Agent> list_child, Info_dict carac, Info_obj style) {
   // int count_female_fertile = 0 ;
   for (Agent female : list_female) {
     if(female instanceof Agent_dynamic) {
@@ -113,7 +116,7 @@ void reproduction_female_carnivore(ArrayList<Agent> list_female, ArrayList<Agent
       f.pregnant() ;
 
       if(f.birth()) {
-        delivery(f, f.genome, f.genome_father, list_child, carac) ;
+        delivery(f, f.genome, f.genome_father, list_child, carac, style) ;
       }
     }
   }
@@ -176,15 +179,15 @@ class Carnivore extends Agent_dynamic {
   Carnivore(int size, int stamina, int life_expectancy, int velocity, int sense_range, String name, Vec2 sex_appeal, int gender) {
     super(size, stamina, life_expectancy, velocity, sense_range, name, sex_appeal, gender) ;
     */
-      Carnivore(Info_dict carac, int gender) {
-    super(carac, gender) ;
+  Carnivore(Info_dict carac, Info_obj style, int gender) {
+    super(carac, style, gender) ;
     // not in the genome
     set_kill_skill(size) ;
 
   }
 
-  Carnivore(Genome mother, Genome father) {
-    super(mother,father) ;
+  Carnivore(Genome mother, Genome father, Info_obj style) {
+    super(mother,father, style) ;
     // not in the genome
     set_kill_skill(size) ;
   }

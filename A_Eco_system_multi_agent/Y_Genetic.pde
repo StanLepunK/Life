@@ -416,8 +416,8 @@ class Genome {
     for(int i = 0 ; i < length ; i++) {
       if(get_gene_product()[i].get_name().contains(target)) {
         count ++ ;
-        if(get_gene_product()[i].catch_a() != null)  {
-          info = new Info_obj(get_gene_product()[i].get_name(), get_gene_product()[i].catch_a()) ;
+        if(get_gene_product()[i].catch_obj(0) != null)  {
+          info = new Info_obj(get_gene_product()[i].get_name(), get_gene_product()[i].catch_obj(0)) ;
         } else {
           info = new Info_obj(get_gene_product()[i].get_name(), "no data match with the request") ;
         }
@@ -433,8 +433,8 @@ class Genome {
       Chromosome c = list_chromosome.get(i) ;
       if(c.chromosome_name.equals(target_chromosome)) {
         for(int j = 0 ; j < get_gene_product(i).length ; j++ ) {
-          if(get_gene_product(i)[j].catch_a() != null)  {
-          info = new Info_obj(get_gene_product(i)[j].get_name(), get_gene_product(i)[j].catch_a()) ;
+          if(get_gene_product(i)[j].catch_obj(0) != null)  {
+          info = new Info_obj(get_gene_product(i)[j].get_name(), get_gene_product(i)[j].catch_obj(0)) ;
         } else {
           info = new Info_obj(get_gene_product(i)[j].get_name(), "no data match with the request") ;
         }
@@ -449,8 +449,8 @@ class Genome {
   Info get_gene_product(int which_chromosome, int locus) {
     Info info = new Info_obj("Chromosome: " + which_chromosome + " locus: " +locus, "don't exist") ;
     if(which_chromosome < list_chromosome.size() &&  locus < list_chromosome.get(which_chromosome).list_allele_left.size() ) {
-      if(get_gene_product(which_chromosome)[locus].catch_a() != null)  {
-        info = new Info_obj(get_gene_product(which_chromosome)[locus].get_name(), get_gene_product(which_chromosome)[locus].catch_a()) ;
+      if(get_gene_product(which_chromosome)[locus].catch_obj(0) != null)  {
+        info = new Info_obj(get_gene_product(which_chromosome)[locus].get_name(), get_gene_product(which_chromosome)[locus].catch_obj(0)) ;
       } else {
         info = new Info_obj(get_gene_product(which_chromosome)[locus].get_name(), "no data match with the request") ;
       }
@@ -546,9 +546,9 @@ class Genome {
     int locus = 0 ;
     // find the gene who match with the target
     for (Info i : gene_map) {
-      if(i.catch_a().equals(target_gene)) {
-        which_chromosome = Integer.parseInt((String)i.catch_b());
-        locus = Integer.parseInt((String)i.catch_c());
+      if(i.catch_obj(0).equals(target_gene)) {
+        which_chromosome = Integer.parseInt((String)i.catch_obj(1));
+        locus = Integer.parseInt((String)i.catch_obj(2));
         match = true ;
         break ;
       } else {
@@ -621,9 +621,9 @@ class Genome {
     int locus = 0 ;
     // find the gene who match with the target
     for (Info i : gene_map) {
-      if(i.catch_a().equals(target_gene)) {
-        which_chromosome = Integer.parseInt((String)i.catch_b());
-        locus = Integer.parseInt((String)i.catch_c());
+      if(i.catch_obj(0).equals(target_gene)) {
+        which_chromosome = Integer.parseInt((String)i.catch_obj(1));
+        locus = Integer.parseInt((String)i.catch_obj(2));
         match = true ;
         break ;
       } else {

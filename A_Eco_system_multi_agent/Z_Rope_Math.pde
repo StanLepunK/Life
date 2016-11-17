@@ -1,5 +1,5 @@
 /**
-Z_Math 1.8.8
+Z_Math 1.8.9
 * @author https://github.com/StanLepunK/Math-Processing
 * @see https://github.com/StanLepunK/Math-Processing
 */
@@ -19,6 +19,8 @@ float decimale (float var, int n) {
   float div = pow(10, abs(n)) ;
   return Math.round(var *div) / div;
 }
+
+
 
 
 
@@ -62,18 +64,21 @@ http://mathworld.wolfram.com/Sphere.html
 float longitude(float x, float range) {
   return map(x, 0,range, 0, TAU) ;
 }
+
 float latitude(float y, float range) {
   return map(y, 0,range, 0, TAU) ;
 }
+
 float angle_radians(float y, float range) {
   return map(y, 0,range, 0, TAU) ;
 }
+
 float angle_degrees(float y, float range) {
   return map(y, 0,range, 0, 360) ;
 }
 
 float angle(Vec2 a, Vec2 b) {
-  return atan2( b.y -a.y, b.x -a.x );
+  return atan2(b.y -a.y, b.x -a.x);
 }
 
 
@@ -576,7 +581,7 @@ void primitive(Vec3 pos, float radius, int summits, float orientation, Vec2 dir)
     /**
     // classic version with polygon_2D method
     */
-    // matrix_3D_start(pos, dir) ;
+    // start_matrix_3D(pos, dir) ;
     for (int i = 0 ; i < summits ; i++) points[i] = polygon_2D(summits, orientation)[i].copy() ;
     // stop_matrix() ;
   } else {
@@ -610,7 +615,7 @@ void draw_primitive (float radius, Vec3 [] pts) {
 
 void draw_primitive (Vec3 pos, Vec2 dir, float radius, Vec3 [] pts) {
   // special one because we have direction for the polygone, so we must use the matrix system until have a good algorithm for the cartesian direction
-  if(renderer_P3D()) matrix_3D_start(pos, dir) ; else matrix_2D_start(Vec2(pos.x, pos.y), 0) ;
+  if(renderer_P3D()) start_matrix_3D(pos, dir) ; else start_matrix_2D(Vec2(pos.x, pos.y), 0) ;
   draw_primitive (radius, pts) ;
   stop_matrix() ;
 }
@@ -1286,40 +1291,6 @@ Vec2 target_direction(Vec2 target, Vec2 my_position) {
 Vec3 target_direction(Vec3 target, Vec3 my_position) {
   return projection(target, my_position, 1).sub(my_position) ;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -7,31 +7,31 @@ METHOD HERBIVORE
 Build HERBIVORE 0.0.2
 */
 
-void build_herbivore(ArrayList<Agent> list,  Info_dict carac, Vec4 colour, int num) {
+void build_herbivore(ArrayList<Agent> list,  Info_dict carac, Info_obj style, int num) {
   int gender = 0 ;
   for(int i = 0 ; i < num ; i++) {
     if(gender > 1) gender = 0 ;
     String name = "human" ;
     if(ENVIRONMENT == 2 ) {
       Vec2 pos = Vec2("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d) ;
-      add_herbivore(list, pos, carac, gender, colour) ;
+      add_herbivore(list, pos, carac, gender, style) ;
     } else {
       Vec3 pos = Vec3("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d, (int)LIMIT.e, (int)LIMIT.f) ;
-      add_herbivore(list, pos, carac, gender, colour) ;
+      add_herbivore(list, pos, carac, gender, style) ;
     }
     gender++ ;
   }
 }
 
-void add_herbivore(ArrayList<Agent> list, Vec2 pos, Info_dict carac, int gender, Vec4 colour) {
+void add_herbivore(ArrayList<Agent> list, Vec2 pos, Info_dict carac, int gender, Info_obj style) {
    Vec3 final_pos = Vec3(pos) ;
-   add_herbivore(list, final_pos, carac, gender, colour) ;
+   add_herbivore(list, final_pos, carac, gender, style) ;
 }
 
-void add_herbivore(ArrayList<Agent> list, Vec3 pos, Info_dict carac, int gender, Vec4 colour) {
-  Agent h = new Herbivore(carac, gender) ;
+void add_herbivore(ArrayList<Agent> list, Vec3 pos, Info_dict carac, int gender, Info_obj style) {
+  Agent h = new Herbivore(carac, style, gender) ;
   list.add(h) ;
-  set_herbivore(h, pos, carac, colour) ;
+  set_herbivore(h, pos, carac, style) ;
 }
 
 /**
@@ -40,18 +40,22 @@ local method
 /**
 set born
 */
-void set_herbivore(Agent a, Vec3 pos, Info_dict carac, Vec4 colour) {
-  float gourmet = (float) carac.get("gourmet")[0].catch_a() ;
-  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_a() ;
-  int starving = (int) carac.get("starving")[0].catch_a() ;
-  float digestion = (float) carac.get("digestion")[0].catch_a() ;
+void set_herbivore(Agent a, Vec3 pos, Info_dict carac, Info_obj style) {
+  float gourmet = (float) carac.get("gourmet")[0].catch_obj(0) ;
+  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_obj(0) ;
+  int starving = (int) carac.get("starving")[0].catch_obj(0) ;
+  float digestion = (float) carac.get("digestion")[0].catch_obj(0) ;
+
+  a.set_costume((int)style.catch_obj(0)) ;
+  a.set_fill((Vec4)style.catch_obj(1)) ;
+  a.set_stroke((Vec4)style.catch_obj(2)) ;
+  a.set_thickness((float)style.catch_obj(3)) ;
+  a.set_pos(pos) ;
+  a.set_nutrient_quality(nutrient_quality) ;
+
   if(a instanceof Agent_dynamic) {
     Agent_dynamic a_d = (Agent_dynamic) a ;
     a_d.set_starving(starving) ;
-    a_d.set_pos(pos) ;
-    a_d.set_nutrient_quality(nutrient_quality) ;
-    a_d.set_fill(colour) ;
-    a_d.set_stroke(colour) ;
     a_d.set_gourmet(gourmet) ;
     a_d.set_digestion(digestion) ;
   }
@@ -77,7 +81,7 @@ Reproduction specific part for each species
 /**
 Female Reproduction
 */
-void reproduction_female_herbivore(ArrayList<Agent> list_female, ArrayList<Agent> list_male, ArrayList<Agent> list_child, Info_dict carac) {
+void reproduction_female_herbivore(ArrayList<Agent> list_female, ArrayList<Agent> list_male, ArrayList<Agent> list_child, Info_dict carac, Info_obj style) {
   //int count_female_fertile = 0 ;
   for (Agent female : list_female) {
     if(female instanceof Agent_dynamic) {
@@ -92,7 +96,7 @@ void reproduction_female_herbivore(ArrayList<Agent> list_female, ArrayList<Agent
       f.pregnant() ;
 
       if(f.birth()) {
-        delivery(f, f.genome, f.genome_father, list_child, carac) ;
+        delivery(f, f.genome, f.genome_father, list_child, carac, style) ;
       }
     }
   }
@@ -168,17 +172,17 @@ SUB CLASS HERBIVORE 0.2.1
 class Herbivore extends Agent_dynamic {
 
   // Herbivore(int size, int stamina, int life_expectancy, int velocity, int sense_range, String name, Vec2 sex_appeal, int gender) {
-  Herbivore(Info_dict carac, int gender) {
+  Herbivore(Info_dict carac, Info_obj style, int gender) {
 
     // super(size, stamina, life_expectancy, velocity, sense_range, name, sex_appeal, gender) ;
-    super(carac, gender) ;
+    super(carac, style, gender) ;
     // not in the genome
     set_kill_skill(size) ;
   }
 
 
-  Herbivore(Genome mother, Genome father) {
-    super(mother,father) ;
+  Herbivore(Genome mother, Genome father, Info_obj style) {
+    super(mother,father, style) ;
     // not in the genome
     set_kill_skill(size) ;
   }

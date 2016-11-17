@@ -9,6 +9,9 @@ First release 0.0.1 for 2016_01 for l'École multimédia / Workshop 2016 februar
 void setup() {
   // fullScreen(P3D) ;
   size(1600,1000,P3D) ;
+  load_costume_pic("pirate.svg") ;
+ //  load_costume_pic("pirate.png") ;
+
   load_nucleotide_table("code.csv") ;
 
   colorMode(HSB, 360,100,100,100) ;
@@ -23,7 +26,6 @@ void draw() {
     init_ecosystem = false ;
     first_save = true ;
     init_log() ;
-    costume_agent() ;
   }
 
   background_rope(biotope_colour(biomass).r,biotope_colour(biomass).g,biotope_colour(biomass).b, 20) ;

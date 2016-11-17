@@ -18,39 +18,43 @@ FLORA
 /**
 * build the plant of the ecosystem
 */
-void build_flora(ArrayList<Agent> list_f, Info_dict carac, Vec4 colour, int num) {
+void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int num) {
   for(int i = 0 ; i < num ; i++) {
     if(ENVIRONMENT == 2 ) {
       Vec2 pos = Vec2("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d) ;
-      add_flora(list_f, pos, carac, colour) ;
+      add_flora(list_f, pos, carac, style) ;
     } else if (ENVIRONMENT == 3 ) {
       Vec3 pos = Vec3("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d, (int)LIMIT.e, (int)LIMIT.f) ;
-      add_flora(list_f, pos, carac, colour) ;
+      add_flora(list_f, pos, carac, style) ;
     }
   }
 }
 
-void add_flora(ArrayList<Agent> list_f, Vec2 pos, Info_dict carac, Vec4 colour) {
+void add_flora(ArrayList<Agent> list_f, Vec2 pos, Info_dict carac, Info_obj style) {
    Vec3 final_pos =  Vec3(pos.x,pos.y,0) ;
-   add_flora(list_f, final_pos, carac, colour) ;
+   add_flora(list_f, final_pos, carac, style) ;
 }
-void add_flora(ArrayList<Agent> list_f, Vec3 pos, Info_dict carac, Vec4 colour) {
+void add_flora(ArrayList<Agent> list_f, Vec3 pos, Info_dict carac, Info_obj style) {
     // recover data
-  String name = (String) carac.get("name")[0].catch_a() ;
-  int size_template = (int) carac.get("size")[0].catch_a() ;
+  String name = (String) carac.get("name")[0].catch_obj(0) ;
+  int size_template = (int) carac.get("size")[0].catch_obj(0) ;
   int size = int(random(ceil(size_template *.5), ceil(size_template*3))) ;
-  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_a() ;
-  int speed_growth = (int) carac.get("speed_growth")[0].catch_a() ;
-  float need = (Float) carac.get("need")[0].catch_a() ;
+  int nutrient_quality = (int) carac.get("nutrient_quality")[0].catch_obj(0) ;
+  int speed_growth = (int) carac.get("speed_growth")[0].catch_obj(0) ;
+  float need = (Float) carac.get("need")[0].catch_obj(0) ;
 
   Flora f = new Flora(pos, size, name) ;
    list_f.add(f) ;
+   // aspect
+   f.set_costume((int)style.catch_obj(0)) ;
+   f.set_fill((Vec4)style.catch_obj(1)) ;
+   f.set_stroke((Vec4)style.catch_obj(2)) ;
+   f.set_thickness((float)style.catch_obj(3)) ;
+   // plant
    f.set_nutrient_quality(nutrient_quality) ;
-   //f.set_pos(pos) ;
-   f.set_fill(colour) ;
-   f.set_stroke(colour) ;
    f.set_growth(speed_growth) ;
    f.set_need(need) ;
+   //f.set_pos(pos) ;
 }
 
 
@@ -89,9 +93,13 @@ void flora_update(ArrayList<Agent> list_f, Biomass b) {
   flora_update_opacity(list_f) ;
 }
 
-void flora_show(ArrayList<Agent> list_f, boolean info) {
-  if(!info) flora_update_aspect(list_f) ;
-  if(info) info_agent(list_f) ;
+void flora_show(Info_obj style, ArrayList<Agent> list_f) {
+  if(!INFO_DISPLAY_AGENT) {
+    update_aspect(style, list_f) ;
+    // flora_update_aspect(list_f) ;
+  } else {
+    info_agent(list_f) ;
+  }
 }
 /**
 Flora update()
@@ -153,7 +161,7 @@ void flora_update_opacity(ArrayList<Agent> list_f) {
 }
 
 
-
+/*
 void flora_update_aspect(ArrayList<Agent> list_f) {
   for(Agent a : list_f) {
     if(a instanceof Flora) {
@@ -167,6 +175,7 @@ void flora_update_aspect(ArrayList<Agent> list_f) {
     }
   }
 }
+*/
 /**
 End flora
 */

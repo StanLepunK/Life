@@ -29,18 +29,16 @@ ArrayList<Agent> DEAD_LIST = new ArrayList<Agent>() ;
 // QUANTITY
 int num_flora = 100 ;
 int num_herbivore = 30 ; 
-int num_omnivore = 0 ; 
+int num_omnivore = 10 ; 
 int num_carnivore = 2 ; 
-int num_bacterium = 0 ;
-int num_dead = 0 ;
+int num_bacterium = 5 ;
+int num_dead = 40 ;
 
 // Colour
-Vec4 colour_flora = Vec4(100, 100, 80, 100) ;
-Vec4 colour_herbivore = Vec4(50, 100, 100, 100) ;
-Vec4 colour_omnivore = Vec4(150, 100, 80, 100) ;
-Vec4 colour_carnivore = Vec4(0, 100, 100, 100)  ; 
-Vec4 colour_bacterium = Vec4(30, 0, 30, 100) ;
-Vec4 colour_dead = Vec4(0, 0, 30, 100) ;
+Info_obj style_carnivore, style_herbivore, style_omnivore ;
+Info_obj style_flora ;
+Info_obj style_dead ;
+Info_obj style_bacterium ;
 
 
 Info_dict flora_carac = new Info_dict() ;
@@ -59,12 +57,47 @@ void ecosystem_setting(Biomass b) {
   set_caracteristic_agent() ;
   b.set_humus(BOX.x *BOX.y *.01) ;
 
-  build_flora(FLORA_LIST, flora_carac, colour_flora, num_flora) ;
-  build_herbivore(HERBIVORE_CHILD_LIST, herbivore_carac, colour_herbivore, num_herbivore) ;
-  build_omnivore(OMNIVORE_CHILD_LIST, omnivore_carac, colour_omnivore, num_omnivore) ;
-  build_carnivore(CARNIVORE_CHILD_LIST, carnivore_carac, colour_carnivore, num_carnivore) ;
-  build_bacterium(BACTERIUM_LIST, bacterium_carac, colour_bacterium, num_bacterium) ;
-  build_dead(DEAD_LIST, dead_carac, colour_dead, num_dead) ;
+  int costume = ELLIPSE_ROPE ;
+  float thickness = 1. ;
+  Vec4 fill_flora = Vec4(100, 100, 80, 100) ;
+  Vec4 stroke_flora = Vec4(100, 100, 80, 100) ;
+  style_flora = new Info_obj("Flora Aspect", costume, fill_flora, stroke_flora, thickness) ;
+
+  costume = TRIANGLE_ROPE ;
+  Vec4 fill_herbivore = Vec4(59, 100, 80, 100) ;
+  Vec4 stroke_herbivore = Vec4(50, 100, 80, 100) ;
+  style_herbivore = new Info_obj("Herbivore Aspect", costume, fill_herbivore, stroke_herbivore, thickness) ;
+
+  costume = PENTAGON_ROPE ;
+  Vec4 fill_omnivore = Vec4(150, 100, 80, 100) ;
+  Vec4 stroke_omnivore = Vec4(150, 100, 80, 100) ;
+  style_omnivore = new Info_obj("Omnivore Aspect", costume, fill_omnivore, stroke_omnivore, thickness) ;
+
+  // costume = HEPTAGON_ROPE ;
+  costume = -1 ;
+  Vec4 fill_carnivore = Vec4(0, 100, 100, 100) ;
+  Vec4 stroke_carnivore = Vec4(0, 100, 100, 100) ;
+  style_carnivore = new Info_obj("Carnivore Aspect", costume, fill_carnivore, stroke_carnivore, thickness) ;
+
+  costume = ELLIPSE_ROPE ;
+  Vec4 fill_bacterium = Vec4(30, 0, 30, 100) ;
+  Vec4 stroke_bacterium = Vec4(30, 0, 30, 100) ;
+  style_bacterium = new Info_obj("Bacterium Aspect", costume, fill_bacterium, stroke_bacterium, thickness) ;
+
+  costume = CROSS_2_ROPE ;
+  Vec4 fill_dead = Vec4(0, 0, 30, 100) ;
+  Vec4 stroke_dead = Vec4(0, 0, 30, 100) ;
+  style_dead = new Info_obj("Dead Aspect", costume, fill_dead, stroke_dead, thickness) ;
+
+     
+
+
+  build_flora(FLORA_LIST, flora_carac, style_flora, num_flora) ;
+  build_herbivore(HERBIVORE_CHILD_LIST, herbivore_carac, style_herbivore, num_herbivore) ;
+  build_omnivore(OMNIVORE_CHILD_LIST, omnivore_carac, style_omnivore, num_omnivore) ;
+  build_carnivore(CARNIVORE_CHILD_LIST, carnivore_carac, style_carnivore, num_carnivore) ;
+  build_bacterium(BACTERIUM_LIST, bacterium_carac, style_bacterium, num_bacterium) ;
+  build_dead(DEAD_LIST, dead_carac, style_dead, num_dead) ;
 }
 
 
@@ -173,7 +206,7 @@ void spawn_carnivore() {
     int population_target = HERBIVORE_CHILD_LIST.size() + HERBIVORE_FEMALE_LIST.size() +  HERBIVORE_MALE_LIST.size() ;
     if(population_target > num_herbivore && frameCount%(5 *(int)frameRate) == 0 ) {
       int num = ceil(random(10)) ;
-      build_carnivore(CARNIVORE_CHILD_LIST, carnivore_carac, colour_carnivore, num) ;
+      build_carnivore(CARNIVORE_CHILD_LIST, carnivore_carac, style_carnivore, num) ;
     }
   }
 }
@@ -191,25 +224,6 @@ void spawn_carnivore() {
 
 
 
-/** 
-COSTUME
-*/
-// int flora_costume, herbivore_costume, omnivore_costume, carnivore_costume, bacterium_costume, dead_costume  ;
-void costume_agent() {
-  int flora_costume = ELLIPSE_ROPE ;
-  int herbivore_costume = TETRAHEDRON_ROPE ;
-  int omnivore_costume = TETRAHEDRON_ROPE ;
-  int carnivore_costume = CROSS_3_ROPE ;
-  int bacterium_costume = SPHERE_LOW_ROPE ;
-  int dead_costume = POINT_ROPE ;
-
-  set_costume_agent(flora_costume, FLORA_LIST) ;
-  set_costume_agent(herbivore_costume, HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
-  set_costume_agent(omnivore_costume, OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
-  set_costume_agent(carnivore_costume, CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
-  set_costume_agent(bacterium_costume, BACTERIUM_LIST) ;
-  set_costume_agent(dead_costume, DEAD_LIST) ;  
-}
 
 
 
@@ -372,47 +386,40 @@ class Biomass {
 UPDATE LIST
 */
 void update_list() {
-  /**
-  flora update
-  */
+
+  // flora update
   flora_update(FLORA_LIST, biomass) ;
-  /**
-  dead corpse update
-  */
+  // bacterium update
   bacterium_update(BACTERIUM_LIST, DEAD_LIST, biomass, INFO_DISPLAY_AGENT) ;
-  dead_update(DEAD_LIST) ;
-
+  // dead corpse update
   
-  /**
-  dynamic agent update
-
-  */
+  dead_update(DEAD_LIST) ;
+ 
+  // dynamic agent update
   herbivore_update(HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
   omnivore_update(OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
   carnivore_update(CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
 
-  /**
-  Eating
-  */
+
+
+
+
+
+  // Eating
+  // carnivore eating
   eating_update(CARNIVORE_CHILD_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
   eating_update(CARNIVORE_FEMALE_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
   eating_update(CARNIVORE_MALE_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
-
-  eating_update(CARNIVORE_CHILD_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
-  eating_update(CARNIVORE_FEMALE_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
-  eating_update(CARNIVORE_MALE_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
-
-  // Omnivore hunt carnivore and herbivore
+  // omnivore eating
   eating_update(OMNIVORE_CHILD_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
   eating_update(OMNIVORE_FEMALE_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
   eating_update(OMNIVORE_MALE_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
 
-  eating_update(OMNIVORE_CHILD_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
-  eating_update(OMNIVORE_FEMALE_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
-  eating_update(OMNIVORE_MALE_LIST, DEAD_LIST, INFO_DISPLAY_AGENT) ;
-  /**
-  hunting
-  */
+
+
+
+
+  // hunting
   // carnivore hunt herbivorr and omnivore
   hunting_update(CARNIVORE_CHILD_LIST, INFO_DISPLAY_AGENT, HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
   hunting_update(CARNIVORE_FEMALE_LIST, INFO_DISPLAY_AGENT, HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
@@ -432,9 +439,7 @@ void update_list() {
   hunting_update(OMNIVORE_MALE_LIST, INFO_DISPLAY_AGENT, CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
 
 
-  /**
-  picking
-  */
+  // picking
   picking_update(HERBIVORE_CHILD_LIST, FLORA_LIST, INFO_DISPLAY_AGENT) ;
   picking_update(HERBIVORE_FEMALE_LIST, FLORA_LIST, INFO_DISPLAY_AGENT) ;
   picking_update(HERBIVORE_MALE_LIST, FLORA_LIST, INFO_DISPLAY_AGENT) ;
@@ -443,23 +448,21 @@ void update_list() {
   picking_update(OMNIVORE_FEMALE_LIST, FLORA_LIST, INFO_DISPLAY_AGENT) ;
   picking_update(OMNIVORE_MALE_LIST, FLORA_LIST, INFO_DISPLAY_AGENT) ;
 
-  /**
-  manage Child
-  */
+
+  // manage Child
   manage_child(HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST, HERBIVORE_CHILD_LIST) ;
   manage_child(OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST, OMNIVORE_CHILD_LIST) ;
   manage_child(CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST, CARNIVORE_CHILD_LIST) ;
   
-  /**
-  reproduction
-  */
-  reproduction_female_herbivore(HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST, HERBIVORE_CHILD_LIST, herbivore_carac) ;
+
+  // reproduction
+  reproduction_female_herbivore(HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST, HERBIVORE_CHILD_LIST, herbivore_carac, style_herbivore) ;
   reproduction_male(HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
 
-  reproduction_female_omnivore(OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST, OMNIVORE_CHILD_LIST, omnivore_carac) ;
+  reproduction_female_omnivore(OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST, OMNIVORE_CHILD_LIST, omnivore_carac, style_omnivore) ;
   reproduction_male(OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
 
-  reproduction_female_carnivore(CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST, CARNIVORE_CHILD_LIST, carnivore_carac) ;
+  reproduction_female_carnivore(CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST, CARNIVORE_CHILD_LIST, carnivore_carac, style_carnivore) ;
   reproduction_male(CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
 
   
@@ -470,24 +473,18 @@ void update_list() {
   /**
   SHOW
   */
-  /**
-  flora show
-  */
-  flora_show(FLORA_LIST, INFO_DISPLAY_AGENT) ;
+  // flora show
+  flora_show(style_flora, FLORA_LIST) ;
   
-  /**
-  dead / corpse show
-  */
-  show_dead(DEAD_LIST, INFO_DISPLAY_AGENT) ;
+  // dead / corpse show 
+  show_dead(style_dead, DEAD_LIST) ;
   
-  /**
-  dynamic agent show
-  */
-  show_agent_dynamic(INFO_DISPLAY_AGENT, HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
-  show_agent_dynamic(INFO_DISPLAY_AGENT, CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
-  show_agent_dynamic(INFO_DISPLAY_AGENT, OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
+  // dynamic agent show
+  show_agent_dynamic(style_herbivore, HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
+  show_agent_dynamic(style_carnivore, CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
+  show_agent_dynamic(style_omnivore, OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
 
-  show_bacterium(biomass, INFO_DISPLAY_AGENT, BACTERIUM_LIST) ;
+  show_bacterium(biomass, style_bacterium, BACTERIUM_LIST) ;
 }
 
 

@@ -35,6 +35,8 @@ interface Agent {
   void set_costume(int which) ;
   
   void aspect(Vec4 f, Vec4 s, float t) ;
+
+  int get_costume() ;
   Vec4 get_fill() ;
   Vec4 get_stroke() ;
   float get_thickness() ;
@@ -175,6 +177,8 @@ abstract class Agent_model implements Agent {
   boolean get_alive() { return alive ;}
   int get_size() { return size ; }
   int get_stamina() { return stamina ; }
+
+  int get_costume() { return costume ; }
   Vec4 get_fill() { return colour_fill ; }
   Vec4 get_stroke() { return colour_stroke ; }
   float get_thickness() { return thickness ; }
@@ -350,8 +354,7 @@ abstract class Agent_model implements Agent {
 
 
   /**
-  Aspect
-
+  ASPECT
   */
   void aspect(float thickness) {
     if(thickness <= 0) { 
@@ -380,7 +383,6 @@ abstract class Agent_model implements Agent {
 
   /**
   COSTUME
-
   */
   void costume() {
     costume_rope(pos, size, costume) ;
@@ -590,6 +592,7 @@ abstract class Agent_dynamic extends Agent_model {
 //  int size_target_flora ;
   int time_watching = 0 ;
   // MISC
+  Info_obj style ;
 
 
   /**
@@ -603,8 +606,12 @@ abstract class Agent_dynamic extends Agent_model {
   @param int velocity, give the maximum of motion speed of your agent.
   @param String name... no comment !
   */
-  Agent_dynamic(Info_dict carac, int gender) {
+  Agent_dynamic(Info_dict carac, Info_obj style, int gender) {
   // Agent_dynamic(int size, int stamina, int life_expectancy, int velocity, int sense_range, String name, Vec2 sex_appeal, int gender) {
+    // set aspect
+    this.style = style ;
+    set_aspect((Vec4)style.catch_obj(1), (Vec4)style.catch_obj(2), (float)style.catch_obj(3)) ;
+
     // catch caracteristic
     String temp_name = "Nobody" ;
     int temp_size = 1 ;
@@ -616,24 +623,28 @@ abstract class Agent_dynamic extends Agent_model {
     Vec2 temp_sex_appeal = Vec2(1) ;
     float temp_multiple_pregnancy = 0 ;
 
-    if (carac.get("name") != null) temp_name = (String) carac.get("name")[0].catch_a() ;
-    if (carac.get("size") != null) temp_size = (int) random_gaussian((int)carac.get("size")[0].catch_a()) ;
-    if (carac.get("stamina") != null) temp_stamina = (int) random_gaussian((int)carac.get("stamina")[0].catch_a()) ;
-    if (carac.get("velocity") != null) temp_velocity = (int) random_gaussian((int)carac.get("velocity")[0].catch_a()) ;
-    if (carac.get("sense_range") != null) temp_sense_range = (int) random_gaussian((int)carac.get("sense_range")[0].catch_a()) ;
+    if (carac.get("name") != null) temp_name = (String) carac.get("name")[0].catch_obj(0) ;
+    if (carac.get("size") != null) temp_size = (int) random_gaussian((int)carac.get("size")[0].catch_obj(0)) ;
+    if (carac.get("stamina") != null) temp_stamina = (int) random_gaussian((int)carac.get("stamina")[0].catch_obj(0)) ;
+    if (carac.get("velocity") != null) temp_velocity = (int) random_gaussian((int)carac.get("velocity")[0].catch_obj(0)) ;
+    if (carac.get("sense_range") != null) temp_sense_range = (int) random_gaussian((int)carac.get("sense_range")[0].catch_obj(0)) ;
     // agent
-    if (carac.get("life_expectancy") != null) temp_life_expectancy = (int) random_gaussian((int)carac.get("life_expectancy")[0].catch_a()) ;
+    if (carac.get("life_expectancy") != null) temp_life_expectancy = (int) random_gaussian((int)carac.get("life_expectancy")[0].catch_obj(0)) ;
     // species
-    if (carac.get("life_expectancy") != null) species_life_cycle = (int) random_gaussian((int)carac.get("life_expectancy")[0].catch_a()) ;
+    if (carac.get("life_expectancy") != null) species_life_cycle = (int) random_gaussian((int)carac.get("life_expectancy")[0].catch_obj(0)) ;
     if (carac.get("sex_appeal") != null) {
-      Object obj = carac.get("sex_appeal")[0].catch_a() ;
+      Object obj = carac.get("sex_appeal")[0].catch_obj(0) ;
       if(obj instanceof Vec2) { 
         Vec2 temp = (Vec2) obj ;
         temp_sex_appeal.x = random_gaussian(temp.x);
         temp_sex_appeal.y = random_gaussian(temp.y);
       }
     }
-    if(carac.get("multiple_pregnancy") != null) temp_multiple_pregnancy = random_gaussian((Float)carac.get("multiple_pregnancy")[0].catch_a()) ;
+
+
+
+
+    if(carac.get("multiple_pregnancy") != null) temp_multiple_pregnancy = random_gaussian((Float)carac.get("multiple_pregnancy")[0].catch_obj(0)) ;
 
     init_var_life_cycle(temp_life_expectancy, species_life_cycle) ;
 
@@ -659,6 +670,7 @@ abstract class Agent_dynamic extends Agent_model {
 
 
     */
+
 
     
     init_ID() ;
@@ -691,7 +703,11 @@ abstract class Agent_dynamic extends Agent_model {
   CONSTRUCTOR 
   Dynamic Agent from mother and father Genome
   */
-  Agent_dynamic(Genome mother, Genome father) {
+  Agent_dynamic(Genome mother, Genome father, Info_obj style) {
+    // aspect
+    this.style = style ;
+    set_aspect((Vec4)style.catch_obj(1), (Vec4)style.catch_obj(2), (float)style.catch_obj(3)) ;
+
     init_ID() ;
     init_dir() ;
     // update gene generation from mother line
@@ -709,21 +725,21 @@ abstract class Agent_dynamic extends Agent_model {
     
     // setting
     // chromosome Float
-    this.size = int((Float)genome.get_gene_product(0,0).catch_a()) ;
-    this.stamina_ref = this.stamina = int((Float)genome.get_gene_product(0,2).catch_a());
-    int life_expectancy_temp = int((Float)genome.get_gene_product(0,3).catch_a()) ;
+    this.size = int((Float)genome.get_gene_product(0,0).catch_obj(0)) ;
+    this.stamina_ref = this.stamina = int((Float)genome.get_gene_product(0,2).catch_obj(0));
+    int life_expectancy_temp = int((Float)genome.get_gene_product(0,3).catch_obj(0)) ;
 
-    this.velocity = this.velocity_ref = int((Float)genome.get_gene_product(0,4).catch_a()) ;
-    this.sense_range = int(size +int((Float)genome.get_gene_product(0,5).catch_a())) ;
+    this.velocity = this.velocity_ref = int((Float)genome.get_gene_product(0,4).catch_obj(0)) ;
+    this.sense_range = int(size +int((Float)genome.get_gene_product(0,5).catch_obj(0))) ;
     // chromosome String
-    this.name = (String) genome.get_gene_product(1,0).catch_a() ;
+    this.name = (String) genome.get_gene_product(1,0).catch_obj(0) ;
     // sex appeal
-    Vec2 sex_appeal = Vec2((Float)genome.get_gene_product(0,6).catch_a(), (Float)genome.get_gene_product(0,7).catch_a()) ;
+    Vec2 sex_appeal = Vec2((Float)genome.get_gene_product(0,6).catch_obj(0), (Float)genome.get_gene_product(0,7).catch_obj(0)) ;
     // multi_pregnancy
-    this.multiple_pregnancy = (Float)genome.get_gene_product(0,8).catch_a() ;
+    this.multiple_pregnancy = (Float)genome.get_gene_product(0,8).catch_obj(0) ;
 
     // cycle life
-    int species_life_cycle = int((Float)genome.get_gene_product(0,9).catch_a()) ;
+    int species_life_cycle = int((Float)genome.get_gene_product(0,9).catch_obj(0)) ;
 
 
     
@@ -736,7 +752,7 @@ abstract class Agent_dynamic extends Agent_model {
 
     set_hunger_cycle() ;
 
-    if((String) genome.get_gene_product("XX").catch_a() == "X") {
+    if((String) genome.get_gene_product("XX").catch_obj(0) == "X") {
       this.gender = 0  ; 
     } else { 
       this.gender = 1 ;
@@ -1159,7 +1175,6 @@ SEARCHING for PICK of HUNT
       a.size -= speed_feeding ;
       hunger += calories ;
       stamina += calories ;
-      println("Pourquoi je mange deux fois", frameCount) ;
       eating = true ;
     } else {
       eating = false ;
@@ -1742,12 +1757,12 @@ abstract class Agent_static extends Agent_model {
     this.size = this.size_ref = this.size_max  = size ;
   }
 
-  Agent_static(Info_dict carac, int gender) {
+  Agent_static(Info_dict carac, Info_obj style, int gender) {
     String temp_name = "Nobody" ;
     int temp_size = 1 ;
     this.ID = (short) Math.round(random(Short.MAX_VALUE)) ;
-    if (carac.get("name") != null) temp_name = (String) carac.get("name")[0].catch_a() ;
-    if (carac.get("size") != null) temp_size = (int) random_gaussian((int)carac.get("size")[0].catch_a()) ;
+    if (carac.get("name") != null) temp_name = (String) carac.get("name")[0].catch_obj(0) ;
+    if (carac.get("size") != null) temp_size = (int) random_gaussian((int)carac.get("size")[0].catch_obj(0)) ;
 
     this.name = temp_name ;
     this.size = this.size_ref = this.size_max = temp_size ;
