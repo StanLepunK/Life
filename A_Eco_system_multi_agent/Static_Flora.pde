@@ -16,8 +16,9 @@ METHOD FLORA
 FLORA
 */
 /**
-* build the plant of the ecosystem
+build
 */
+// main method
 void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int num) {
   for(int i = 0 ; i < num ; i++) {
     if(ENVIRONMENT == 2 ) {
@@ -30,6 +31,75 @@ void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int n
   }
 }
 
+void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int num, Vec... area) {
+
+
+  for(int i = 0 ; i < num ; i++) {
+    if(ENVIRONMENT == 2) {
+      int where = (int)random(area.length) ;
+      if(area[where] instanceof Vec2) {
+        Vec2 spawn_pos = (Vec2) area[where] ;
+        add_flora(list_f, spawn_pos, carac, style) ;
+      }
+      if(area[where] instanceof Vec3) {
+        Vec3 spawn_pos = (Vec3) area[where] ;
+        add_flora(list_f, Vec2(spawn_pos.x, spawn_pos.y), carac, style) ;
+      }  
+    } else if (ENVIRONMENT == 3) {
+      int where = (int)random(area.length) ;
+      if(area[where] instanceof Vec2) {
+        Vec2 spawn_pos = (Vec2) area[where] ;
+        add_flora(list_f, Vec3(spawn_pos.x, spawn_pos.y, 0), carac, style) ;
+      }
+      if(area[where] instanceof Vec3) {
+        Vec3 spawn_pos = (Vec3) area[where] ;
+        add_flora(list_f, spawn_pos, carac, style) ;
+      }  
+    }
+  }
+}
+
+
+void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int num, PImage img, Vec pos_drop_zone) {
+  // create drop zone
+  int grid = 5 ;
+  int bags = 2 ;
+  Area drop_zone = new Area(img, grid, bags, BRIGHTNESS_SORT) ;
+  Vec3 pos_img = Vec3(width/2  - (img.width/2), height/2  - (img.height/2), 0) ;
+
+
+  if(pos_drop_zone instanceof Vec2) {
+    Vec2 p = (Vec2) pos_drop_zone ;
+    pos_img.set(p.x - (img.width/2), p.y  - (img.height/2), 0) ;
+  } else if(pos_drop_zone instanceof Vec3) {
+    Vec3 p = (Vec3) pos_drop_zone ;
+    pos_img.set(p.x - (img.width/2), p.y  - (img.height/2), p.z) ;
+  }
+
+  for(int i = 0 ; i < num ; i++) {
+    if(ENVIRONMENT == 2 ) {
+      int ID_bag = 1 ;
+      int size_bag = drop_zone.get(ID_bag).size() ;
+      Vec2 pos = drop_zone.get(ID_bag).get_pos(size_bag) ;
+      pos.add(pos_img) ;
+      add_flora(list_f, pos, carac, style) ;
+    } else if (ENVIRONMENT == 3 ) {
+      int ID_bag = 1 ;
+      int size_bag = drop_zone.get(ID_bag).size() ;
+      int where = floor(random(size_bag)) ;
+      Vec2 temp_pos = drop_zone.get(ID_bag).get_pos(where) ;
+      // float z = random((int)LIMIT.c, (int)LIMIT.f) ;
+      float z = 0 ;
+      Vec3 pos = Vec3(temp_pos.x,temp_pos.y, z) ;
+      pos.add(pos_img) ;
+      add_flora(list_f, pos, carac, style) ;
+    }
+  }
+}
+
+
+// annexe methode
+// add
 void add_flora(ArrayList<Agent> list_f, Vec2 pos, Info_dict carac, Info_obj style) {
    Vec3 final_pos =  Vec3(pos.x,pos.y,0) ;
    add_flora(list_f, final_pos, carac, style) ;
@@ -58,6 +128,14 @@ void add_flora(ArrayList<Agent> list_f, Vec3 pos, Info_dict carac, Info_obj styl
 }
 
 
+
+
+
+
+
+
+
+
 /**
  set aspect flora
  */
@@ -81,6 +159,12 @@ void scale_flora(ArrayList<Flora> list_f, float scale) {
   }
 }
 */
+
+
+
+
+
+
 
 /**
 Flora update 0.0.3

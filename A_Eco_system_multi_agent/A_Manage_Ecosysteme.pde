@@ -27,12 +27,12 @@ ArrayList<Agent> CARNIVORE_MALE_LIST = new ArrayList<Agent>() ;
 ArrayList<Agent> DEAD_LIST = new ArrayList<Agent>() ;
 
 // QUANTITY
-int num_flora = 100 ;
-int num_herbivore = 30 ; 
-int num_omnivore = 10 ; 
-int num_carnivore = 2 ; 
-int num_bacterium = 5 ;
-int num_dead = 40 ;
+int num_flora = 200 ;
+int num_herbivore = 200 ; 
+int num_omnivore = 0 ; 
+int num_carnivore = 0 ; 
+int num_bacterium = 0 ;
+int num_dead = 0 ;
 
 // Colour
 Info_obj style_carnivore, style_herbivore, style_omnivore ;
@@ -51,6 +51,8 @@ Info_dict dead_carac = new Info_dict() ;
 
 
 
+
+PImage drop_zone_img_flora ;
 // main method
 void ecosystem_setting(Biomass b) {
   clear_agent() ;
@@ -88,16 +90,55 @@ void ecosystem_setting(Biomass b) {
   Vec4 fill_dead = Vec4(0, 0, 30, 100) ;
   Vec4 stroke_dead = Vec4(0, 0, 30, 100) ;
   style_dead = new Info_obj("Dead Aspect", costume, fill_dead, stroke_dead, thickness) ;
+  
 
-     
 
+  create_drop_zone() ;
+  /*
+  // drop_zone with image bitmap
+  drop_zone_img_flora = loadImage("pirate_1500x1000.jpg") ;
+  Vec3 drop_pos = Vec3(width/2, height/2, -100) ;
+  build_flora(FLORA_LIST, flora_carac, style_flora, num_flora, drop_zone_img_flora, drop_pos)  ;
+  */
+  // classic radom drop zone
+  // build_flora(FLORA_LIST, flora_carac, style_flora, num_flora) ;
 
-  build_flora(FLORA_LIST, flora_carac, style_flora, num_flora) ;
+  //drop zone from list of point
+  build_flora(FLORA_LIST, flora_carac, style_flora, num_flora, drop_zone_flora) ;
+
   build_herbivore(HERBIVORE_CHILD_LIST, herbivore_carac, style_herbivore, num_herbivore) ;
   build_omnivore(OMNIVORE_CHILD_LIST, omnivore_carac, style_omnivore, num_omnivore) ;
   build_carnivore(CARNIVORE_CHILD_LIST, carnivore_carac, style_carnivore, num_carnivore) ;
   build_bacterium(BACTERIUM_LIST, bacterium_carac, style_bacterium, num_bacterium) ;
   build_dead(DEAD_LIST, dead_carac, style_dead, num_dead) ;
+}
+
+Vec3 [] drop_zone_flora ;
+Helix_DNA drop_flora_DNA ;
+void create_drop_zone() {
+  //flora
+  int revolution = 50 ;
+  int nucleotide = num_flora *2 ;
+  int size = height / 2;
+  int radius = width/2 ;
+  int num_strand = 2 ;
+
+  Vec3 pos_drope_zone_flora = Vec3(width / 2, 0, 0) ;
+
+  drop_flora_DNA = new Helix_DNA(num_strand, nucleotide, revolution) ;
+  drop_flora_DNA.set_radius(radius) ;
+  drop_flora_DNA.set_height(size) ;
+  drop_flora_DNA.set_pos(pos_drope_zone_flora) ;
+
+
+   drop_zone_flora = new Vec3[num_flora] ;
+   for(int i = 0 ; i < drop_zone_flora.length ; i++) {
+     drop_zone_flora[i] = Vec3() ;
+     int where = (int)random(drop_flora_DNA.list().length) ;
+     drop_zone_flora[i].set(drop_flora_DNA.list()[where]) ;
+   }
+   printArray(drop_zone_flora) ;
+  
 }
 
 

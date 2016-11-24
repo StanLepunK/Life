@@ -1,5 +1,5 @@
 /**
-CLASS OPE VEC 1.5.4
+CLASS OPE VEC 1.5.6
 Rope – Romanesco Processing Environment – 2015 – 2016
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Vec
@@ -206,7 +206,7 @@ class Vec2 extends Vec {
     return new Vec2(x,y);
   }
   /* add Vector */
-  Vec2 add(Vec2 v) {
+  Vec2 add(Vec v) {
     if(v != null) {
       x += v.x ;
       y += v.y ;
@@ -215,7 +215,7 @@ class Vec2 extends Vec {
     return new Vec2(x,y);
   }
   /* add two Vector together */
-  Vec2 add(Vec2 v_a, Vec2 v_b) {
+  Vec2 add(Vec v_a, Vec v_b) {
     if(v_a != null &&  v_b != null) {
       x = v_a.x + v_b.x ;
       y = v_a.y + v_b.y ;
@@ -244,7 +244,7 @@ class Vec2 extends Vec {
     return new Vec2(x,y);
   }
   /* add one Vector */
-  Vec2 sub(Vec2 v) {
+  Vec2 sub(Vec v) {
     if(v != null) {
       x -= v.x ;
       y -= v.y ;
@@ -254,7 +254,7 @@ class Vec2 extends Vec {
   }
   
   /* add two Vector together */
-  Vec2 sub(Vec2 v_a, Vec2 v_b) {
+  Vec2 sub(Vec v_a, Vec v_b) {
     if(v_a != null &&  v_b != null) {
       x = v_a.x - v_b.x ;
       y = v_a.y - v_b.y ;
@@ -346,7 +346,7 @@ class Vec2 extends Vec {
   return mapping vector
   @return Vec2
   */
-  Vec2 normalize(Vec2 min, Vec2 max) {
+  Vec2 normalize(Vec min, Vec max) {
     if(min != null && max != null) {
       x = map(x, min.x, max.x, 0, 1) ;
       y = map(y, min.y, max.y, 0, 1) ;
@@ -355,7 +355,7 @@ class Vec2 extends Vec {
     return new Vec2(x,y) ;
   }
   
-  Vec2 normalize(Vec2 max) {
+  Vec2 normalize(Vec max) {
     if(max != null) {
       x = map(x, 0, max.x, 0, 1) ;
       y = map(y, 0, max.y, 0, 1) ;
@@ -399,7 +399,7 @@ class Vec2 extends Vec {
     return sqrt(x+y) ;
   }
 
-  float mag(Vec2 v_target) {
+  float mag(Vec v_target) {
     if(v_target != null) {
       float new_x = (v_target.x -x) *(v_target.x -x) ;
       float new_y = (v_target.y -y) *(v_target.y -y) ;
@@ -418,7 +418,7 @@ class Vec2 extends Vec {
   @ return float
   distance between himself and an other vector
   */
-  float dist(Vec2 v_target) {
+  float dist(Vec v_target) {
     if(v_target != null) {
       float dx = x - v_target.x;
       float dy = y - v_target.y;
@@ -478,7 +478,7 @@ class Vec2 extends Vec {
   /**
   Compare
   */
-  boolean compare(Vec2 target) {
+  boolean compare(Vec target) {
     if(target != null ) {
       if((x == target.x) && (y == target.y)) {
         return true ; 
@@ -761,7 +761,7 @@ class Vec3 extends Vec {
     return new Vec3(x,y,z) ;
   }
   /* add one Vector */
-  Vec3 add(Vec3 v) {
+  Vec3 add(Vec v) {
     if(v != null) {
       x += v.x ;
       y += v.y ;
@@ -772,7 +772,7 @@ class Vec3 extends Vec {
   }
   
   /* add two Vector together */
-  Vec3 add(Vec3 v_a, Vec3 v_b) {
+  Vec3 add(Vec v_a, Vec v_b) {
     if(v_a != null &&  v_b != null) {
       x = v_a.x + v_b.x ;
       y = v_a.y + v_b.y ;
@@ -805,7 +805,7 @@ class Vec3 extends Vec {
     return new Vec3(x,y,z) ;
   }
   /* add one Vector */
-  Vec3 sub(Vec3 v) {
+  Vec3 sub(Vec v) {
     if(v != null) {
       x -= v.x ;
       y -= v.y ;
@@ -816,7 +816,7 @@ class Vec3 extends Vec {
   }
   
   /* add two Vector together */
-  Vec3 sub(Vec3 v_a, Vec3 v_b) {
+  Vec3 sub(Vec v_a, Vec v_b) {
     if(v_a != null &&  v_b != null) {
       x = v_a.x - v_b.x ;
       y = v_a.y - v_b.y ;
@@ -935,7 +935,7 @@ class Vec3 extends Vec {
   return mapping vector
   @return Vec3
   */
-  Vec3 normalize(Vec3 min, Vec3 max) {
+  Vec3 normalize(Vec min, Vec max) {
     if(min != null && max != null) {
       x = map(x, min.x, max.x, 0, 1) ;
       y = map(y, min.y, max.y, 0, 1) ;
@@ -945,7 +945,7 @@ class Vec3 extends Vec {
     return new Vec3(x,y,z) ;
   }
   
-  Vec3 normalize(Vec3 max) {
+  Vec3 normalize(Vec max) {
     if(max != null) {
       x = map(x, 0, max.x, 0, 1) ;
       y = map(y, 0, max.y, 0, 1) ;
@@ -1014,7 +1014,7 @@ class Vec3 extends Vec {
   @ return float
   distance himself and an other vector
   */
-  float dist(Vec3 v_target) {
+  float dist(Vec v_target) {
     if(v_target != null) {
       float dx = x - v_target.x;
       float dy = y - v_target.y;
@@ -1394,7 +1394,7 @@ class Vec4 extends Vec {
     return new Vec4(x,y,z,w) ;
   }
   /* add vec */
-  Vec4 add(Vec4 v) {
+  Vec4 add(Vec v) {
     if(v != null) {
       x += v.x ;
       y += v.y ;
@@ -1405,7 +1405,7 @@ class Vec4 extends Vec {
     return new Vec4(x,y,z,w)  ;
   }
   /* add two Vector together */
-  Vec4 add(Vec4 v_a, Vec4 v_b) {
+  Vec4 add(Vec v_a, Vec v_b) {
     if(v_a != null && v_b != null) {
       x = v_a.x + v_b.x ;
       y = v_a.y + v_b.y ;
@@ -1439,7 +1439,7 @@ class Vec4 extends Vec {
     return new Vec4(x,y,z,w) ;
   }
   /* add one Vector */
-  Vec4 sub(Vec4 v) {
+  Vec4 sub(Vec v) {
     if(v != null) {
       x -= v.x ;
       y -= v.y ;
@@ -1451,7 +1451,7 @@ class Vec4 extends Vec {
   }
   
   /* add two Vector together */
-  Vec4 sub(Vec4 v_a, Vec4 v_b) {
+  Vec4 sub(Vec v_a, Vec v_b) {
     if(v_a != null &&  v_b != null) {
       x = v_a.x - v_b.x ;
       y = v_a.y - v_b.y ;
@@ -1520,7 +1520,7 @@ class Vec4 extends Vec {
   return mapping vector
   @return Vec3
   */
-  Vec4 normalize(Vec4 min, Vec4 max) {
+  Vec4 normalize(Vec min, Vec max) {
     if(min != null && max != null) {
       x = map(x, min.x, max.x, 0, 1) ;
       y = map(y, min.y, max.y, 0, 1) ;
@@ -1532,7 +1532,7 @@ class Vec4 extends Vec {
   }
   
 
-  Vec4 normalize(Vec4 max) {
+  Vec4 normalize(Vec max) {
     if(max != null) {
       x = map(x, 0, max.x, 0, 1) ;
       y = map(y, 0, max.y, 0, 1) ;
@@ -3309,13 +3309,21 @@ void rotateXYZ(Vec3 rot) {
 /**
 Matrix
 
-
 */
 
-void start_matrix_3D(Vec3 pos, Vec3 dir_cart) {
+void start_matrix_3D(Vec pos, Vec3 dir_cart) {
   Vec3 dir = dir_cart.copy() ;
   pushMatrix() ;
-  translate(pos) ;
+  if(pos instanceof Vec2) {
+    Vec2 p = (Vec2) pos ;
+    translate(p) ;
+  } else if(pos instanceof Vec3) {
+    Vec3 p = (Vec3) pos ;
+    translate(p) ;
+  } else {
+    System.err.println("error in start_matrix_3D(), Vec pos is not an instance of Vec2 or Vec3, the matrix don't translate your object") ;
+    exit() ;
+  }
   float radius = sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
   float longitude = acos(dir.x / sqrt(dir.x * dir.x + dir.y * dir.y)) * (dir.y < 0 ? -1 : 1);
   float latitude = acos(dir.z / radius) * (dir.z < 0 ? -1 : 1);
@@ -3327,16 +3335,38 @@ void start_matrix_3D(Vec3 pos, Vec3 dir_cart) {
   rotateY(longitude) ;
 }
 
-void start_matrix_3D(Vec3 pos, Vec2 dir_polar) {
-  pushMatrix() ;
-  translate(pos) ;
-  rotateXY(dir_polar) ;
+void start_matrix_3D(Vec pos, Vec2 dir_polar) {
+  if(pos instanceof Vec2) {
+    Vec2 p = (Vec2) pos ;
+    pushMatrix() ;
+    translate(p) ;
+    rotateXY(dir_polar) ;
+  } else if(pos instanceof Vec3) {
+    Vec3 p = (Vec3) pos ;
+    pushMatrix() ;
+    translate(p) ;
+    rotateXY(dir_polar) ;
+  } else {
+    System.err.println("error in start_matrix_3D(), Vec pos is not an instance of Vec2 or Vec3, the matrix cannot be init") ;
+    exit() ;
+  }
 }
 
-void start_matrix_2D(Vec2 pos, float orientation) {
-  pushMatrix() ;
-  translate(pos) ;
-  rotate(orientation) ;
+void start_matrix_2D(Vec pos, float orientation) {
+  if(pos instanceof Vec2) {
+    Vec2 p = (Vec2) pos ;
+    pushMatrix() ;
+    translate(p) ;
+    rotate(orientation) ;
+  } else if(pos instanceof Vec3) {
+    Vec3 p = (Vec3) pos ;
+    pushMatrix() ;
+    translate(p.x, p.y) ;
+    rotate(orientation) ;
+  } else {
+    System.err.println("Vec pos is not an instance of Vec2 or Vec3, the matrix cannot be init") ;
+    exit() ;
+  }
 }
 
 void stop_matrix() {
@@ -3391,5 +3421,3 @@ void matrix_start() {
   pushMatrix() ;
   System.err.println("Deprecated method matrix_start() is deprecated instead use start_matrix()") ;
 }
-
-

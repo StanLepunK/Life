@@ -1,11 +1,12 @@
 /**
-RPE Costume 0.1.2 – 2016-2016
+RPE Costume 0.2.1 – 2016-2016
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Costume_rope
 */
 final int POINT_ROPE = 0 ;
 final int ELLIPSE_ROPE = 1 ;
 final int RECT_ROPE = 2 ;
+final int LINE_ROPE = 3 ;
 
 final int TRIANGLE_ROPE = 13 ;
 final int SQUARE_ROPE = 14 ;
@@ -15,6 +16,8 @@ final int HEPTAGON_ROPE = 17 ;
 final int OCTOGON_ROPE = 18 ;
 final int NONAGON_ROPE = 19 ;
 final int DECAGON_ROPE = 20 ;
+final int HENDECAGON_ROPE = 21 ;
+final int DODECAGON_ROPE = 22 ;
 
 final int CROSS_2_ROPE = 52 ;
 final int CROSS_3_ROPE = 53 ;
@@ -42,6 +45,8 @@ void costume_list() {
 		costume_dict.add("POINT_ROPE", POINT_ROPE, 2, 0) ;
 		costume_dict.add("ELLIPSE_ROPE", ELLIPSE_ROPE, 2, 0) ;
 		costume_dict.add("RECT_ROPE", RECT_ROPE, 2, 0) ;
+		costume_dict.add("LINE_ROPE", LINE_ROPE, 2, 0) ;
+
 		costume_dict.add("TRIANGLE_ROPE", TRIANGLE_ROPE, 2, 0) ;
 		costume_dict.add("SQUARE_ROPE", SQUARE_ROPE, 2, 0) ;
 		costume_dict.add("PENTAGON_ROPE", PENTAGON_ROPE, 2, 0) ;
@@ -50,8 +55,10 @@ void costume_list() {
 		costume_dict.add("OCTOGON_ROPE", OCTOGON_ROPE, 2, 0) ;
 		costume_dict.add("NONAGON_ROPE", NONAGON_ROPE, 2, 0) ;
 		costume_dict.add("DECAGON_ROPE", DECAGON_ROPE, 2, 0) ;
+		costume_dict.add("HENDECAGON_ROPE", HENDECAGON_ROPE, 2, 0) ;
+		costume_dict.add("DODECAGON_ROPE", DODECAGON_ROPE, 2, 0) ;
 
-		costume_dict.add("CROSS_2_ROPE", CROSS_2_ROPE, 2, 0) ;
+		costume_dict.add("CROSS_2_ROPE", CROSS_2_ROPE, 3, 0) ;
 		costume_dict.add("CROSS_3_ROPE", CROSS_3_ROPE, 3, 0) ;
 
 		costume_dict.add("SPHERE_LOW_ROPE", SPHERE_LOW_ROPE, 3, 0) ;
@@ -135,7 +142,7 @@ void load_costume_pic(String path) {
 		new_ID -= 1 ;
 		Costume_pic c = new Costume_pic(this, path, new_ID) ;
 		costume_pic_list.add(c) ; ;
-		println("ID pic:", new_ID, path) ;
+		println("ID pic:", new_ID) ;
 	}
 }
 
@@ -184,27 +191,61 @@ class Costume_pic {
 /**
 // display costume
 */
-void costume_rope(Vec3 pos, int size_int,  int which_costume)  {
+// 3D
+void costume_rope(Vec3 pos, int size_int, int which_costume)  {
 	Vec3 dir_null = Vec3() ;
 	Vec3 size = Vec3(size_int) ;
-	costume_rope(pos, size, dir_null, which_costume) ;
+	float angle = 0 ;
+	costume_rope(pos, size, angle, dir_null, which_costume) ;
 }
 
-void costume_rope(Vec3 pos, Vec3 size,  int which_costume)  {
+void costume_rope(Vec3 pos, Vec3 size, int which_costume)  {
 	Vec3 dir_null = Vec3() ;
-	costume_rope(pos, size, dir_null, which_costume) ;
+	float angle = 0 ;
+	costume_rope(pos, size, angle, dir_null, which_costume) ;
 }
 
-void costume_rope(Vec2 pos, int size_int,  int which_costume)  {
+void costume_rope(Vec3 pos, Vec3 size, float angle, int which_costume)  {
+	Vec3 dir_null = Vec3() ;
+	costume_rope(pos, size, angle, dir_null, which_costume) ;
+}
+
+void costume_rope(Vec3 pos, Vec3 size, Vec dir, int which_costume)  {
+	float angle = 0 ;
+	costume_rope(pos, size, dir, which_costume) ;
+}
+
+
+//costume_rope(Vec3 pos, Vec3 size, float angle, Vec dir, int which_costume)
+
+
+// 2D
+void costume_rope(Vec2 pos, int size_int, int which_costume)  {
 	Vec3 dir_null = Vec3() ;
 	Vec3 size = Vec3(size_int) ;
-	costume_rope(Vec3(pos.x,pos.y,0), size, dir_null, which_costume) ;
+	float angle = 0 ;
+  Vec3 new_pos = Vec3(pos.x, pos.y, 0) ;
+	costume_rope(new_pos, size, angle,  dir_null, which_costume) ;
+}
+// costume_rope(Vec3 pos, Vec3 size, float angle, Vec dir, int which_costume)
+void costume_rope(Vec2 pos, Vec3 size, int which_costume)  {
+	Vec3 dir_null = Vec3() ;
+	float angle = 0 ;
+	costume_rope(Vec3(pos.x,pos.y,0), size, angle, dir_null, which_costume) ;
 }
 
-void costume_rope(Vec2 pos, Vec3 size,  int which_costume)  {
+void costume_rope(Vec2 pos, int size_int, float angle, int which_costume)  {
 	Vec3 dir_null = Vec3() ;
-	costume_rope(Vec3(pos.x,pos.y,0), size, dir_null, which_costume) ;
+	Vec3 size = Vec3(size_int) ;
+	costume_rope(Vec3(pos.x,pos.y,0), size, angle, dir_null, which_costume) ;
 }
+
+void costume_rope(Vec2 pos, Vec3 size, float angle, int which_costume)  {
+	Vec3 dir_null = Vec3() ;
+	costume_rope(Vec3(pos.x,pos.y,0), size, angle, dir_null, which_costume) ;
+}
+
+
 
 
 
@@ -214,49 +255,64 @@ case
 and 
 break
 */
-void costume_rope(Vec3 pos, Vec3 size, Vec3 dir, int which_costume) {
-	if (which_costume == 0 ) {
+void costume_rope(Vec3 pos, Vec3 size, float angle, Vec dir, int which_costume) {
+	if(dir instanceof Vec2) {
+    // direction polar
+	} else if (dir instanceof Vec3) {
+    // direction cartesian
+	} else {
+    //
+	}
+
+	if (which_costume == POINT_ROPE) {
+    strokeWeight(size.x) ;
 		point(pos) ;
-	}  else if (which_costume == 1 ) {
+	} else if (which_costume == ELLIPSE_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		ellipse(0,0, size.x, size.y) ;
 		stop_matrix() ;
-	}  else if (which_costume == 2 ) {
+	} else if (which_costume == RECT_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		rect(0,0, size.x, size.y) ;
 		stop_matrix() ;
-	} 
-
-
-
-		else if (which_costume == 13) {
-		primitive(pos, size.x, 3) ;
-	}  else if (which_costume == 14) {
-		primitive(pos, size.x, 4) ;
-	} else if (which_costume == 15) {
-		primitive(pos, size.x, 5) ;
-	} else if (which_costume == 16) {
-		primitive(pos, size.x, 6) ;
-	} else if (which_costume == 17) {
-		primitive(pos, size.x, 7) ;
-	} else if (which_costume == 18) {
-		primitive(pos, size.x, 8) ;
-	} else if (which_costume == 19) {
-		primitive(pos, size.x, 9) ;
-	} else if (which_costume == 20) {
-		primitive(pos, size.x, 10) ;
+	} else if (which_costume == LINE_ROPE) {
+		primitive(pos, size.x, 2, angle) ;
 	}
 
 
 
-		else if (which_costume == 52) {
+		else if (which_costume == TRIANGLE_ROPE) {
+		primitive(pos, size.x, 3, angle) ;
+	}  else if (which_costume == SQUARE_ROPE) {
+		primitive(pos, size.x, 4, angle) ;
+	} else if (which_costume == PENTAGON_ROPE) {
+		primitive(pos, size.x, 5, angle) ;
+	} else if (which_costume == HEXAGON_ROPE) {
+		primitive(pos, size.x, 6, angle) ;
+	} else if (which_costume == HEPTAGON_ROPE) {
+		primitive(pos, size.x, 7, angle) ;
+	} else if (which_costume == OCTOGON_ROPE) {
+		primitive(pos, size.x, 8, angle) ;
+	} else if (which_costume == NONAGON_ROPE) {
+		primitive(pos, size.x, 9, angle) ;
+	} else if (which_costume == DECAGON_ROPE) {
+		primitive(pos, size.x, 10, angle) ;
+	} else if (which_costume == HENDECAGON_ROPE) {
+		primitive(pos, size.x, 11, angle) ;
+	} else if (which_costume == DODECAGON_ROPE) {
+		primitive(pos, size.x, 12, angle) ;
+	}
+
+
+
+		else if (which_costume == CROSS_2_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		cross_2(size) ;
 		stop_matrix() ;
-	} else if (which_costume == 53) {
+	} else if (which_costume == CROSS_3_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		cross_3(size) ;
@@ -266,29 +322,29 @@ void costume_rope(Vec3 pos, Vec3 size, Vec3 dir, int which_costume) {
 
 
 
-		else if (which_costume == 100) {
+		else if (which_costume == SPHERE_LOW_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		sphereDetail(5);
 		sphere(size.x) ;
 		stop_matrix() ;
-	} else if (which_costume == 101) {
+	} else if (which_costume == SPHERE_MEDIUM_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		sphereDetail(12);
 		sphere(size.x) ;
 		stop_matrix() ;
-	}else if (which_costume == 102) {
+	}else if (which_costume == SPHERE_HIGH_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		sphere(size.x) ;
 		stop_matrix() ;
-	} else if (which_costume == 103) {
+	} else if (which_costume == TETRAHEDRON_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		tetrahedron((int)size.x) ;
 		stop_matrix() ;
-	} else if (which_costume == 104) {
+	} else if (which_costume == BOX_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		box(size) ;
@@ -297,27 +353,27 @@ void costume_rope(Vec3 pos, Vec3 size, Vec3 dir, int which_costume) {
 
 
 
-		else if (which_costume == 1001) {
+		else if (which_costume == TETRAHEDRON_LINE_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		polyhedron("TETRAHEDRON","LINE", (int)size.x) ;
 		stop_matrix() ;
-	} else if (which_costume == 1002) {
+	} else if (which_costume == CUBE_LINE_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		polyhedron("CUBE","LINE", (int)size.x) ;
 		stop_matrix() ;
-	} else if (which_costume == 1003) {
+	} else if (which_costume == OCTOHEDRON_LINE_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		polyhedron("OCTOHEDRON","LINE", (int)size.x) ;
 		stop_matrix() ;
-	} else if (which_costume == 1004) {
+	} else if (which_costume == RHOMBIC_COSI_DODECAHEDRON_SMALL_LINE_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		polyhedron("RHOMBIC COSI DODECAHEDRON SMALL","LINE", (int)size.x) ;
 		stop_matrix() ;
-	} else if (which_costume == 1005) {
+	} else if (which_costume == ICOSI_DODECAHEDRON_LINE_ROPE) {
 		start_matrix() ;
 		translate(pos) ;
 		polyhedron("ICOSI DODECAHEDRON","LINE", (int)size.x) ;
@@ -387,9 +443,3 @@ void cross_3(Vec3 size) {
 	box(small_part, size.y, small_part) ;
 	box(small_part, small_part, size.z) ;
 }
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 /**
-RPE UTILS 1.20.1
+RPE UTILS 1.21.0
 Rope – Romanesco Processing Environment – 2015–2016
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Utils_rope
@@ -13,6 +13,88 @@ final float PHI = (1 + sqrt(5))/2; //a number of polys use the golden ratio...
 final float ROOT2 = sqrt(2); //...and the square root of two, the famous first irrationnal number by Pythagore
 final float EULER = 2.718281828459045235360287471352; // Constant d'Euler
 // about constant https://en.wikipedia.org/wiki/Mathematical_constant
+
+/**
+COLOR 0.0.1
+I MUST clean the Z_Color of Romanesco and keed what is good 
+*/
+// camaieu
+// return hue or other date in range of specific data float
+int camaieu(int max, float colorRef, int range) {
+  float camaieu = 0 ;
+  float whichColor = random(-range, range) ;
+  camaieu = colorRef +whichColor ;
+  if(camaieu < 0 ) camaieu = max +camaieu ;
+  if(camaieu > max) camaieu = camaieu -max ;
+ 
+  return (int)camaieu ;
+}
+
+
+
+boolean alpha_range(float min, float max, int colour) {
+  float alpha = alpha(colour) ;
+  return in_range(min, max, alpha) ;
+}
+
+boolean red_range(float min, float max, int colour) {
+  float  r = red(colour) ;
+  return in_range(min, max, r) ;
+}
+
+boolean green_range(float min, float max, int colour) {
+  float  g = green(colour) ;
+  return in_range(min, max, g) ;
+}
+
+boolean blue_range(float min, float max, int colour) {
+  float  b = blue(colour) ;
+  return in_range(min, max, b) ;
+}
+
+boolean saturation_range(float min, float max, int colour) {
+  float  s = saturation(colour) ;
+  return in_range(min, max, s) ;
+}
+
+boolean brightness_range(float min, float max, int colour) {
+  float  b = brightness(colour) ;
+  return in_range(min, max, b) ;
+}
+
+
+boolean hue_range(float min, float max, int colour) {
+  int c_m = g.colorMode ;
+  float c_x = g.colorModeX ;
+  float c_y = g.colorModeY ;
+  float c_z = g.colorModeZ ;
+  float c_a = g.colorModeA ;
+  colorMode(HSB, c_x, c_y, c_z, c_a) ;
+  float  h = hue(colour) ;
+
+  boolean result = false ;
+  // test for the wheel value, hue is one of them ;
+  result = in_range_wheel(min, max, c_x, h) ;
+  // return to the current colorMode
+  colorMode(c_m, c_x, c_y, c_z, c_a) ;
+  return result ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
@@ -1444,14 +1526,7 @@ END INFO LIST
 
 
 
-/**
-Random around value
-*/
 
-float random_gaussian(float value) {
-  float distrib = random(-1, 1) ;
-  return (pow(distrib,5)) *(value*.4) +value ;
-}
 
 
 
@@ -1551,6 +1626,27 @@ float map_smooth(float value, float sourceMin, float sourceMax, float targetMin,
 
 
 
+/**
+MISC
+
+
+*/
+
+/**
+Random around value
+*/
+
+float random_gaussian(float value) {
+  float distrib = random(-1, 1) ;
+  return (pow(distrib,5)) *(value*.4) +value ;
+}
+
+
+
+
+
+
+
 
 
 /**
@@ -1583,6 +1679,12 @@ String get_renderer_name(final PGraphics graph) {
 }
 
 
+
+
+
+
+
+
 /**
 Check Type
 */
@@ -1613,6 +1715,44 @@ public String object_type(Object t) {
 }
 
 
+
+
+
+
+
+
+
+/**
+check value in range
+*/
+boolean in_range(float min, float max, float value) {
+  if(value <= max && value >= min) {
+    return true ; 
+  } else {
+    return false ;
+  }
+}
+
+boolean in_range_wheel(float min, float max, float roof_max, float value) {
+  if(value <= max && value >= min) {
+    return true ;
+  } else {
+    // wheel value
+    if(max > roof_max ) {
+      // test hight value
+      if(value <= (max - roof_max)) {
+        return true ;
+      } 
+    } 
+    if (min < 0) {
+      // here it's + min 
+      if(value >= (roof_max + min)) {
+        return true ;
+      } 
+    } 
+    return false ;
+  }
+}
 
 
 

@@ -1,13 +1,17 @@
 /**
-GENETIC 0.3.0
-* Start June 2016
+GENETIC 0.4.0
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Digital-Life-Processing/tree/master/GENETIC_SYSTEM
 */
 
 
+
+
+
+
+
 /**
-GENOME
+GENOME 0.1.0
 
 */
 class Genome {
@@ -1388,3 +1392,115 @@ class Masked extends Nucleotide {
     this.nac = 'X' ;
   }
 }
+
+
+
+
+
+
+
+
+/**
+DNA display shape 0.0.1
+*/
+class Helix_DNA {
+  Strand_DNA [] strand ;
+  int num_strand ;
+  int num_nucleotide ;
+  Helix_DNA (int num_strand, int num_nucleotide, int nucleotide_by_revolution) {
+    this.num_nucleotide = num_nucleotide ;
+    this.num_strand = num_strand ;
+    strand = new Strand_DNA [num_strand] ;
+    float start_angle = 0 ;
+    float angle = TAU / num_strand ;
+    for(int i = 0 ; i < num_strand ; i++) {
+      strand[i] = new Strand_DNA(num_nucleotide, nucleotide_by_revolution, start_angle) ;
+      start_angle += angle ;
+    }
+  }
+
+
+
+  void set_radius(float ratio) {
+    for(int i = 0 ; i < strand.length ; i++) {
+      for(int k = 0 ; k < strand[i].pos.length ; k++) {
+        strand[i].pos[k].x *= ratio ;
+        strand[i].pos[k].z *= ratio ;
+      }
+    }
+  }
+
+  void set_height(float height_strand) {
+    for(int i = 0 ; i < strand.length ; i++) {
+      for(int k = 0 ; k < strand[i].pos.length ; k++) {
+        strand[i].pos[k].y *= height_strand ;
+      }
+    }
+  }
+
+  void set_pos(Vec3 global_pos) {
+    for(int i = 0 ; i < strand.length ; i++) {
+      for(int k = 0 ; k < strand[i].pos.length ; k++) {
+        strand[i].pos[k].add(global_pos) ;
+      }
+    }
+  }
+
+
+  Vec3 [] list() {
+    int count = 0 ;
+    Vec3 [] pos = new Vec3[num_nucleotide *num_strand] ;
+    for(int i = 0 ; i < num_strand ; i++) {
+      for(int k = 0 ; k < num_nucleotide ; k++) {
+        pos[count] = Vec3() ;
+        pos[count].set(strand[i].pos[k]) ;
+        count ++ ;
+      }
+    }
+    return pos ;
+  }
+
+
+
+
+  class Strand_DNA {
+    Vec3 [] pos ;
+    Strand_DNA(int nucleotide, int nucleotide_by_revolution, float start_angle) {
+      pos = new Vec3[nucleotide] ;
+      float spacing = nucleotide_by_revolution ;
+      int radius = 1 ;
+      pos = helix(nucleotide, nucleotide_by_revolution, spacing, radius, start_angle) ;
+    }
+  }
+}
+
+
+
+
+
+
+Vec3 [] helix(int num, int revolution, float spacing, int radius, float start_angle) {
+  int level = num / revolution ;
+  Vec3 [] pos = new Vec3[num] ;
+  float angle = TAU / revolution ;
+  float step = spacing / revolution ;
+  float z = 0 ;
+  int count = 0 ;
+
+  for(int i = 0 ; i < level ; i++) {
+    for(int k = 0 ; k < revolution ; k ++) {
+
+      float angle_projection = k *angle +start_angle ;
+      Vec2 pos_XY = projection(angle_projection, radius) ;
+      z += step ;
+      Vec3 pos_XYZ = Vec3(pos_XY.x, z, pos_XY.y) ;
+      
+      pos[count] = pos_XYZ ;
+      count ++ ;
+      if(count >= num) break ;
+    }
+  }
+  return pos ;
+}
+
+
