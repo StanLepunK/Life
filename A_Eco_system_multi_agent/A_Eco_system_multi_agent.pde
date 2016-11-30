@@ -33,6 +33,9 @@ void draw() {
   
   update_list() ;
   // spawn_carnivore() ;
+  show_agent() ;
+
+  
   info_agent(info_agent) ;
   int tempo_info = 300 ;
   log_ecosystem(tempo_info) ;

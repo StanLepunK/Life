@@ -7,9 +7,11 @@ this guide is not updated
 Ecosystem is a multi-agent system with predator, prey. Where the death is a begin of life !
 
 
-USE ECOSYSTEM
+SET ECOSYSTEM
 --
-All method present in the main tab.
+set_horizon(boolean horizon) ;
+>you can use this method to ask agent to dissapear smoothly when this one approche to the hozizon.
+>Can be use only in P3D mode.
 
 To look the agent behavior and why that's must happen
 INFO_DISPLAY_AGENT = false ; 
@@ -154,7 +156,7 @@ void clear_ecosytem()
 
 
 
-UPDATE
+SET AGENT
 --------------
 
 > set aspect, fill, stroke and thickness ( strokeWeight) of your agent
@@ -165,12 +167,6 @@ set_aspect_bacterium(Vec4 fill, Vec4 stroke, float thickness) ;
 set_aspect_corpse(Vec4 fill, Vec4 stroke, float thickness) ;
 
 
-> scale the size of the sub class agent
-void scale_flora(ArrayList<Flora> list_f, float scale) ;
-void scale_herbivore(ArrayList<Herbivore> list_h, float scale) ;
-void scale_carnivore(ArrayList<Carnivore> list_c, float scale) ;
-void scale_bacterium(ArrayList<Bacterium> list_b, float scale) ;
-void scale_corpse(ArrayList<Agent_dynamic> list_body, float scale) ;
 
 
 
@@ -185,9 +181,15 @@ void scale_corpse(ArrayList<Agent_dynamic> list_body, float scale) ;
 
 
 
-=======================
-CLASS
-=======================
+
+
+
+
+--
+--
+CLASS AGENT
+--
+--
 
 interface Agent
 int CLOCK
@@ -241,49 +243,58 @@ int greed
 
 set methode
 ----------
-Set food behavior
+set feeding
 --
-set_hunger(int hunger) 
+set_hunger(int hunger) ;
 > hunger = 0 by default, your agent start in life very hungry :)
 
-set_step_hunger(float step_hunger) 
-by default spep hunger is calculated on this formula :
-step_hunger = (size + life)/2 *((life_expectancy -age)/life_expectancy) ;
-where a default age = 0 ;
-and life_expectancy = 1 ;
+set_step_hunger(float step_hunger) ;
+>by default spep hunger is calculated on this formula :
+>step_hunger = (size + life)/2 *((life_expectancy -age)/life_expectancy) ;
+>where a default age = 0 ; and life_expectancy = 1 ;
 
 when you set step_hunger the result is life *step_hunger 
 For axample if you choice 2 and the life is 10, your agent be angry if he don't 20 units, so it can be an eternal hunter :)
 
-void set_speed_feeding(int calories) 
-> speed_feeding = 1 by default
+void set_speed_feeding(int speed_feeding) ;
+>speed_feeding = 1 by default
 
-void set_starving(int starving)
-> speed the starving statement of the agent
+void set_starving(int starving) ;
+>speed the starving statement of the agent
 
-void set_greed(int greed) 
-> this.greed = int(greed *SPEED_TIME) ;
+void set_greed(int greed) ;
+>this.greed = int(greed *SPEED_TIME) ;
 
-void set_gourmet(int gourmet) 
-> this.gourmet = gourmet*1.1 ;
-@ gourmet set the attitude with the Flora or meet, 0 the Agent is very gourmet and want the best part of the Flora, for the higher value the Agent became step by step a scavenger
+void set_gourmet(int gourmet) ;
+>this.gourmet = gourmet*1.1 ;
+>gourmet set the attitude with the Flora or meet, 0 the Agent is very gourmet and want the best part of the Flora, for the higher value the Agent became step by step a scavenger
 
 void set_digestion(int digestion)
 > set the speed of digestion "1" is very fast. 
 value from 1 or more !
 
 
-set misc
+set aspect
 --
-void set_fill(Vec4 colour_fill) 
+void set_fill(Vec4 colour_fill) ;
 > colour_fill = Vec4(0,0,0,max_color_environment_value) is colour by default
 
-void set_stroke(Vec4 colour_stroke) 
+void set_stroke(Vec4 colour_stroke) ;
 > colour_stroke = Vec4(0,0,0,max_color_environment_value) is colour by default
 
-void set_thickness(float thickness)
+void set_thickness(float thickness) ;
 > thickness = 1 by default > thickness is strokeWeight
 
+void set_alpha(Vec3 alpha_behavior) ;
+>this setting is used with the 'z' coordinate.
+>'alpha_behavior.x' is the medium value be use to calucul the front and the back horizon.
+>'alpha_behavior.y' this value must start from '0' to negative value. This value multiply the HORIZON constante to calcule where the alpha is 0.
+>'alpha_behavior.z' this value must start from '0' to positive value. This value multiply the HORIZON constante to calcule where the alpha is 1.
+>your setting can be something like that : Vec3(-100, -.5, .1). if the HORIZON is 500. the agent have an alpha to 0 at : 500 *(-.5) -100 = -350, and alpha to 100% : 500 *.1 -100 = -50 ;
+
+
+set misc
+--
 void set_nutrient_quality(int nutrient_quality) 
 > nutrient_quality = 1 by default
 
@@ -293,7 +304,7 @@ void set_watching(int  max_watching)
 void set_alive(boolean alive) 
 > dead or alive agent
 
-void set_size(Vec3 size) 
+void set_size(Vec3 size) ;
 
 
 

@@ -1,5 +1,5 @@
 /**
-CLASS AGENT 0.1.0
+CLASS AGENT 0.1.1
 */
 /**
 
@@ -22,6 +22,11 @@ interface Agent {
   boolean get_alive() ;
   Vec3 get_pos() ;
   int get_size() ;
+
+  int get_alpha_cursor() ;
+  float get_alpha_back() ;
+  float get_alpha_front() ;
+
 
   /**
   METHOD
@@ -52,6 +57,7 @@ interface Agent {
   void set_fill(Vec4 colour_fill) ;
   void set_stroke(Vec4 colour_stroke) ;
   void set_thickness(float thickness) ;
+  void set_alpha(Vec3 alpha_behavior) ;
   /**
   set coor, motion...
   */
@@ -92,7 +98,7 @@ END INTERFACE AGENT
 
 
 
-Agent_model ABSTRACT CLASS 0.0.2
+Agent_model ABSTRACT CLASS 0.1.0
 
 */
 abstract class Agent_model implements Agent {
@@ -140,6 +146,10 @@ abstract class Agent_model implements Agent {
   float thickness = 1 ;
 
   int costume = 0 ; // costume 0 is point in Z_costume_rope library
+
+  int alpha_cursor = 0 ;
+  float alpha_back = 1. ;
+  float alpha_front = 1. ;
   /**
   pos
   */
@@ -171,19 +181,52 @@ abstract class Agent_model implements Agent {
   /**
   GET
   */
-  short get_ID() { return ID ; }
-  int get_life() { return life ; }
-  Genome get_genome() { return genome ;}
-  boolean get_alive() { return alive ;}
-  int get_size() { return size ; }
-  int get_stamina() { return stamina ; }
+  short get_ID() { 
+    return ID ; 
+  }
+  int get_life() { 
+    return life ; 
+  }
+  Genome get_genome() { 
+    return genome ;
+  }
+  boolean get_alive() { 
+    return alive ;
+  }
+  int get_size() { 
+    return size ; 
+  }
+  int get_stamina() { 
+    return stamina ; 
+  }
 
-  int get_costume() { return costume ; }
-  Vec4 get_fill() { return colour_fill ; }
-  Vec4 get_stroke() { return colour_stroke ; }
-  float get_thickness() { return thickness ; }
+  int get_costume() { 
+    return costume ; 
+  }
+  Vec4 get_fill() { 
+    return colour_fill ; 
+  }
+  Vec4 get_stroke() { 
+    return colour_stroke ; 
+  }
+  float get_thickness() { 
+    return thickness ; 
+  }
 
-  Vec3 get_pos() { return pos ;}
+  Vec3 get_pos() { 
+    return pos ;
+  }
+
+  int get_alpha_cursor() {
+    return alpha_cursor ;
+  }
+  float get_alpha_back() {
+    return alpha_back ;
+  }
+  float get_alpha_front() {
+    return alpha_front ;
+  }
+
 
   /**
   set reproduction
@@ -248,6 +291,14 @@ abstract class Agent_model implements Agent {
 
   void set_thickness(float thickness) {
     this.thickness = thickness ;
+  }
+
+
+  // void set_alpha(int alpha_cursor, float alpha_back, float alpha_front) {
+  void set_alpha(Vec3 alpha_behavior) {
+    this.alpha_cursor = (int)alpha_behavior.x ;
+    this.alpha_back = abs(alpha_behavior.y) ;
+    this.alpha_front = alpha_behavior.z ;
   }
 
   /**

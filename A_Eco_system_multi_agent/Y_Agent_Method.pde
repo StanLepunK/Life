@@ -1,5 +1,5 @@
 /**
-AGENT Methods 0.1.0
+AGENT Methods 0.1.1
 */
 
 /**
@@ -750,23 +750,37 @@ void show_agent_dynamic(Info_obj style, ArrayList<Agent>... all_list) {
 Aspect
 */
 void update_aspect(Info_obj style, ArrayList<Agent> list) {
-  int costume_ID = (int)style.catch_obj(0) ;
-  Vec4 fill_vec = (Vec4)style.catch_obj(1) ;
-  Vec4 stroke_vec = (Vec4)style.catch_obj(2) ; 
-  float thickness = (float)style.catch_obj(3) ;
+    int costume_ID = (int)style.catch_obj(0) ;
+    Vec4 fill_vec = (Vec4)style.catch_obj(1) ;
+    Vec4 stroke_vec = (Vec4)style.catch_obj(2) ; 
+    float thickness = (float)style.catch_obj(3) ;
 
   for(Agent a : list) {
     boolean original_aspect = true ;
+
     if(costume_ID != a.get_costume() || fill_vec != a.get_fill() || stroke_vec != a.get_stroke() || thickness != a.get_thickness()) {
       original_aspect = false ;
     }
     if(original_aspect) {
-      // printTempo(60, "aspect original") ;
-      a.aspect(a.get_fill(), a.get_stroke(), a.get_thickness()) ;
+      if(HORIZON_ALPHA) {
+        Vec4 new_fill = Vec4(a.get_fill().x, a.get_fill().y, a.get_fill().z, alpha(a)) ;
+        Vec4 new_stroke = Vec4(a.get_stroke().x, a.get_stroke().y, a.get_stroke().z, alpha(a)) ;
+        a.aspect(new_fill, new_stroke, thickness) ;
+      } else {
+        a.aspect(a.get_fill(), a.get_stroke(), a.get_thickness()) ;
+      }
+      
       a.costume() ;
 
     } else {
-      a.aspect(fill_vec, stroke_vec, thickness) ;
+      if(HORIZON_ALPHA) {
+        Vec4 new_fill = Vec4(fill_vec.x, fill_vec.y, fill_vec.z, alpha(a)) ;
+        Vec4 new_stroke = Vec4(stroke_vec.x, stroke_vec.y, stroke_vec.z, alpha(a)) ;
+        a.aspect(new_fill, new_stroke, thickness) ;
+      } else {
+        a.aspect(fill_vec, stroke_vec, thickness) ;
+      }
+
       if(costume_ID != a.get_costume()) {
         a.costume(costume_ID) ; 
       } else {
@@ -775,21 +789,23 @@ void update_aspect(Info_obj style, ArrayList<Agent> list) {
     } 
   }
 }
+
+
+float alpha(Agent a) {
+  Vec3 temp_pos = a.get_pos() ;
+  int horizon_back = int(HORIZON * a.get_alpha_back()) ;
+  int horizon_front = int(HORIZON * a.get_alpha_front()) ;
+  horizon_back += a.get_alpha_cursor() ;
+  horizon_front += a.get_alpha_cursor() ;
+  float alpha = map(temp_pos.z, -horizon_back, horizon_front, 0 ,1) ;
+  if(alpha <= 0 ) alpha = 0 ;
+  alpha = alpha * g.colorModeA ;
+  return alpha ;
+}
 /**
 END SHOW
 
 */
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -963,58 +979,6 @@ void update_log(ArrayList<Agent> list, int tempo) {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

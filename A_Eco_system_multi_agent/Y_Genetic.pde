@@ -1,8 +1,233 @@
 /**
-GENETIC 0.4.0
+GENETIC 0.5.0
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Digital-Life-Processing/tree/master/GENETIC_SYSTEM
 */
+
+
+
+
+/**
+DNA display shape 0.0.3
+*/
+class Helix_DNA {
+  Strand_DNA [] strand ;
+  int num_strand ;
+  int num_nucleotide ;
+  int level ;
+  Vec3 radius ;
+  DNA [] dna_seq ; 
+
+  Helix_DNA (int num_strand, int num_nucleotide, int nucleotide_by_revolution) {
+    // make a nucleotide chain if it's classic strand '1' or '2'
+    if(num_strand == 2) {
+      // this case is a real one case of ADN
+      dna_seq = new DNA[1] ;
+      dna_seq[0] = new DNA(num_nucleotide, true) ;
+    } else {
+      dna_seq = new DNA[num_strand] ;
+      for(int i = 0 ; i < num_strand ; i++) {
+        dna_seq[i] = new DNA(num_nucleotide, false) ;
+      }
+    }
+
+    this.num_nucleotide = num_nucleotide ;
+    this.num_strand = num_strand ;
+    this.level = (int) num_nucleotide / nucleotide_by_revolution ;
+    strand = new Strand_DNA [num_strand] ;
+    float start_angle = 0 ;
+    float angle = TAU / num_strand ;
+    for(int i = 0 ; i < num_strand ; i++) {
+      strand[i] = new Strand_DNA(num_nucleotide, nucleotide_by_revolution, start_angle) ;
+      start_angle += angle ;
+    }
+  }
+
+
+  // info
+  int size() {
+    return strand.length ;
+  }
+
+  int length(int which_strand) {
+    if(which_strand > num_strand) {
+      return strand[which_strand].size() ;
+    } else return 0 ;
+  }
+
+  int length() {
+    return strand[0].size() ;
+  }
+
+  Vec3 get_radius() {
+    if(radius == null) radius = Vec3(1) ;
+    return radius ;
+  }
+
+
+  DNA get_DNA(int which_strand) {
+    if(which_strand < num_strand) {
+      return dna_seq[which_strand] ;
+    } else {
+      return null ;
+    }
+  }
+
+
+
+  // setting
+  void set_radius(int radius) {
+    set_radius(radius, radius) ;
+  }
+
+  void set_radius(int radius_x, int radius_z) {
+    if(radius == null) {
+      radius = Vec3(radius_x, 1, radius_z) ;
+    } else {
+      radius.set(radius_x, 1, radius_z) ;
+    }
+
+    for(int i = 0 ; i < strand.length ; i++) {
+      for(int k = 0 ; k < strand[i].size() ; k++) {
+        strand[i].get_pos(k).x *= radius.x ;
+        strand[i].get_pos(k).z *= radius.z ;
+      }
+    }
+  }
+
+  void set_height(int height_strand) {
+    int size_h = height_strand / level ;
+    for(int i = 0 ; i < strand.length ; i++) {
+
+      for(int k = 0 ; k < strand[i].size() ; k++) {
+        strand[i].get_pos(k).y *= size_h ;
+      }
+    }
+  }
+
+  void set_pos(Vec3 global_pos) {
+    for(int i = 0 ; i < strand.length ; i++) {
+      for(int k = 0 ; k < strand[i].size() ; k++) {
+        strand[i].add(k, global_pos) ;
+      }
+    }
+  }
+  
+  // get strand
+  Strand_DNA [] get() {
+    return strand ;
+  }
+
+  Strand_DNA get(int which_strand) {
+    if(which_strand < num_strand) {
+      return strand[which_strand] ;
+    } else {
+      return null ;
+    }
+  }
+
+
+  // get pos
+  Vec3 [] get_pos() {
+    int count = 0 ;
+    Vec3 [] pos = new Vec3[num_nucleotide *num_strand] ;
+    for(int i = 0 ; i < num_strand ; i++) {
+      for(int k = 0 ; k < num_nucleotide ; k++) {
+        pos[count] = Vec3() ;
+        pos[count].set(strand[i].get_pos(k)) ;
+        count ++ ;
+      }
+    }
+    return pos ;
+  }
+
+  Vec3 [] get_pos(int which_strand) {
+    if(which_strand < num_strand) {
+      Vec3 [] pos = new Vec3[strand[which_strand].size()] ;
+      for(int i = 0 ; i < num_nucleotide ; i++) {
+        pos[i] = Vec3() ;
+        pos[i].set(strand[which_strand].get_pos(i)) ;
+      }
+      return pos ;
+    } else {
+      return null ;
+    }
+  }
+
+
+
+
+
+  private class Strand_DNA {
+    private Vec3 [] pos ;
+
+    Strand_DNA(int nucleotide, int nucleotide_by_revolution, float start_angle) {
+      pos = new Vec3[nucleotide] ;
+      float spacing = 1. / (float)nucleotide_by_revolution ;
+      int radius = 1 ;
+      pos = helix(nucleotide, nucleotide_by_revolution, spacing, radius, start_angle) ;
+    }
+
+    int size() {
+      return pos.length ;
+    }
+
+    Vec3 get_pos(int target) {
+      if(target < pos.length) {
+        return pos[target] ;
+      } else return null ;
+    }
+
+    void add(int target, Vec3 v) {
+      if( target < pos.length) {
+        pos[target].add(v) ;
+      } 
+    }
+  }
+}
+
+
+
+
+/**
+method public helix
+*/
+Vec3 [] helix(int num, int revolution, float spacing, int radius, float start_angle) {
+  int level = num / revolution ;
+  Vec3 [] pos = new Vec3[num] ;
+  float angle = TAU / revolution ;
+  float z = 0 ;
+  int count = 0 ;
+
+  for(int i = 0 ; i <= level ; i++) {
+    for(int k = 0 ; k < revolution ; k ++) {
+
+      float angle_projection = k *angle +start_angle ;
+      Vec2 pos_XY = projection(angle_projection, radius) ;
+      z += spacing ;
+      Vec3 pos_XYZ = Vec3(pos_XY.x, z, pos_XY.y) ;
+      
+      pos[count] = pos_XYZ ;
+      count ++ ;
+      if(count >= num) break ;
+    }
+  }
+  return pos ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1066,7 +1291,7 @@ END CLASS ZYGOTE
 
 /**
 
-ALLELE
+ALLELE 0.1.1
 
 */
 class Allele {
@@ -1094,11 +1319,11 @@ class Allele {
     this.name = name ;
     this.data = data ;
     this.dominance = dominance ;
-    dna_locus = new DNA(int_to_String(locus)) ;
-    dna_ancester = new DNA(ancester) ;
-    dna_name = new DNA(name) ;
-    dna_data = new DNA(data) ;
-    dna_dominance = new DNA(float_to_String_4(dominance)) ;
+    dna_locus = new DNA(int_to_String(locus), true) ;
+    dna_ancester = new DNA(ancester, true) ;
+    dna_name = new DNA(name, true) ;
+    dna_data = new DNA(data, true) ;
+    dna_dominance = new DNA(float_to_String_4(dominance), true) ;
   }
 }
 
@@ -1262,7 +1487,7 @@ END GENETIC
 
 /**
 
-DNA 0.0.3
+DNA 0.1.1
 
 */
 
@@ -1281,30 +1506,77 @@ void load_nucleotide_table(String path) {
 
 
 class DNA {
-  ArrayList<Nucleotide> sequence = new ArrayList<Nucleotide>() ;
+  ArrayList<Nucleotide> sequence_a  ;
+  ArrayList<Nucleotide> sequence_b  ;
+  // constructor
+  DNA(String data, boolean pairing_dna) {
+    sequence_a = new ArrayList<Nucleotide>() ;
 
-  DNA(String data) {
     char [] array_char = data.toCharArray() ;
     for(int i = 0 ; i < array_char.length ; i++) {
       build_sequence(array_char[i]) ;
     }
+    
+    // pairing
+    if(pairing_dna) {
+      sequence_b = new ArrayList<Nucleotide>(pairing(sequence_a)) ;
+    }
   }
-  
+
+  DNA(int size, boolean pairing_dna) {
+    sequence_a = new ArrayList<Nucleotide>() ;
+    int classic = 4 ;
+    // with 4, it's classic ADN with GTAC
+    for(int i = 0 ; i < size ; i++) {
+      int nuc = floor(random(classic)) ;
+      sequence_a.add(code(nuc)) ;
+    }
+    
+    // pairing
+    if(pairing_dna) {
+      sequence_b = new ArrayList<Nucleotide>(pairing(sequence_a)) ;
+    }
+  }
+
+
+
+
+
+
+  // methode
   Nucleotide nucleotide ;
-  void build_sequence(char c) {
+  private void build_sequence(char c) {
     Nucleotide [] nucleotide  = new Nucleotide [4] ;
     for(int i = 0 ; i < nucleotide.length ; i++) {
       nucleotide [i] = translate(nucleotide, c)[i] ;
-      sequence.add(nucleotide[i]) ;
+      sequence_a.add(nucleotide[i]) ;
     }
   }
   
   
-  char [] get_sequence() {
-    char [] seq = new char[sequence.size()] ;
-    for (int i = 0 ; i < sequence.size() ; i++) {
-      Nucleotide n = (Nucleotide) sequence.get(i) ;
+  private char [] get_sequence() {
+    char [] seq = new char[sequence_a.size()] ;
+    for (int i = 0 ; i < sequence_a.size() ; i++) {
+      Nucleotide n = (Nucleotide) sequence_a.get(i) ;
       seq[i] = n.nac ;
+    }
+    return seq ;
+  }
+
+
+
+  // mirror chain
+  private ArrayList<Nucleotide> pairing(ArrayList<Nucleotide> strand) {
+    ArrayList<Nucleotide> seq = new ArrayList<Nucleotide>() ;
+    for(int i = 0 ; i < strand.size() ; i++) {
+      Nucleotide nuc = strand.get(i) ;
+      Nucleotide partner ;
+      if(nuc.nac == 'c') partner = new Guanine() ;
+      else if(nuc.nac == 'g') partner = new Cytosine() ;
+      else if(nuc.nac == 't') partner = new Adenine() ;
+      else if(nuc.nac == 'a') partner = new Thymine() ;
+      else partner = new Masked() ;
+      seq.add(partner) ;
     }
     return seq ;
   }
@@ -1316,7 +1588,7 @@ class DNA {
 /**
 Translate char to Nucleotide
 */
-Nucleotide [] translate(Nucleotide [] n, char c) {
+private Nucleotide [] translate(Nucleotide [] n, char c) {
   for(int i = 0 ; i < nucleotide_char.length ; i++) {
     if(c == nucleotide_char[i]) {
       write_sequence(n, i) ;
@@ -1330,24 +1602,34 @@ Nucleotide [] translate(Nucleotide [] n, char c) {
   return n ;
 }
 
-void write_sequence(Nucleotide [] n, int row_id) {
+private void write_sequence(Nucleotide [] n, int row_id) {
   TableRow row = CODE_DNA_REF.getRow(row_id) ;
   String ref_sequence = row.getString("code") ;
-  String [] sequence = ref_sequence.split("") ;
-  for(int i = 0 ; i < sequence.length ; i++) {
-    n[i] = code(sequence[i].charAt(0)) ;
+  String [] sequence_a = ref_sequence.split("") ;
+  for(int i = 0 ; i < sequence_a.length ; i++) {
+    n[i] = code(sequence_a[i].charAt(0)) ;
   }
 }
 
 
-Nucleotide code(char nac) {
+// Nucleotide from char
+private Nucleotide code(char nac) {
   // nac : nucleic acid code from IUPAC
   if(nac == 'A' || nac == 'a') return new Adenine() ;
   else if(nac == 'C' || nac == 'c') return new Cytosine() ;
   else if(nac == 'G' || nac == 'g') return new Guanine() ;
   else if(nac == 'T' || nac == 't') return new Thymine() ;
   else return new Masked() ;
-  
+}
+
+// Nucleotide from int
+private Nucleotide code(int nac) {
+  // nac : nucleic acid code from IUPAC
+  if(nac == 0) return new Adenine() ;
+  else if(nac == 1) return new Cytosine() ;
+  else if(nac == 2) return new Guanine() ;
+  else if(nac == 3) return new Thymine() ;
+  else return new Masked() ;
 }
 
 
@@ -1398,109 +1680,5 @@ class Masked extends Nucleotide {
 
 
 
-
-
-/**
-DNA display shape 0.0.1
-*/
-class Helix_DNA {
-  Strand_DNA [] strand ;
-  int num_strand ;
-  int num_nucleotide ;
-  Helix_DNA (int num_strand, int num_nucleotide, int nucleotide_by_revolution) {
-    this.num_nucleotide = num_nucleotide ;
-    this.num_strand = num_strand ;
-    strand = new Strand_DNA [num_strand] ;
-    float start_angle = 0 ;
-    float angle = TAU / num_strand ;
-    for(int i = 0 ; i < num_strand ; i++) {
-      strand[i] = new Strand_DNA(num_nucleotide, nucleotide_by_revolution, start_angle) ;
-      start_angle += angle ;
-    }
-  }
-
-
-
-  void set_radius(float ratio) {
-    for(int i = 0 ; i < strand.length ; i++) {
-      for(int k = 0 ; k < strand[i].pos.length ; k++) {
-        strand[i].pos[k].x *= ratio ;
-        strand[i].pos[k].z *= ratio ;
-      }
-    }
-  }
-
-  void set_height(float height_strand) {
-    for(int i = 0 ; i < strand.length ; i++) {
-      for(int k = 0 ; k < strand[i].pos.length ; k++) {
-        strand[i].pos[k].y *= height_strand ;
-      }
-    }
-  }
-
-  void set_pos(Vec3 global_pos) {
-    for(int i = 0 ; i < strand.length ; i++) {
-      for(int k = 0 ; k < strand[i].pos.length ; k++) {
-        strand[i].pos[k].add(global_pos) ;
-      }
-    }
-  }
-
-
-  Vec3 [] list() {
-    int count = 0 ;
-    Vec3 [] pos = new Vec3[num_nucleotide *num_strand] ;
-    for(int i = 0 ; i < num_strand ; i++) {
-      for(int k = 0 ; k < num_nucleotide ; k++) {
-        pos[count] = Vec3() ;
-        pos[count].set(strand[i].pos[k]) ;
-        count ++ ;
-      }
-    }
-    return pos ;
-  }
-
-
-
-
-  class Strand_DNA {
-    Vec3 [] pos ;
-    Strand_DNA(int nucleotide, int nucleotide_by_revolution, float start_angle) {
-      pos = new Vec3[nucleotide] ;
-      float spacing = nucleotide_by_revolution ;
-      int radius = 1 ;
-      pos = helix(nucleotide, nucleotide_by_revolution, spacing, radius, start_angle) ;
-    }
-  }
-}
-
-
-
-
-
-
-Vec3 [] helix(int num, int revolution, float spacing, int radius, float start_angle) {
-  int level = num / revolution ;
-  Vec3 [] pos = new Vec3[num] ;
-  float angle = TAU / revolution ;
-  float step = spacing / revolution ;
-  float z = 0 ;
-  int count = 0 ;
-
-  for(int i = 0 ; i < level ; i++) {
-    for(int k = 0 ; k < revolution ; k ++) {
-
-      float angle_projection = k *angle +start_angle ;
-      Vec2 pos_XY = projection(angle_projection, radius) ;
-      z += step ;
-      Vec3 pos_XYZ = Vec3(pos_XY.x, z, pos_XY.y) ;
-      
-      pos[count] = pos_XYZ ;
-      count ++ ;
-      if(count >= num) break ;
-    }
-  }
-  return pos ;
-}
 
 

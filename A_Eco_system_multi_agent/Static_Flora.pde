@@ -16,7 +16,7 @@ METHOD FLORA
 FLORA
 */
 /**
-build
+build 0.1.0
 */
 // main method
 void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int num) {
@@ -32,70 +32,29 @@ void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int n
 }
 
 void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int num, Vec... area) {
-
-
   for(int i = 0 ; i < num ; i++) {
     if(ENVIRONMENT == 2) {
-      int where = (int)random(area.length) ;
-      if(area[where] instanceof Vec2) {
-        Vec2 spawn_pos = (Vec2) area[where] ;
+      if(area[i] instanceof Vec2) {
+        Vec2 spawn_pos = (Vec2) area[i] ;
         add_flora(list_f, spawn_pos, carac, style) ;
       }
-      if(area[where] instanceof Vec3) {
-        Vec3 spawn_pos = (Vec3) area[where] ;
+      if(area[i] instanceof Vec3) {
+        Vec3 spawn_pos = (Vec3) area[i] ;
         add_flora(list_f, Vec2(spawn_pos.x, spawn_pos.y), carac, style) ;
       }  
     } else if (ENVIRONMENT == 3) {
-      int where = (int)random(area.length) ;
-      if(area[where] instanceof Vec2) {
-        Vec2 spawn_pos = (Vec2) area[where] ;
+      if(area[i] instanceof Vec2) {
+        Vec2 spawn_pos = (Vec2) area[i] ;
         add_flora(list_f, Vec3(spawn_pos.x, spawn_pos.y, 0), carac, style) ;
       }
-      if(area[where] instanceof Vec3) {
-        Vec3 spawn_pos = (Vec3) area[where] ;
+      if(area[i] instanceof Vec3) {
+        Vec3 spawn_pos = (Vec3) area[i] ;
         add_flora(list_f, spawn_pos, carac, style) ;
       }  
     }
   }
 }
 
-
-void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int num, PImage img, Vec pos_drop_zone) {
-  // create drop zone
-  int grid = 5 ;
-  int bags = 2 ;
-  Area drop_zone = new Area(img, grid, bags, BRIGHTNESS_SORT) ;
-  Vec3 pos_img = Vec3(width/2  - (img.width/2), height/2  - (img.height/2), 0) ;
-
-
-  if(pos_drop_zone instanceof Vec2) {
-    Vec2 p = (Vec2) pos_drop_zone ;
-    pos_img.set(p.x - (img.width/2), p.y  - (img.height/2), 0) ;
-  } else if(pos_drop_zone instanceof Vec3) {
-    Vec3 p = (Vec3) pos_drop_zone ;
-    pos_img.set(p.x - (img.width/2), p.y  - (img.height/2), p.z) ;
-  }
-
-  for(int i = 0 ; i < num ; i++) {
-    if(ENVIRONMENT == 2 ) {
-      int ID_bag = 1 ;
-      int size_bag = drop_zone.get(ID_bag).size() ;
-      Vec2 pos = drop_zone.get(ID_bag).get_pos(size_bag) ;
-      pos.add(pos_img) ;
-      add_flora(list_f, pos, carac, style) ;
-    } else if (ENVIRONMENT == 3 ) {
-      int ID_bag = 1 ;
-      int size_bag = drop_zone.get(ID_bag).size() ;
-      int where = floor(random(size_bag)) ;
-      Vec2 temp_pos = drop_zone.get(ID_bag).get_pos(where) ;
-      // float z = random((int)LIMIT.c, (int)LIMIT.f) ;
-      float z = 0 ;
-      Vec3 pos = Vec3(temp_pos.x,temp_pos.y, z) ;
-      pos.add(pos_img) ;
-      add_flora(list_f, pos, carac, style) ;
-    }
-  }
-}
 
 
 // annexe methode
@@ -120,6 +79,7 @@ void add_flora(ArrayList<Agent> list_f, Vec3 pos, Info_dict carac, Info_obj styl
    f.set_fill((Vec4)style.catch_obj(1)) ;
    f.set_stroke((Vec4)style.catch_obj(2)) ;
    f.set_thickness((float)style.catch_obj(3)) ;
+   f.set_alpha((Vec3)style.catch_obj(4)) ;
    // plant
    f.set_nutrient_quality(nutrient_quality) ;
    f.set_growth(speed_growth) ;
@@ -309,11 +269,11 @@ class Flora extends Agent_static {
    Set Flora
    */
    void set_growth(int speed) {
-   	this.speed_growth = speed ;
+    this.speed_growth = speed ;
    }
 
    void set_need(float need) {
-   	this.need = need ;
+    this.need = need ;
    }
 
 
@@ -355,7 +315,7 @@ class Flora extends Agent_static {
    }
    
    void info_print_flora() {
-   	println("INFO",this.name) ;
+    println("INFO",this.name) ;
       println("No particular info for the moment") ;
    }
 }
