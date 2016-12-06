@@ -184,7 +184,9 @@ class Helix_DNA {
     }
 
     int size() {
-      return pos.length ;
+      if(pos != null) {
+        return pos.length ;
+      } else return 0 ;
     }
 
     void set_angle(float start_angle) {
@@ -221,21 +223,27 @@ Vec3 [] helix(int num, int revolution, float spacing, float radius, float start_
   float angle = TAU / revolution ;
   float z = 0 ;
   int count = 0 ;
+  if(num > 0) {
+    for(int i = 0 ; i <= level ; i++) {
+      for(int k = 0 ; k < revolution ; k ++) {
 
-  for(int i = 0 ; i <= level ; i++) {
-    for(int k = 0 ; k < revolution ; k ++) {
-
-      float angle_projection = k *angle +start_angle ;
-      Vec2 pos_XY = projection(angle_projection, radius) ;
-      z += spacing ;
-      Vec3 pos_XYZ = Vec3(pos_XY.x, z, pos_XY.y) ;
-      
-      pos[count] = pos_XYZ ;
-      count ++ ;
-      if(count >= num) break ;
+        float angle_projection = k *angle +start_angle ;
+        Vec2 pos_XY = projection(angle_projection, radius) ;
+        z += spacing ;
+        Vec3 pos_XYZ = Vec3(pos_XY.x, z, pos_XY.y) ;
+        
+        if(count < pos.length) {
+          pos[count] = pos_XYZ ;
+          count ++ ;
+        } else {
+          break ;
+        }
+        if(count >= num) break ;
+      }
     }
-  }
-  return pos ;
+    return pos ;
+  } else return null ;
+  
 }
 
 

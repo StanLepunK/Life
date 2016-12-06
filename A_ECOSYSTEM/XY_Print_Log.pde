@@ -1,24 +1,32 @@
 
 /**
-INFO 0.1.1
+INFO 
+LOG
+PRINT
 
+0.1.1
 */
-boolean first_save = true  ;
-String save_date = "" ;
-String save_date() {
-  if (first_save) {
-    save_date = year()+"_"+month()+"_"+day()+"_"+hour()+"_"+minute() ;
-    SEQUENCE_LOG = 0 ;
-    first_save = false ;
-  }
-  return save_date ;
-}
+boolean INFO_DISPLAY_AGENT = false ;
 
 
+int FRAME_RATE_LOG = 300 ;
 
-/**
-Log ecosystem 0.0.1
-*/
+boolean PRINT_DEATH_AGENT_DYNAMIC = true ;
+boolean PRINT_BORN_AGENT_DYNAMIC = true ;
+boolean PRINT_POPULATION = true ;
+
+
+boolean LOG_ECOSYSTEM = false ;
+boolean LOG_ALL_AGENTS = false ;
+
+boolean LOG_HERBIVORE = false ;
+boolean LOG_OMNIVORE = false ;
+boolean LOG_CARNIVORE = false ;
+boolean LOG_FLORA = false ;
+boolean LOG_BACTERIUM = false ;
+boolean LOG_DEAD = false ;
+
+
 boolean log_is ;
 int SEQUENCE_LOG = 0 ;
 // int col_num = 10 ;
@@ -33,6 +41,65 @@ TableRow [] tableRow_eco_resume ;
 Table log_agents ;
 TableRow [] tableRow_agents ;
 int col_num_agents = 10 ;
+
+
+boolean first_save = true  ;
+String save_date = "" ;
+String save_date() {
+  if (first_save) {
+    save_date = year()+"_"+month()+"_"+day()+"_"+hour()+"_"+minute() ;
+    SEQUENCE_LOG = 0 ;
+    first_save = false ;
+  }
+  return save_date ;
+}
+
+
+/**
+LOG 1.0.0
+
+*/
+/**
+Log ecosystem 0.0.1
+*/
+
+
+/**
+set log
+*/
+
+void set_frameRate_log(int tempo) {
+  FRAME_RATE_LOG = tempo ;
+}
+
+
+void set_log_ecosystem(boolean b) { 
+  LOG_ECOSYSTEM = b ;
+}
+void set_log_agents(boolean b) { 
+  LOG_ALL_AGENTS = b ;
+}
+
+void set_log_herbivore(boolean b) { 
+  LOG_HERBIVORE = b ;
+}
+void set_log_omnivore(boolean b) { 
+  LOG_OMNIVORE = b ;
+}
+void set_log_carnivore(boolean b) { 
+  LOG_CARNIVORE = b ;
+}
+void set_log_bacterium(boolean b) { 
+  LOG_BACTERIUM = b ;
+}
+void set_log_flora(boolean b) { 
+  LOG_FLORA = b ;
+}
+void set_log_dead(boolean b) { 
+  LOG_DEAD = b ;
+}
+
+
 
 
 // log
@@ -288,7 +355,7 @@ void add_log_eco_agent(Table table, String name, ArrayList... pop_list) {
 /**
 print 0.0.2
 */
-void print_info_environment() {
+void print_info_environment(Biomass biomass) {
   println("ENVIRONMENT") ;
   println("Humus", biomass.humus) ;
 }
@@ -326,14 +393,7 @@ void print_death_agent(Agent_dynamic dead) {
 }
 
 
-void print_population() {
-  println(frameCount) ;
-  print_pop_agent_dynamic("Population Herbivore", HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
-  print_pop_agent_dynamic("Population Carnivore", CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
-  print_pop_agent_dynamic("Population Omnivore", OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
-  print_pop_agent_dynamic("Population Bacterium", BACTERIUM_LIST) ;
-  print_pop_agent_dynamic("Population Dead Bodies", DEAD_LIST) ;
-}
+
 
 
 void print_pop_agent_dynamic(String name, ArrayList... pop_list) {
@@ -430,19 +490,7 @@ void print_info_bacterium(String title, ArrayList<Agent> list) {
 
 
 
-void print_list() {
-  println("Flora", FLORA_LIST.size()) ;
 
-  println("Bacterium",BACTERIUM_LIST.size()) ;
-
-  println("Herbivore child",HERBIVORE_CHILD_LIST.size()) ;
-  println("Herbivore female",HERBIVORE_FEMALE_LIST.size()) ;
-  println("Herbivore male",HERBIVORE_MALE_LIST.size()) ;
-
-  println("Carnivore",CARNIVORE_CHILD_LIST.size()) ;
-  
-  println("Corpse",DEAD_LIST.size()) ;
-}
 /**
 END INFO
 */

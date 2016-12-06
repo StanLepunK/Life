@@ -106,9 +106,9 @@ void reproduction_female_herbivore(ArrayList<Agent> list_female, ArrayList<Agent
 /**
 HERBIVORE update 0.1.1
 */
-void herbivore_update(ArrayList<Agent>... all_list) {
+void herbivore_update(ArrayList<Dead> list_dead, ArrayList<Agent>... all_list) {
   for(ArrayList list : all_list) {
-    update_die(list) ;
+    update_die(list_dead, list) ;
     update_growth(list) ;
     update_motion(list) ;
     update_statement(list) ;
@@ -229,9 +229,9 @@ void reproduction_female_omnivore(ArrayList<Agent> list_female, ArrayList<Agent>
 Omnivore update 0.0.1
 */
 
-void omnivore_update(ArrayList<Agent>... all_list) {
+void omnivore_update(ArrayList<Dead> list_dead, ArrayList<Agent>... all_list) {
   for(ArrayList list : all_list) {
-    update_die(list) ;
+    update_die(list_dead, list) ;
     update_growth(list) ;
     update_motion(list) ;
     update_statement(list) ;
@@ -363,9 +363,9 @@ void reproduction_female_carnivore(ArrayList<Agent> list_female, ArrayList<Agent
 /**
 CARNIVORE update 0.2.0
 */
-void carnivore_update(ArrayList<Agent>... all_list) {
+void carnivore_update(ArrayList<Dead> list_dead, ArrayList<Agent>... all_list) {
   for(ArrayList list : all_list) {
-    update_die(list) ;
+    update_die(list_dead, list) ;
     update_growth(list) ;
     update_motion(list) ;
     update_statement(list) ;
@@ -457,11 +457,11 @@ void set_aspect_bacterium(Vec4 fill_colour, Vec4 stroke_colour, float thickness)
 /**
 Bacterium update 0.1.1
 */
-void bacterium_update(ArrayList<Agent> list, ArrayList<Agent> list_dead_body, Biomass biomass, boolean info) {
-  update_die(list) ;
+void bacterium_update(ArrayList<Dead> list_dead, ArrayList<Agent> list,  Biomass biomass, boolean info) {
+  update_die(list_dead, list) ;
   update_motion(list) ;
   update_statement(list) ;
-  bacterium_update_feed(list, list_dead_body, biomass, info) ;
+  bacterium_update_feed(list_dead, list, biomass, info) ;
   if(LOG_ECOSYSTEM) update_log(list, FRAME_RATE_LOG) ;
 }
 
@@ -482,7 +482,7 @@ void show_bacterium(Biomass biomass, Info_obj style, ArrayList<Agent>... all_lis
 /**
 Bacterium update
 */
-void bacterium_update_feed(ArrayList<Agent> list_b, ArrayList<Agent> list_dead_body, Biomass biomass, boolean info) {
+void bacterium_update_feed(ArrayList<Dead> list_dead_body, ArrayList<Agent> list_b, Biomass biomass, boolean info) {
   for(Agent a : list_b) {
     if(a instanceof Bacterium) {
       Bacterium b = (Bacterium) a ;
@@ -503,7 +503,7 @@ void bacterium_update_feed(ArrayList<Agent> list_b, ArrayList<Agent> list_dead_b
 /**
 local method
 */
-void eat_corpse(Bacterium b, ArrayList<Agent> list_target, Biomass biomass, boolean info) {
+void eat_corpse(Bacterium b, ArrayList<Dead> list_target, Biomass biomass, boolean info) {
 // first eat the agent who eat just before without look in the list
   if(b.eating) {
     int pointer = (int)b.ID_target.x ;
@@ -549,7 +549,7 @@ void eat_corpse(Bacterium b, ArrayList<Agent> list_target, Biomass biomass, bool
 }
 
 
-void hunt_dead_agent(Bacterium b, ArrayList<Agent> list_target, boolean info) {
+void hunt_dead_agent(Bacterium b, ArrayList<Dead> list_target, boolean info) {
   for(Agent target : list_target) {
     if(target instanceof Agent_static) {
       Agent_static target_dead = (Agent_static) target ;
@@ -853,7 +853,7 @@ void set_aspect_corpse(Vec4 fill_colour, Vec4 stroke_colour, float thickness) {
   thickness_corpse = thickness ;
 }
 
-void build_dead(ArrayList<Agent> list, Info_dict carac, Info_obj style, int num) {
+void build_dead(ArrayList<Dead> list, Info_dict carac, Info_obj style, int num) {
   for(int i = 0 ; i < num ; i++) {
     if(ENVIRONMENT == 2 ) {
       Vec2 pos = Vec2("RANDOM RANGE",(int)LIMIT.a, (int)LIMIT.b, (int)LIMIT.c, (int)LIMIT.d) ;
@@ -867,11 +867,11 @@ void build_dead(ArrayList<Agent> list, Info_dict carac, Info_obj style, int num)
 
 
 
-void add_dead(ArrayList<Agent> list, Vec pos, Info_dict carac, Info_obj style) {
+void add_dead(ArrayList<Dead> list, Vec pos, Info_dict carac, Info_obj style) {
   int gender = (int)round(random(1));
-  Agent dead = new Dead(carac, style, gender) ;
+  Dead dead = new Dead(carac, style, gender) ;
   set_dead(dead, pos, carac, style) ;
-  DEAD_LIST.add(dead) ;
+  list.add(dead) ;
 
 }
 
@@ -902,13 +902,16 @@ void set_dead(Agent d, Vec pos, Info_dict carac, Info_obj style) {
 /**
 CORPSE || DEAD BODY update 0.1.0
 */
-void dead_update(ArrayList<Agent> list) {
+void dead_update(ArrayList<Dead> list) {
   dead_remove(list) ;
   carrion_update(list) ;
-  if(LOG_ECOSYSTEM) update_log(list, FRAME_RATE_LOG) ;
+  /*
+  rework log for dead list
+  */
+  // if(LOG_ECOSYSTEM) update_log(list, FRAME_RATE_LOG) ;
 }
 
-void show_dead(Info_obj style, ArrayList<Agent> list_dead) {
+void show_dead(Info_obj style, ArrayList<Dead> list_dead) {
   if(INFO_DISPLAY_AGENT) {
     info_agent(list_dead) ;
   } else {
@@ -922,8 +925,8 @@ void show_dead(Info_obj style, ArrayList<Agent> list_dead) {
 /**
 update dead body / corpse
 */
-void dead_remove(ArrayList<Agent> list) {
-  for(Agent dead : list) {
+void dead_remove(ArrayList<Dead> list) {
+  for(Dead dead : list) {
     if(dead.get_size() <= 0) {
       list.remove(dead) ;
       break ;
@@ -933,8 +936,8 @@ void dead_remove(ArrayList<Agent> list) {
 
 
 
-void carrion_update(ArrayList<Agent> list) {
-  for(Agent dead : list) {
+void carrion_update(ArrayList<Dead> list) {
+  for(Dead dead : list) {
     if(dead instanceof Agent_static) {
       Agent_static corpse = (Agent_static) dead ;
       corpse.carrion() ;

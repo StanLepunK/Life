@@ -115,24 +115,26 @@ void update_flora_position_from_adn() {
 float rotation_dna = 0 ;
 boolean rotation_bool_dna = false ;
 
-void show_decorum() {
+void show_decorum(float speed_rotation_dna, int direction_dna, boolean info) {
 
   // show DNA
-  if(rotation_bool_dna) {
-    rotation_dna += abs(speed_rotation_dna) *direction_dna ;
-    // rotation_dna = abs(rotation_dna) *direction_dna ;
-    strand_DNA.rotation(rotation_dna) ;
-    strand_DNA.set_radius(radius_dna) ;
-    strand_DNA.set_height(size_dna) ;
-    strand_DNA.set_pos(pos_final_dna) ;
-  }  
+  if(size_dna > 0 ) {
+    if(rotation_bool_dna) {
+      rotation_dna += abs(speed_rotation_dna) *direction_dna ;
+      // rotation_dna = abs(rotation_dna) *direction_dna ;
+      strand_DNA.rotation(rotation_dna) ;
+      strand_DNA.set_radius(radius_dna) ;
+      strand_DNA.set_height(size_dna) ;
+      strand_DNA.set_pos(pos_final_dna) ;
+    }  
 
-  for(int i = 0 ; i < strand_DNA.length() ; i++) {
-    costume_DNA(strand_DNA, i, pos_final_dna) ;
-  }  
+    for(int i = 0 ; i < strand_DNA.length() ; i++) {
+      costume_DNA(strand_DNA, i, pos_final_dna, info) ;
+    }
+  }
 }
 
-void costume_DNA(Helix_DNA helix, int target, Vec3 pos_final) {
+void costume_DNA(Helix_DNA helix, int target, Vec3 pos_final, boolean info) {
   Vec3 pos_a = helix.get_pos(0)[target] ;
   Vec3 pos_b = helix.get_pos(1)[target] ;
 
@@ -157,7 +159,7 @@ void costume_DNA(Helix_DNA helix, int target, Vec3 pos_final) {
   float alpha_b = g.colorModeA *ratio_b ;
 
 
-  if(info_agent) {
+  if(info) {
     fill(color_strand_a, alpha_a) ;
     String nuc_a = "" +helix.get_DNA(0).sequence_a.get(target).nac ;
     costume_rope(pos_a, size, nuc_a) ;

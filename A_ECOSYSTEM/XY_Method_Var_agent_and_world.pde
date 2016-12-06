@@ -1,10 +1,89 @@
 /**
-AGENT Methods 0.1.1
+ECOSYSTEM METHOD & VAR 0.0.1
+
+
 */
+boolean HORIZON_ALPHA = false ;
+int HORIZON = 0 ;
+int ENVIRONMENT = 2 ; // 2 is for 2D, 3 for 3D
+Vec3 BOX = Vec3(100,100,100) ;
+Vec3 BOX_POS = Vec3() ;
+Vec6 LIMIT = Vec6(0,BOX.x,0,BOX.y,0,BOX.z) ;
+
+boolean REBOUND ;
+int SIZE_TEXT_INFO ;
+
+
+void set_environment(String renderer) {
+  if(renderer.equals(P3D)) ENVIRONMENT = 3 ; else ENVIRONMENT = 2 ;
+}
+
+
+
+
+
+void set_horizon(boolean horizon) {
+  HORIZON_ALPHA = horizon ;
+}
+
+void set_horizon_depth(int value) {
+   HORIZON = value ;
+}
+
+void set_rebound(boolean rebound) {
+  REBOUND = rebound ;
+}
+
+Vec3 get_box_pos() {
+  return BOX_POS ;
+}
+
+Vec3 get_box_size() {
+  return BOX ;
+}
+
+void build_box(Vec3 pos, Vec3 size) {
+  BOX_POS.set(pos) ;
+  BOX.set(size) ;
+}
+
+void set_box(float left, float right, float top, float bottom, float front, float back) {
+  LIMIT.set(left,right, top, bottom, front, back) ;
+}
+
+void set_textSize_info(int size) {
+  SIZE_TEXT_INFO = size ;
+}
+
+
+
+
+/**
+BIOMASS
+*/
+class Biomass {
+  float humus, humus_max ;
+  Biomass() {}
+
+  void humus_update(float var_humus) {
+    humus +=var_humus ;
+  }
+
+  void set_humus(float humus) {
+    this.humus = this.humus_max = humus ;
+  }
+} 
+
+
+
+
+
+
+
+
 
 /**
 
-FOND
 AGENT DYNAMIC
 
 */
@@ -32,7 +111,7 @@ void hunting_update(ArrayList<Agent> list_hunter, boolean info, ArrayList<Agent>
   }
 }
 
-void eating_update(ArrayList<Agent> list_hunter, ArrayList<Agent> list_dead) {
+void eating_update(ArrayList<Agent> list_hunter, ArrayList<Dead> list_dead) {
   for(Agent a : list_hunter) {
     if(a instanceof Agent_dynamic) {
       Agent_dynamic hunter = (Agent_dynamic) a ;
@@ -199,7 +278,7 @@ void eat_flora(Agent_dynamic grazer, ArrayList<Agent> list_target) {
 /**
 eat meat
 */
-void eat_meat(Agent_dynamic hunter, ArrayList<Agent> list_dead) {
+void eat_meat(Agent_dynamic hunter, ArrayList<Dead> list_dead) {
   // first eat the agent who eat just before without look in the list
   if(hunter.eating) {
     int pointer = (int)hunter.ID_target.x ;
@@ -208,7 +287,7 @@ void eat_meat(Agent_dynamic hunter, ArrayList<Agent> list_dead) {
     if the pointer is superior of the list, 
     because if it's inferior a corpse can be eat by an other Agent */
     if(pointer < list_dead.size() ) {
-      Agent target = list_dead.get((int)hunter.ID_target.x) ;
+      Dead target = list_dead.get((int)hunter.ID_target.x) ;
       /* if the entry point of the list return an agent 
       with a same ID than a ID_target corpse eat just before, 
       the Carnivore can continue the lunch */
@@ -219,7 +298,7 @@ void eat_meat(Agent_dynamic hunter, ArrayList<Agent> list_dead) {
       else {
         /* If the ID returned is different, a corpse was leave from the list, 
         and it's necessary to check in the full ist to find if any corpse have a seme ID */
-        for(Agent target_in_list : list_dead) {
+        for(Dead target_in_list : list_dead) {
           if (target_in_list instanceof Agent_static && target_in_list.get_ID() == ID_target) {
             Agent_static agent_meat = (Agent_static) target_in_list ;
             hunter.eat_flesh(agent_meat) ; 
@@ -771,44 +850,83 @@ void show_agent_dynamic(Info_obj style, ArrayList<Agent>... all_list) {
 /**
 Aspect
 */
-void update_aspect(Info_obj style, ArrayList<Agent> list) {
-    int costume_ID = (int)style.catch_obj(0) ;
-    Vec4 fill_vec = (Vec4)style.catch_obj(1) ;
-    Vec4 stroke_vec = (Vec4)style.catch_obj(2) ; 
-    float thickness = (float)style.catch_obj(3) ;
+/**
+update aspect
+*/
+void update_aspect(Info_obj style, ArrayList list) {
+  int costume_ID = (int)style.catch_obj(0) ;
+  Vec4 fill_vec = (Vec4)style.catch_obj(1) ;
+  Vec4 stroke_vec = (Vec4)style.catch_obj(2) ; 
+  float thickness = (float)style.catch_obj(3) ;
 
-  for(Agent a : list) {
-    boolean original_aspect = true ;
+  for(Object o : list) {
+    if(o instanceof Agent) {
+      Agent a = (Agent) o ;
+      boolean original_aspect = true ;
 
-    if(costume_ID != a.get_costume() || fill_vec != a.get_fill() || stroke_vec != a.get_stroke() || thickness != a.get_thickness()) {
-      original_aspect = false ;
-    }
-    if(original_aspect) {
-      if(HORIZON_ALPHA) {
-        Vec4 new_fill = Vec4(a.get_fill().x, a.get_fill().y, a.get_fill().z, alpha(a)) ;
-        Vec4 new_stroke = Vec4(a.get_stroke().x, a.get_stroke().y, a.get_stroke().z, alpha(a)) ;
-        a.aspect(new_fill, new_stroke, thickness) ;
-      } else {
-        a.aspect(a.get_fill(), a.get_stroke(), a.get_thickness()) ;
+      if(costume_ID != a.get_costume() || fill_vec != a.get_fill() || stroke_vec != a.get_stroke() || thickness != a.get_thickness()) {
+        original_aspect = false ;
       }
-      
-      a.costume() ;
-
-    } else {
-      if(HORIZON_ALPHA) {
-        Vec4 new_fill = Vec4(fill_vec.x, fill_vec.y, fill_vec.z, alpha(a)) ;
-        Vec4 new_stroke = Vec4(stroke_vec.x, stroke_vec.y, stroke_vec.z, alpha(a)) ;
-        a.aspect(new_fill, new_stroke, thickness) ;
-      } else {
-        a.aspect(fill_vec, stroke_vec, thickness) ;
-      }
-
-      if(costume_ID != a.get_costume()) {
-        a.costume(costume_ID) ; 
-      } else {
+      if(original_aspect) {
+        if(HORIZON_ALPHA) {
+          Vec4 new_fill = Vec4(a.get_fill().x, a.get_fill().y, a.get_fill().z, alpha(a)) ;
+          Vec4 new_stroke = Vec4(a.get_stroke().x, a.get_stroke().y, a.get_stroke().z, alpha(a)) ;
+          a.aspect(new_fill, new_stroke, thickness) ;
+        } else {
+          a.aspect(a.get_fill(), a.get_stroke(), a.get_thickness()) ;
+        }
+        
         a.costume() ;
+
+      } else {
+        if(HORIZON_ALPHA) {
+          Vec4 new_fill = Vec4(fill_vec.x, fill_vec.y, fill_vec.z, alpha(a)) ;
+          Vec4 new_stroke = Vec4(stroke_vec.x, stroke_vec.y, stroke_vec.z, alpha(a)) ;
+          a.aspect(new_fill, new_stroke, thickness) ;
+        } else {
+          a.aspect(fill_vec, stroke_vec, thickness) ;
+        }
+
+        if(costume_ID != a.get_costume()) {
+          a.costume(costume_ID) ; 
+        } else {
+          a.costume() ;
+        }
       }
-    } 
+    }
+    if(o instanceof Dead) {
+      Dead d = (Dead) o ;
+      boolean original_aspect = true ;
+
+      if(costume_ID != d.get_costume() || fill_vec != d.get_fill() || stroke_vec != d.get_stroke() || thickness != d.get_thickness()) {
+        original_aspect = false ;
+      }
+      if(original_aspect) {
+        if(HORIZON_ALPHA) {
+          Vec4 new_fill = Vec4(d.get_fill().x, d.get_fill().y, d.get_fill().z, alpha(d)) ;
+          Vec4 new_stroke = Vec4(d.get_stroke().x, d.get_stroke().y, d.get_stroke().z, alpha(d)) ;
+          d.aspect(new_fill, new_stroke, thickness) ;
+        } else {
+          d.aspect(d.get_fill(), d.get_stroke(), d.get_thickness()) ;
+        }
+        d.costume() ;
+
+      } else {
+        if(HORIZON_ALPHA) {
+          Vec4 new_fill = Vec4(fill_vec.x, fill_vec.y, fill_vec.z, alpha(d)) ;
+          Vec4 new_stroke = Vec4(stroke_vec.x, stroke_vec.y, stroke_vec.z, alpha(d)) ;
+          d.aspect(new_fill, new_stroke, thickness) ;
+        } else {
+          d.aspect(fill_vec, stroke_vec, thickness) ;
+        }
+
+        if(costume_ID != d.get_costume()) {
+          d.costume(costume_ID) ; 
+        } else {
+          d.costume() ;
+        }
+      }
+    }   
   }
 }
 
@@ -854,9 +972,25 @@ END SHOW
 INFO
 
 */
+/*
 void info_agent(ArrayList<Agent> list) {
   for(Agent a : list) {
     a.info(a.get_fill(), SIZE_TEXT_INFO) ;
+  }
+}
+*/
+
+void info_agent(ArrayList list) {
+  for(Object o : list) {
+    if(o instanceof Agent) {
+      Agent a = (Agent) o ;
+      a.info(a.get_fill(), SIZE_TEXT_INFO) ;
+    } else if(o instanceof Dead) {
+      Dead d = (Dead) o ;
+      d.info(d.get_fill(), SIZE_TEXT_INFO) ;
+
+    }
+   
   }
 }
 
@@ -931,7 +1065,7 @@ void update_growth(ArrayList<Agent> list) {
 }
 
 
-void update_die(ArrayList<Agent> list) {
+void update_die(ArrayList<Dead> list_dead, ArrayList<Agent> list) {
   // dead, possible to add to the dead list
   for(Agent a : list) {
     if(!a.get_alive()) {
@@ -940,8 +1074,8 @@ void update_die(ArrayList<Agent> list) {
         if(PRINT_DEATH_AGENT_DYNAMIC) {
           print_death_agent(a_d) ;
         }
-        Agent dead = new Dead(a_d.pos, a_d.size, a_d.size_ref, a_d.nutrient_quality, a_d.name) ;
-        DEAD_LIST.add(dead) ;
+        Dead dead = new Dead(a_d.pos, a_d.size, a_d.size_ref, a_d.nutrient_quality, a_d.name) ;
+        list_dead.add(dead) ;
         list.remove(a) ;
         break ;
       }

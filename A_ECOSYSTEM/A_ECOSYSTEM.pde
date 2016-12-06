@@ -17,11 +17,13 @@ void setup() {
   load_nucleotide_table("code.csv") ;
 
   colorMode(HSB, 360,100,100,100) ;
+
+
   set_environment() ;
   set_horizon(true) ;
-  
-  create_decorum() ; 
+  set_frameRate_log(600) ;
 
+  create_decorum() ; 
 }
 
 
@@ -44,7 +46,7 @@ void draw() {
   // spawn_carnivore() ;
   int num_carnivore_must_spawn = 3 ;
   int level_frameRate_limit = 45 ;
-  control_population_via_frameRate(level_frameRate_limit, num_carnivore_must_spawn) ;
+  // control_population_via_frameRate(level_frameRate_limit, num_carnivore_must_spawn) ;
 
 
   info_agent(info_agent) ;
@@ -70,8 +72,7 @@ void draw() {
 
   // display
   if(agent_display) show_agent() ;
-  if(decorum_display) show_decorum() ;
-
+  if(decorum_display) show_decorum(speed_rotation_dna, direction_dna, info_agent) ;
 }
 
 

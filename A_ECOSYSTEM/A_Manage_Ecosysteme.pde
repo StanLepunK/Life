@@ -24,15 +24,15 @@ ArrayList<Agent> CARNIVORE_CHILD_LIST = new ArrayList<Agent>() ;
 ArrayList<Agent> CARNIVORE_FEMALE_LIST = new ArrayList<Agent>() ;
 ArrayList<Agent> CARNIVORE_MALE_LIST = new ArrayList<Agent>() ;
 
-ArrayList<Agent> DEAD_LIST = new ArrayList<Agent>() ;
+ArrayList<Dead> DEAD_LIST = new ArrayList<Dead>() ;
 
 // QUANTITY
-int num_flora = 80 ;
-int num_herbivore = 50 ; 
+int num_flora = 50 ;
+int num_herbivore = 100 ; 
 int num_omnivore = 0 ; 
-int num_carnivore = 0 ; 
-int num_bacterium = 6 ;
-int num_dead = 0 ;
+int num_carnivore = 10 ; 
+int num_bacterium = 10 ;
+int num_dead = 50 ;
 
 // Colour
 Info_obj style_carnivore, style_herbivore, style_omnivore ;
@@ -66,7 +66,12 @@ void ecosystem_setting(Biomass b) {
 
   Vec4 fill_flora = Vec4(color_flora) ;
   Vec4 stroke_flora = Vec4(color_flora) ;
-  Vec3 alpha_behavior_flora = Vec3(pos_final_dna.z, -.4, .8) ;
+
+  Vec3 alpha_behavior_flora = Vec3(0, -1, 1) ; // it's like 100% all the time
+  if(pos_final_dna != null) {
+    alpha_behavior_flora = Vec3(pos_final_dna.z, -.4, .8) ;
+  }
+  
   style_flora = new Info_obj("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
 
   // HERBIVORE
@@ -80,26 +85,30 @@ void ecosystem_setting(Biomass b) {
   costume = PENTAGON_ROPE ;
   Vec4 fill_omnivore = Vec4(150, 100, 80, 100) ;
   Vec4 stroke_omnivore = Vec4(150, 100, 80, 100) ;
-  style_omnivore = new Info_obj("Omnivore Aspect", costume, fill_omnivore, stroke_omnivore, thickness) ;
+  Vec3 alpha_behavior_omnivore = Vec3(0, -1, 1) ;
+  style_omnivore = new Info_obj("Omnivore Aspect", costume, fill_omnivore, stroke_omnivore, thickness, alpha_behavior_omnivore) ;
 
   // CARNIVORE
   costume = HEPTAGON_ROPE ;
   Vec4 fill_carnivore = Vec4(0, 100, 100, 100) ;
   Vec4 stroke_carnivore = Vec4(0, 100, 100, 100) ;
-  style_carnivore = new Info_obj("Carnivore Aspect", costume, fill_carnivore, stroke_carnivore, thickness) ;
+  Vec3 alpha_behavior_carnivore = Vec3(0, -1, 1) ;
+  style_carnivore = new Info_obj("Carnivore Aspect", costume, fill_carnivore, stroke_carnivore, thickness, alpha_behavior_carnivore) ;
   
   // BACTERIUM
   costume = ELLIPSE_ROPE ;
   Vec4 fill_bacterium = Vec4(30, 0, 30, 100) ;
   Vec4 stroke_bacterium = Vec4(30, 0, 30, 100) ;
-  style_bacterium = new Info_obj("Bacterium Aspect", costume, fill_bacterium, stroke_bacterium, thickness) ;
+  Vec3 alpha_behavior_bacterium = Vec3(0, -1, 1) ;
+  style_bacterium = new Info_obj("Bacterium Aspect", costume, fill_bacterium, stroke_bacterium, thickness, alpha_behavior_bacterium) ;
   
 
   // DEAD
   costume = CROSS_2_ROPE ;
   Vec4 fill_dead = Vec4(0, 0, 30, 100) ;
   Vec4 stroke_dead = Vec4(0, 0, 30, 100) ;
-  style_dead = new Info_obj("Dead Aspect", costume, fill_dead, stroke_dead, thickness) ;
+  Vec3 alpha_behavior_dead = Vec3(0, -1, 1) ;
+  style_dead = new Info_obj("Dead Aspect", costume, fill_dead, stroke_dead, thickness, alpha_behavior_dead) ;
   
 
 
@@ -109,7 +118,11 @@ void ecosystem_setting(Biomass b) {
   // build_flora(FLORA_LIST, flora_carac, style_flora, num_flora) ;
 
   //drop zone from list of point
-  build_flora(FLORA_LIST, flora_carac, style_flora, num_flora, drop_zone_flora_list) ;
+  if(drop_zone_flora_list.length > 0 ) {
+    build_flora(FLORA_LIST, flora_carac, style_flora, num_flora, drop_zone_flora_list) ;
+  } else {
+    build_flora(FLORA_LIST, flora_carac, style_flora, num_flora) ;
+  }
 
   build_herbivore(HERBIVORE_CHILD_LIST, herbivore_carac, style_herbivore, num_herbivore) ;
   build_omnivore(OMNIVORE_CHILD_LIST, omnivore_carac, style_omnivore, num_omnivore) ;
@@ -238,7 +251,7 @@ void set_caracteristic_agent() {
   bacterium_carac.add("life_expectancy", 800 *60) ;
   bacterium_carac.add("velocity", 5) ;
   bacterium_carac.add("nutrient_quality", 1) ;
-  bacterium_carac.add("sense_range", 2000) ;
+  bacterium_carac.add("sense_range", 500) ;
   bacterium_carac.add("starving", 2) ;
   bacterium_carac.add("digestion", 12.5) ;
 
@@ -279,14 +292,11 @@ ENVIRONMENT 0.0.3
 */
 
 
-boolean HORIZON_ALPHA = false ;
-int HORIZON = 0 ;
-Vec3 BOX = Vec3(100,100,100) ;
-Vec3 BOX_POS = Vec3() ;
-Vec6 LIMIT = Vec6(0,BOX.x,0,BOX.y,0,BOX.z) ;
-boolean REBOUND ;
-int SIZE_TEXT_INFO ;
-int ENVIRONMENT = 3 ; // 2 is for 2D, 3 for 3D
+
+
+
+
+
 
 /**
 * Create enviromnent where the ecosystem will be live
@@ -296,32 +306,28 @@ void build_environment(Vec2 pos, Vec2 size) {
   Vec3 size_3D = Vec3(size.x, size.y,0) ;
   build_environment(pos_3D, size_3D) ;
   // write here to be sure the Environment have a good info
-  ENVIRONMENT = 2 ; 
+  set_environment(P3D) ;
 }
 
 void build_environment(Vec3 pos, Vec3 size) {
-  BOX_POS.set(pos) ;
-  BOX.set(size) ;
+  build_box(pos, size) ;
 
-  float left = BOX_POS.x - (BOX.x *.5) ;
-  float right = BOX_POS.x + (BOX.x *.5) ;
-  float top = BOX_POS.y - (BOX.y *.5) ;
-  float bottom = BOX_POS.y + (BOX.y *.5) ;
-  float front = BOX_POS.z - (BOX.z *.5) ;
-  float back = BOX_POS.z + (BOX.z *.5) ;
-  LIMIT.set(left,right, top, bottom, front, back) ;
+  float left = get_box_pos().x - (get_box_size().x *.5) ;
+  float right = get_box_pos().x + (get_box_size().x *.5) ;
+  float top = get_box_pos().y - (get_box_size().y *.5) ;
+  float bottom = get_box_pos().y + (get_box_size().y *.5) ;
+  float front = get_box_pos().z - (get_box_size().z *.5) ;
+  float back = get_box_pos().z + (get_box_size().z *.5) ;
 
-
-  HORIZON = int(abs(back) +abs(front)) ;
-  REBOUND = false ;
-  SIZE_TEXT_INFO = 18 ;
+  set_box(left, right, top,  bottom, front, back) ;
+  set_horizon_depth(int(abs(back) +abs(front))) ;
+  set_rebound(false) ;
+  set_textSize_info(18) ; 
   // b.set_humus(BOX.x *BOX.y *.01) ;
   // b.humus_max = b.humus = BOX.x *BOX.y *.01 ;
 }
 
-void set_horizon(boolean horizon) {
-  HORIZON_ALPHA = horizon ;
-}
+
 
 
 
@@ -360,21 +366,7 @@ Vec4 biotope_colour(Biomass b) {
 
 
 
-/**
-BIOMASS
-*/
-class Biomass {
-  float humus, humus_max ;
-  Biomass() {}
 
-  void humus_update(float var_humus) {
-    humus +=var_humus ;
-  }
-
-  void set_humus(float humus) {
-    this.humus = this.humus_max = humus ;
-  }
-}
 
 
 
@@ -404,15 +396,15 @@ void update_list() {
   // flora update
   flora_update(FLORA_LIST, biomass) ;
   // bacterium update
-  bacterium_update(BACTERIUM_LIST, DEAD_LIST, biomass, INFO_DISPLAY_AGENT) ;
+  bacterium_update(DEAD_LIST, BACTERIUM_LIST, biomass, INFO_DISPLAY_AGENT) ;
   // dead corpse update
   
   dead_update(DEAD_LIST) ;
  
   // dynamic agent update
-  herbivore_update(HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
-  omnivore_update(OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
-  carnivore_update(CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
+  herbivore_update(DEAD_LIST, HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
+  omnivore_update(DEAD_LIST, OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
+  carnivore_update(DEAD_LIST, CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
 
 
 
@@ -553,158 +545,7 @@ void show_agent() {
 
 
 
-/**
 
-INFO & LOG 0.1.0
-
-*/
-int FRAME_RATE_LOG = 300 ;
-
-boolean PRINT_DEATH_AGENT_DYNAMIC = true ;
-boolean PRINT_BORN_AGENT_DYNAMIC = true ;
-boolean PRINT_POPULATION = true ;
-
-boolean INFO_DISPLAY_AGENT = false ;
-
-
-
-
-
-void info_agent(boolean info) {
-  INFO_DISPLAY_AGENT = info ;
-}
-/**
-INFO
-*/
-void info_ecosystem(int tempo) {
-    if(frameCount%tempo == 0) {
-    if (PRINT_POPULATION) {
-      print_population() ;
-    }
-    // print_info_environment() ;
-    //print_list() ;
-    // print_info_carnivore(CARNIVORE_CHILD_LIST) ;
-    print_info_herbivore("Child", HERBIVORE_CHILD_LIST) ;
-    print_info_herbivore("Female", HERBIVORE_FEMALE_LIST) ;
-    print_info_herbivore("Male", HERBIVORE_MALE_LIST) ;
-    // print_info_bacterium(BACTERIUM_LIST) ;
-  }
-}
-
-
-/**
-LOG
-*/
-boolean LOG_ECOSYSTEM = false ;
-boolean LOG_ALL_AGENTS = false ;
-
-boolean LOG_HERBIVORE = false ;
-boolean LOG_OMNIVORE = false ;
-boolean LOG_CARNIVORE = false ;
-boolean LOG_FLORA = false ;
-boolean LOG_BACTERIUM = false ;
-boolean LOG_DEAD = false ;
-
-void set_log_ecosystem(boolean b) { 
-  LOG_ECOSYSTEM = b ;
-}
-void set_log_agents(boolean b) { 
-  LOG_ALL_AGENTS = b ;
-}
-
-void set_log_herbivore(boolean b) { 
-  LOG_HERBIVORE = b ;
-}
-void set_log_omnivore(boolean b) { 
-  LOG_OMNIVORE = b ;
-}
-void set_log_carnivore(boolean b) { 
-  LOG_CARNIVORE = b ;
-}
-void set_log_bacterium(boolean b) { 
-  LOG_BACTERIUM = b ;
-}
-void set_log_flora(boolean b) { 
-  LOG_FLORA = b ;
-}
-void set_log_dead(boolean b) { 
-  LOG_DEAD = b ;
-}
-
-
-
-void log_ecosystem(int tempo) {
-
-  /**
-  log population
-  */
-  if(frameCount%tempo == 0 && LOG_ECOSYSTEM) {
-    // log eco agent
-    int num_log_eco_agent = 6 ;
-    if(!log_is()) {
-      build_log(num_log_eco_agent) ;
-    }
-
-    log_eco_agent() ;
-    log_eocsystem_resume() ;
-    log_agent_global() ;
-
-    log_save() ;
-  }
-}
-
-
-// local log method
-void log_eocsystem_resume() {
-      log_eco_resume(   biomass.humus, biomass.humus_max, 
-                      HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST,
-                      OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST,
-                      CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST,
-                      BACTERIUM_LIST,
-                      FLORA_LIST,
-                      DEAD_LIST) ;
-
-}
-
-void log_eco_agent() {
-  if(LOG_ALL_AGENTS) {
-      log_eco_agent(0, "Herbivore", HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
-      log_eco_agent(1, "Omnivore", OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
-      log_eco_agent(2, "Carnivore", CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
-      log_eco_agent(3, "Bacterium", BACTERIUM_LIST) ;
-      log_eco_agent(4,  "Flora", FLORA_LIST) ;
-      log_eco_agent(5,  "Dead", DEAD_LIST) ;
-    } else {
-      if(LOG_HERBIVORE) log_eco_agent(0, "Herbivore", HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
-      if(LOG_OMNIVORE)  log_eco_agent(1, "Omnivore", OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
-      if(LOG_CARNIVORE)  log_eco_agent(2, "Carnivore", CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
-      if(LOG_BACTERIUM) log_eco_agent(3, "Bacterium", BACTERIUM_LIST) ;
-      if(LOG_FLORA) log_eco_agent(4,  "Flora", FLORA_LIST) ;
-      if(LOG_DEAD) log_eco_agent(5,  "Dead", DEAD_LIST) ;
-    }
-
-}
-
-void log_agent_global() {
-  if(LOG_ALL_AGENTS) {
-    log_agent_global("Herbivore", HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
-    log_agent_global("Omnivore", OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
-    log_agent_global("Carnivore", CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
-    log_agent_global("Bacterium", BACTERIUM_LIST) ;
-    log_agent_global("Flora", FLORA_LIST) ;
-    log_agent_global("Dead", DEAD_LIST) ;
-  } else {
-    if(LOG_HERBIVORE) log_agent_global("Herbivore", HERBIVORE_CHILD_LIST, HERBIVORE_FEMALE_LIST, HERBIVORE_MALE_LIST) ;
-    if(LOG_OMNIVORE) log_agent_global("Omnivore", OMNIVORE_CHILD_LIST, OMNIVORE_FEMALE_LIST, OMNIVORE_MALE_LIST) ;
-    if(LOG_CARNIVORE) log_agent_global("Carnivore", CARNIVORE_CHILD_LIST, CARNIVORE_FEMALE_LIST, CARNIVORE_MALE_LIST) ;
-    if(LOG_BACTERIUM) log_agent_global("Bacterium", BACTERIUM_LIST) ;
-    if(LOG_BACTERIUM) log_agent_global("Flora", FLORA_LIST) ;
-    if(LOG_DEAD) log_agent_global("Dead", DEAD_LIST) ;
-  }
-}
-/**
-END LOG & PRINT
-*/
 
 
 
