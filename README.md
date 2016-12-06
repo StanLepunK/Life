@@ -85,6 +85,29 @@ print_info_bacterium(BACTERIUM_LIST) ;
 
 
 
+--
+LOG
+--
+>Create log and save in the log folder.
+
+void set_log_ecosystem(boolean log) ;
+
+void set_log_agents(oolean log) ;
+
+void set_log_herbivore(oolean log) ;
+
+void set_log_omnivore(foolean log) ;
+
+void set_log_carnivore(oolean log) ;
+
+void set_log_bacterium(oolean log) ;
+
+void set_log_flora(oolean log) ;
+
+void set_log_dead(oolean log) ;
+
+
+
 
 
 
