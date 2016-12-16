@@ -176,18 +176,20 @@ void clear_ecosytem()
 
 
 
-
-
-
-SET AGENT
---------------
-
-> set aspect, fill, stroke and thickness ( strokeWeight) of your agent
+set aspect, fill, stroke and thickness (strokeWeight) of your agent
+--
 set_aspect_flora(Vec4 fill, Vec4 stroke, float thickness) ;
+
 set_aspect_herbivore(Vec4 fill, Vec4 stroke, float thickness) ;
+
 set_aspect_carnivore(Vec4 fill, Vec4 stroke, float thickness) ;
+
 set_aspect_bacterium(Vec4 fill, Vec4 stroke, float thickness) ;
+
 set_aspect_corpse(Vec4 fill, Vec4 stroke, float thickness) ;
+
+
+
 
 
 
@@ -220,12 +222,82 @@ int CLOCK
 @ this var can change the speed_feeding, hunger...
 
 
+VARIABLE
+--
+Vec4 colour_fill ;
+
+Vec4 colour_stroke ;
+
+float thickness ;
+
+String name ;
+
+int ID ;
 
 
 
---------------------
-Class Agent_dynamic implements Agent
------------------------------------------------
+
+GET METHOD AGENT
+--
+get home
+-- 
+Vec4 get_home() ;
+
+Vec3 get_home_pos() ;
+
+int get_home_id() ;
+
+
+
+SET METHOD AGENT
+--
+set home
+--
+void set_home(Vec4 home) ;
+
+void set_home(Vec3 pos, int id_home) ;
+
+void set_home_pos(Vec3 pos) ;
+
+void set_home_ID(int id_home) ;
+
+
+
+
+set aspect
+--
+void set_fill(Vec4 colour_fill) ;
+> colour_fill = Vec4(0,0,0,max_color_environment_value) is colour by default
+
+void set_stroke(Vec4 colour_stroke) ;
+> colour_stroke = Vec4(0,0,0,max_color_environment_value) is colour by default
+
+void set_thickness(float thickness) ;
+> thickness = 1 by default > thickness is strokeWeight
+
+void set_alpha(Vec3 alpha_behavior) ;
+>this setting is used with the 'z' coordinate.
+>'alpha_behavior.x' is the medium value be use to calucul the front and the back horizon.
+>'alpha_behavior.y' this value must start from '0' to negative value. This value multiply the HORIZON constante to calcule where the alpha is 0.
+>'alpha_behavior.z' this value must start from '0' to positive value. This value multiply the HORIZON constante to calcule where the alpha is 1.
+>your setting can be something like that : Vec3(-100, -.5, .1). if the HORIZON is 500. the agent have an alpha to 0 at : 500 *(-.5) -100 = -350, and alpha to 100% : 500 *.1 -100 = -50 ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
+CLASS AGENT DYNAMIC
+--
 Constructor
 -------------
 Agent(Vec3 pos, int size, int velocity, int life, String name)
@@ -245,15 +317,12 @@ Vec3 pos, motion, direction ;
 Vec3 velocity_xyz ;
 int velocity ;
 
-String name ;
-int ID ;
+
 
 int size ;
 int life ;
 
-Vec4 colour_fill ;
-Vec4 colour_stroke ;
-float thickness ;
+
 
 int hunger  ;
 float gourmet ;
@@ -264,7 +333,10 @@ int greed
 
 
 
-set methode
+
+
+
+SET METHOD
 ----------
 set feeding
 --
@@ -297,23 +369,14 @@ void set_digestion(int digestion)
 value from 1 or more !
 
 
-set aspect
---
-void set_fill(Vec4 colour_fill) ;
-> colour_fill = Vec4(0,0,0,max_color_environment_value) is colour by default
 
-void set_stroke(Vec4 colour_stroke) ;
-> colour_stroke = Vec4(0,0,0,max_color_environment_value) is colour by default
 
-void set_thickness(float thickness) ;
-> thickness = 1 by default > thickness is strokeWeight
 
-void set_alpha(Vec3 alpha_behavior) ;
->this setting is used with the 'z' coordinate.
->'alpha_behavior.x' is the medium value be use to calucul the front and the back horizon.
->'alpha_behavior.y' this value must start from '0' to negative value. This value multiply the HORIZON constante to calcule where the alpha is 0.
->'alpha_behavior.z' this value must start from '0' to positive value. This value multiply the HORIZON constante to calcule where the alpha is 1.
->your setting can be something like that : Vec3(-100, -.5, .1). if the HORIZON is 500. the agent have an alpha to 0 at : 500 *(-.5) -100 = -350, and alpha to 100% : 500 *.1 -100 = -50 ;
+
+
+
+
+
 
 
 set misc

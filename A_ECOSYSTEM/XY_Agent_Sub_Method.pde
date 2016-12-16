@@ -643,6 +643,8 @@ void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int n
       if(area[i] instanceof Vec3) {
         Vec3 spawn_pos = (Vec3) area[i] ;
         add_flora(list_f, Vec2(spawn_pos.x, spawn_pos.y), carac, style) ;
+      } else {
+        System.err.println("Arg area in not an instance of Vec2 or Vec3, no agent can be add") ;
       }  
     } else if (ENVIRONMENT == 3) {
       if(area[i] instanceof Vec2) {
@@ -652,7 +654,9 @@ void build_flora(ArrayList<Agent> list_f, Info_dict carac, Info_obj style, int n
       if(area[i] instanceof Vec3) {
         Vec3 spawn_pos = (Vec3) area[i] ;
         add_flora(list_f, spawn_pos, carac, style) ;
-      }  
+      } else {
+        System.err.println("Arg area in not an instance of Vec2 or Vec3, no agent can be add") ;
+      } 
     }
   }
 }

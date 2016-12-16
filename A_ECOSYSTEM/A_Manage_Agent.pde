@@ -49,7 +49,7 @@ Info_dict bacterium_carac = new Info_dict() ;
 Info_dict dead_carac = new Info_dict() ;
 
 
-
+  Vec4 color_flora = Vec4(0, 100, 80, 100) ;
 
 
 // main method
@@ -68,14 +68,15 @@ void ecosystem_setting(Biomass b) {
   Vec4 stroke_flora = Vec4(color_flora) ;
 
   Vec3 alpha_behavior_flora = Vec3(0, -1, 1) ; // it's like 100% all the time
-  if(pos_final_dna != null) {
-    alpha_behavior_flora = Vec3(pos_final_dna.z, -.4, .8) ;
+  if(get_pos_host()  != null) {
+    alpha_behavior_flora = Vec3(get_pos_host().z, -.4, .8) ;
   }
   
   style_flora = new Info_obj("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
 
   // HERBIVORE
   costume = POINT_ROPE ;
+  Vec4 color_herbivore = Vec4(110, 100, 70, 100) ;
   Vec4 fill_herbivore = Vec4(color_herbivore) ;
   Vec4 stroke_herbivore = Vec4(color_herbivore) ;
   Vec3 alpha_behavior_herbivore = Vec3(0, -1, 1) ;
@@ -112,14 +113,9 @@ void ecosystem_setting(Biomass b) {
   
 
 
-
-
-  // classic radom drop zone
-  // build_flora(FLORA_LIST, flora_carac, style_flora, num_flora) ;
-
-  //drop zone from list of point
-  if(drop_zone_flora_list.length > 0 ) {
-    build_flora(FLORA_LIST, flora_carac, style_flora, num_flora, drop_zone_flora_list) ;
+  if(get_symbiosis_area().length > 0 ) {
+    build_flora(FLORA_LIST, flora_carac, style_flora, num_flora, get_symbiosis_area_pos()) ;
+    symbiosis(FLORA_LIST, get_symbiosis_area_pos(), get_host_address()) ;
   } else {
     build_flora(FLORA_LIST, flora_carac, style_flora, num_flora) ;
   }
@@ -130,6 +126,65 @@ void ecosystem_setting(Biomass b) {
   build_bacterium(BACTERIUM_LIST, bacterium_carac, style_bacterium, num_bacterium) ;
   build_dead(DEAD_LIST, dead_carac, style_dead, num_dead) ;
 }
+
+
+
+/**
+WHATTTTTTT
+
+
+*/
+
+/**
+Manage AGENT STYLE / ASPECT / COSTUME
+*/
+
+boolean new_costume_virus = false ;
+void random_flora_costume_and_colour() {
+  Vec4 fill_flora = Vec4(color_flora) ;
+  Vec4 stroke_flora = Vec4(color_flora) ;
+  float change_hue = random(50) ;
+  float change_alpha = random(100) ;
+  fill_flora.x += change_hue ;
+  stroke_flora.x += change_hue ;
+  fill_flora.a -= change_alpha ;
+  stroke_flora.a -= change_alpha ;
+
+
+  int costume = VIRUS_3_4_64_ROPE ;
+  int new_costume = floor(random(8)) ;
+  if(new_costume == 0 ) {
+    costume = VIRUS_3_4_32_ROPE ;
+  } else if(new_costume == 1 ) {
+    costume = VIRUS_3_4_64_ROPE ;
+  } else if(new_costume == 2 ) {
+    costume = VIRUS_3_4_128_ROPE ;
+  } else if(new_costume == 3 ) {
+    costume = VIRUS_2_2_16_ROPE ;
+  } else if(new_costume == 4 ) {
+    costume = VIRUS_3_8_16_ROPE ;
+  } else if(new_costume == 5 ) {
+    costume = VIRUS_2_2_32_ROPE ;
+  } else if(new_costume == 6 ) {
+    costume = VIRUS_3_8_64_ROPE ;
+  } else if(new_costume == 7 ) {
+    costume = VIRUS_3_8_16_ROPE ;
+  }
+  float thickness = 1. ;
+
+
+  Vec3 alpha_behavior_flora = Vec3(get_pos_host().z, -.4, .8) ;
+  style_flora = new Info_obj("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -244,7 +299,6 @@ void set_caracteristic_agent() {
   carnivore_carac.add("sex_appeal", Vec2(30, 10)) ;
   carnivore_carac.add("multiple_pregnancy", 5.5) ;
 
-
   bacterium_carac.add("name", "Gnak Gnak") ;
   bacterium_carac.add("size", 2) ;
   bacterium_carac.add("stamina", 200) ;
@@ -254,7 +308,6 @@ void set_caracteristic_agent() {
   bacterium_carac.add("sense_range", 500) ;
   bacterium_carac.add("starving", 2) ;
   bacterium_carac.add("digestion", 12.5) ;
-
 
   dead_carac.add("name", "UNDEAD") ;
   dead_carac.add("size", 25) ;
@@ -373,6 +426,18 @@ Vec4 biotope_colour(Biomass b) {
 
 
 
+
+
+
+
+
+/**
+SYMBIOSIS
+*/
+
+void update_symbiosis() {
+  update_symbiosis(FLORA_LIST, get_symbiosis_area_pos()) ;
+}
 
 
 

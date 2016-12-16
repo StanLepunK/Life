@@ -23,7 +23,8 @@ void setup() {
   set_horizon(true) ;
   set_frameRate_log(600) ;
 
-  create_decorum() ; 
+  set_host() ;
+
 }
 
 
@@ -67,12 +68,15 @@ void draw() {
   /**
   special update for the flora from list
   */
-  update_flora_position_from_adn() ;
+  // update_flora_position_from_adn() ;
+  update_symbiosis() ;
+  update_host() ;
+  
 
 
   // display
   if(agent_display) show_agent() ;
-  if(decorum_display) show_decorum(speed_rotation_dna, direction_dna, info_agent) ;
+  if(host_display) show_host(info_agent) ;
 }
 
 
@@ -81,12 +85,13 @@ void draw() {
 
 boolean info_agent = false ;
 
-boolean decorum_display = true ;
+boolean host_display = true ;
 boolean agent_display = true ;
 
 boolean bg_refresh = true ;
-int direction_dna = 1 ;
-float speed_rotation_dna = .01 ;
+int direction_host = 1 ;
+boolean motion_bool_host ;
+float speed_host = .01 ;
 void keyPressed() {
   if(key == 'i' ) {
     if(info_agent) info_agent = false ; else info_agent = true ;
@@ -102,30 +107,34 @@ void keyPressed() {
 
   if(key == 'x') init_ecosystem = true  ;
 
-  if(key == 'n') set_virus_costume() ;
+  if(key == 'n') {
+    random_flora_costume_and_colour() ;
+  }
 
   // rotation
-  if(key == 'r' ) {
-    if(rotation_bool_dna) rotation_bool_dna = false ; else rotation_bool_dna = true ;
+  if(key == 'm' ) {
+    if(motion_bool_host) motion_bool_host = false ; else motion_bool_host = true ;
   }
-  if(key == 'e' ) {
-    if(direction_dna == 1) direction_dna = -1 ; else direction_dna = 1 ;
+  if(key == 'r' ) {
+    if(direction_host == 1) direction_host = -1 ; else direction_host = 1 ;
   }
 
   if(key == 'a' ) {
-    if(speed_rotation_dna > 0) speed_rotation_dna -= .001 ;
+    if(speed_host > 0) speed_host -= .001 ;
   }
 
   if(key == 'z' ) {
-    speed_rotation_dna += .001 ;
+    speed_host += .001 ;
   }
   
-
-  if(key == 'l') {
-    if(decorum_display) decorum_display = false ; else decorum_display = true ;
+  /**
+  display
+  */
+  if(key == 'f') {
+    if(host_display) host_display = false ; else host_display = true ;
   }
 
-  if(key == 'm') {
+  if(key == 'd') {
     if(agent_display) agent_display = false ; else agent_display = true ;
   }
 }
