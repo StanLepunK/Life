@@ -18,47 +18,84 @@ void set_host() {
 
 
 void show_host(boolean info_agent) {
-
   show_host(speed_host, direction_host, ELLIPSE_ROPE, motion_bool_host, info_agent) ;
-
 }
 
 
 
 
 /**
-HOST 0.1.0
+HOST 0.1.1
 
 */
 /**
 CREATE
 */
 void create_host(int num, Vec3 pos, Vec3 size, Vec3 canvas, Vec3 radius) {
+  // host
   pos_host(pos) ;
   size_host(size) ;
   canvas_host(canvas) ;
   radius_host(radius) ;
 
-  
-  
-  // init_symbiosis_area(num) ;
-  
-
   int height_dna = (int)canvas.y ;
   int radius_dna = (int)radius.x ;
   int num_nucleotide = num ;
-  int num_helix = 2 ;
-  
+  int num_helix = 2 ; 
 
   init_host_target(num *num_helix) ;
-  init_symbiosis_area(num *num_helix) ;
-
-
   create_dna(num_helix, num_nucleotide, pos, size, height_dna, radius_dna) ;
 
+  // symbiosis
 
 }
 
+
+void init_symbiosis() {
+  
+  // num *num_helix
+  init_symbiosis_area(strand_DNA.num()) ;
+  set_symbiosis_area(strand_DNA.get_pos()) ;
+
+}
+
+
+/**
+UPDATE SYMBIOSIS
+*/
+void update_symbiosis() {
+  // update_symbiosis_area(strand_DNA.get_pos()) ;
+}
+
+
+void sync_symbiosis() {
+  // sync_symbiosis(FLORA_LIST, get_symbiosis_area_pos()) ;
+  sync_symbiosis(FLORA_LIST) ;
+}
+
+
+
+
+
+
+
+
+/**
+SHOW
+*/
+
+void show_host(float speed_rotation_host, int direction_host, int which_costume, boolean motion_bool_host, boolean info) {
+  
+  int height_dna = (int)get_canvas_host().y ;
+  int radius_dna = (int)get_radius_host().x ;
+  Vec3 pos = get_pos_host().copy() ;
+  show_dna(pos, height_dna, radius_dna, speed_rotation_host, direction_host, which_costume, motion_bool_host, info) ;
+}
+
+
+/**
+DNA
+*/
 // DNA host
 Vec3 color_strand_a = Vec3(30, 10, 80) ;
 Vec3 color_strand_b = Vec3(0, 10, 20) ;
@@ -79,34 +116,9 @@ void create_dna(int num_helix, int num, Vec3 pos, Vec3 size, int height_dna, int
   strand_DNA.set_radius(radius_dna) ;
   strand_DNA.set_height(height_dna) ;
   strand_DNA.set_pos(pos) ;
-
-  set_symbiosis_area(symbiosis_area, strand_DNA.get_pos()) ;
-  
-
+ 
 }
 
-
-/**
-UPDATE HOST
-*/
-void update_host() {
-  update_symbiosis_area(symbiosis_area, strand_DNA.get_pos()) ;
-}
-
-
-
-
-/**
-SHOW
-*/
-
-void show_host(float speed_rotation_host, int direction_host, int which_costume, boolean motion_bool_host, boolean info) {
-  
-  int height_dna = (int)get_canvas_host().y ;
-  int radius_dna = (int)get_radius_host().x ;
-  Vec3 pos = get_pos_host().copy() ;
-  show_dna(pos, height_dna, radius_dna, speed_rotation_host, direction_host, which_costume, motion_bool_host, info) ;
-}
 
 
 
@@ -149,8 +161,6 @@ void costume_DNA(Helix_DNA helix, int target, Vec3 pos, int which_costume, boole
   float ratio_a = map(pos_a.z -pos.z , -radius, radius, 0 +alpha_min, alpha_max) ;
   float alpha_a = g.colorModeA * ratio_a ;
   
-  
-
 
   float ratio_b = map(pos_b.z -pos.z, -radius, radius, 0 +alpha_min, alpha_max) ;
   float alpha_b = g.colorModeA *ratio_b ;

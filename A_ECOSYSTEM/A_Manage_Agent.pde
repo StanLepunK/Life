@@ -431,13 +431,7 @@ Vec4 biotope_colour(Biomass b) {
 
 
 
-/**
-SYMBIOSIS
-*/
 
-void update_symbiosis() {
-  update_symbiosis(FLORA_LIST, get_symbiosis_area_pos()) ;
-}
 
 
 

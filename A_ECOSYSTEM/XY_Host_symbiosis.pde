@@ -1,5 +1,5 @@
 /**
-HOST SYMBIOSIS MANAGEMENT 0.0.1
+HOST SYMBIOSIS MANAGEMENT 0.0.2
 */
 int [] target_host ;
 Vec4 [] symbiosis_area ;
@@ -40,7 +40,7 @@ int [] get_host_address() {
 
 void set_host_address(int target, int value) {
 	if(target < target_host.length) {
-     target_host[target] = value ;
+    target_host[target] = value ;
 	}
 }
 
@@ -141,7 +141,7 @@ Vec3 get_canvas_host() {
 /**
 symbiosis area
 */
-void set_symbiosis_area(Vec4 [] symbiosis_area, Vec3 [] target_host_list) {
+void set_symbiosis_area(Vec3 [] target_host_list) {
   for(int i = 0 ; i < symbiosis_area.length ; i++) {
     if(symbiosis_area[i] == null) symbiosis_area[i] = Vec4() ;
     int where = (int)random(target_host_list.length) ;
@@ -152,16 +152,13 @@ void set_symbiosis_area(Vec4 [] symbiosis_area, Vec3 [] target_host_list) {
 
 
 
-void update_symbiosis_area(Vec4 [] symbiosis_area, Vec3 [] target_host_list) {
-
+void update_symbiosis_area(Vec3 [] target_host_list) {
   for(int i = 0 ; i < symbiosis_area.length ; i++) {
     int where = (int)symbiosis_area[i].w ;
     Vec3 pos = target_host_list[where] ;
     symbiosis_area[i].x = pos.x ;
     symbiosis_area[i].y = pos.y ;
     symbiosis_area[i].z = pos.z ;
-      printTempo(180, "host", where, target_host_list[where]) ;
-    printTempo(180, "symbiosis", i, symbiosis_area[i]) ;
   }
 }
 
@@ -182,9 +179,9 @@ void symbiosis(ArrayList<Agent> symbiotic_agent_list, Vec3 [] list_coord_host, i
 }
 
 
-void update_symbiosis(ArrayList<Agent> symbiotic_agent_list, Vec3 [] list_coord_host) {
-  for(Agent a : symbiotic_agent_list)	{
-    a.set_home_pos(list_coord_host[a.get_home_id()]) ;
+void sync_symbiosis(ArrayList<Agent> symbiotic_agent_list) {
+  for(Agent a : symbiotic_agent_list) {
+    a.set_home_pos(get_symbiosis_area_pos() [a.get_home_id()]) ;
     a.set_pos(a.get_home_pos()) ;
   }
 }

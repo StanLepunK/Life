@@ -605,15 +605,74 @@ int Flora_quality
 
 
 
------------------
+--
 Class Humus
------------------
+--
 Humus(Vec2 pos)
 
 Set
 ---
 void set_colour(Vec4 colour) 
 > colour = Vec4(0,0,0,max8value) is colour by default
+
+
+
+
+
+
+
+
+
+
+
+
+--
+Class Helix DNA
+--
+Helix_DNA (int num_strand, int num_nucleotide, int nucleotide_by_revolution)
+
+Get
+--
+int size() ;
+>return strand.length ;
+
+int num() ;
+>return num of nucletotide of all strands ;
+
+int length() {
+>return nucleotide of the first strand
+
+int length(int which_strand) ;
+>return length of a specific strand ;
+
+Vec3 get_radius() {;
+>return radius of the helix
+
+DNA get_DNA(int which_strand) ;
+>return dna sequence of specific strand
+
+Strand_DNA [] get() 
+>return array of all Strand
+
+Vec3 [] get_pos() 
+>return Vec3 list of all nucleotides position
+
+Vec3 [] get_pos(int which_strand) 
+>return Vec3 list of nucleotide of a specific strand
+
+
+Set
+--
+void set_radius(int radius) ;
+
+void set_radius(int radius_x, int radius_z) ;
+
+void rotation(float angle) :
+
+void set_height(int height_strand) ;
+
+void set_pos(Vec3 global_pos) ;
+
 
 
 

@@ -24,6 +24,7 @@ void setup() {
   set_frameRate_log(600) ;
 
   set_host() ;
+  init_symbiosis() ;
 
 }
 
@@ -68,9 +69,8 @@ void draw() {
   /**
   special update for the flora from list
   */
-  // update_flora_position_from_adn() ;
+  sync_symbiosis() ;
   update_symbiosis() ;
-  update_host() ;
   
 
 

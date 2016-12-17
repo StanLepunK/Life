@@ -1,5 +1,5 @@
 /**
-GENETIC 0.5.0.1
+GENETIC 0.5.0.2
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Digital-Life-Processing/tree/master/GENETIC_SYSTEM
 */
@@ -50,6 +50,10 @@ class Helix_DNA {
     return strand.length ;
   }
 
+  int num() {
+    return strand.length *strand[0].size() ;
+  }
+
   int length(int which_strand) {
     if(which_strand > num_strand) {
       return strand[which_strand].size() ;
@@ -64,7 +68,6 @@ class Helix_DNA {
     if(radius == null) radius = Vec3(1) ;
     return radius ;
   }
-
 
   DNA get_DNA(int which_strand) {
     if(which_strand < num_strand) {
