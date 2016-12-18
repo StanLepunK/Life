@@ -1,7 +1,8 @@
 /**
 ECOSYSTEME 0.1.0
 System multi-agent
-First release 0.0.1 for 2016_01 for l'École multimédia / Workshop 2016 february
+First release 0.0.1 École multimédia workshop 2016 february
+Seconde release for the Telethon venue 2016 december
 
 */
 /**
