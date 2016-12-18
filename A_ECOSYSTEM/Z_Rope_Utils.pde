@@ -1,5 +1,5 @@
 /**
-RPE UTILS 1.21.0
+RPE UTILS 1.21.1
 Rope – Romanesco Processing Environment – 2015–2016
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Utils_rope
@@ -432,12 +432,18 @@ void write_row(TableRow row, String col_name, Object o) {
 
 
 /**
-print tempo
+print tempo 0.0.2
 
 */
 void printTempo(int tempo, Object... var) {
   if(frameCount%tempo == 0 ) {
     println(var) ;
+  }
+}
+
+void printArrayTempo(int tempo, Object[] var) {
+  if(frameCount%tempo == 0 ) {
+    printArray(var) ;
   }
 }
 

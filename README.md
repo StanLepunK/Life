@@ -645,6 +645,9 @@ int length() {
 int length(int which_strand) ;
 >return length of a specific strand ;
 
+Vec3 get_final_pos() ;
+return a Vec3 pos of the Helix
+
 Vec3 get_radius() {;
 >return radius of the helix
 
@@ -654,11 +657,11 @@ DNA get_DNA(int which_strand) ;
 Strand_DNA [] get() 
 >return array of all Strand
 
-Vec3 [] get_pos() 
->return Vec3 list of all nucleotides position
+Vec3 [] get_nuc_pos() 
+>return array Vec3 of all nucleotides position
 
-Vec3 [] get_pos(int which_strand) 
->return Vec3 list of nucleotide of a specific strand
+Vec3 [] get_nuc_pos(int which_strand) 
+>return array Vec3 of nucleotide of a specific strand
 
 
 Set

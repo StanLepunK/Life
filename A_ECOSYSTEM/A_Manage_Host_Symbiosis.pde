@@ -45,18 +45,12 @@ void create_host(int num, Vec3 pos, Vec3 size, Vec3 canvas, Vec3 radius) {
 
   init_host_target(num *num_helix) ;
   create_dna(num_helix, num_nucleotide, pos, size, height_dna, radius_dna) ;
-
-  // symbiosis
-
 }
 
 
 void init_symbiosis() {
-  
-  // num *num_helix
   init_symbiosis_area(strand_DNA.num()) ;
-  set_symbiosis_area(strand_DNA.get_pos()) ;
-
+  set_symbiosis_area(strand_DNA.get_nuc_pos()) ;
 }
 
 
@@ -64,12 +58,11 @@ void init_symbiosis() {
 UPDATE SYMBIOSIS
 */
 void update_symbiosis() {
-  // update_symbiosis_area(strand_DNA.get_pos()) ;
+  update_symbiosis_area(strand_DNA.get_nuc_pos()) ;
 }
 
 
 void sync_symbiosis() {
-  // sync_symbiosis(FLORA_LIST, get_symbiosis_area_pos()) ;
   sync_symbiosis(FLORA_LIST) ;
 }
 
@@ -80,17 +73,7 @@ void sync_symbiosis() {
 
 
 
-/**
-SHOW
-*/
 
-void show_host(float speed_rotation_host, int direction_host, int which_costume, boolean motion_bool_host, boolean info) {
-  
-  int height_dna = (int)get_canvas_host().y ;
-  int radius_dna = (int)get_radius_host().x ;
-  Vec3 pos = get_pos_host().copy() ;
-  show_dna(pos, height_dna, radius_dna, speed_rotation_host, direction_host, which_costume, motion_bool_host, info) ;
-}
 
 
 /**
@@ -115,10 +98,21 @@ void create_dna(int num_helix, int num, Vec3 pos, Vec3 size, int height_dna, int
   strand_DNA = new Helix_DNA(num_strand, nucleotide, revolution) ;
   strand_DNA.set_radius(radius_dna) ;
   strand_DNA.set_height(height_dna) ;
-  strand_DNA.set_pos(pos) ;
- 
+  strand_DNA.set_final_pos(pos) ;
 }
 
+
+/**
+SHOW
+*/
+
+void show_host(float speed_rotation_host, int direction_host, int which_costume, boolean motion_bool_host, boolean info) {
+  
+  int height_dna = (int)get_canvas_host().y ;
+  int radius_dna = (int)get_radius_host().x ;
+  Vec3 pos = get_pos_host().copy() ;
+  show_dna(pos, height_dna, radius_dna, speed_rotation_host, direction_host, which_costume, motion_bool_host, info) ;
+}
 
 
 
@@ -128,11 +122,10 @@ void show_dna(Vec3 pos, int height_dna, int radius_dna, float speed_host, int di
   if(height_dna > 0 ) {
     if(rotation_bool_dna) {
       rotation_dna += abs(speed_host) *direction_host ;
-      // rotation_dna = abs(rotation_dna) *direction_host ;
       strand_DNA.rotation(rotation_dna) ;
       strand_DNA.set_radius(radius_dna) ;
       strand_DNA.set_height(height_dna) ;
-      strand_DNA.set_pos(pos) ;
+      strand_DNA.set_final_pos(pos) ;
     }  
 
     for(int i = 0 ; i < strand_DNA.length() ; i++) {
@@ -143,14 +136,20 @@ void show_dna(Vec3 pos, int height_dna, int radius_dna, float speed_host, int di
 
 
 
-void costume_DNA(Helix_DNA helix, int target, Vec3 pos, int which_costume, boolean info) {
-  Vec3 pos_a = helix.get_pos(0)[target] ;
-  Vec3 pos_b = helix.get_pos(1)[target] ;
+void costume_DNA(Helix_DNA strand, int target, Vec3 pos, int which_costume, boolean info) {
+  /**
+  printTempo(60, "costume_DNA(Helix_DNA strand, int target, Vec3 pos, int which_costume, boolean info)") ;
+  if(frameCount%60== 0 ) {
+    printArray(strand.get_nuc_pos()) ;
+  }
+  */
+  Vec3 pos_a = strand.get_nuc_pos(0)[target] ;
+  Vec3 pos_b = strand.get_nuc_pos(1)[target] ;
 
   int size = 36 ;
   int size_link = 1 ;
 
-  float radius = helix.get_radius().x ;
+  float radius = strand.get_radius().x ;
   float alpha_min = .01 ;
   float alpha_max = .8 ;
 
@@ -168,10 +167,10 @@ void costume_DNA(Helix_DNA helix, int target, Vec3 pos, int which_costume, boole
 
   if(info) {
     fill(color_strand_a, alpha_a) ;
-    String nuc_a = "" +helix.get_DNA(0).sequence_a.get(target).nac ;
+    String nuc_a = "" +strand.get_DNA(0).sequence_a.get(target).nac ;
     costume_rope(pos_a, size, nuc_a) ;
     fill(color_strand_b, alpha_b) ;
-    String nuc_b = "" +helix.get_DNA(0).sequence_a.get(target).nac ;
+    String nuc_b = "" +strand.get_DNA(0).sequence_a.get(target).nac ;
     costume_rope(pos_b, size, nuc_b) ;
   } else {
     noFill() ;

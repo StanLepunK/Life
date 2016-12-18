@@ -8,7 +8,7 @@ GENETIC 0.5.0.2
 
 
 /**
-DNA display shape 0.0.4
+DNA display shape 0.1.0
 */
 class Helix_DNA {
   Strand_DNA [] strand ;
@@ -16,6 +16,7 @@ class Helix_DNA {
   int num_nucleotide ;
   int level ;
   Vec3 radius ;
+  Vec3 final_pos ;
   DNA [] dna_seq ; 
 
   Helix_DNA (int num_strand, int num_nucleotide, int nucleotide_by_revolution) {
@@ -79,7 +80,9 @@ class Helix_DNA {
 
 
 
-  // setting
+  /**
+  setting
+  */
   void set_radius(int radius) {
     set_radius(radius, radius) ;
   }
@@ -117,15 +120,23 @@ class Helix_DNA {
     }
   }
 
-  void set_pos(Vec3 global_pos) {
+  void set_final_pos(Vec3 pos) {
+    if(this.final_pos == null) {
+      this.final_pos = pos.copy() ;
+    } else {
+      this.final_pos.set(pos) ;
+    }
+
     for(int i = 0 ; i < strand.length ; i++) {
       for(int k = 0 ; k < strand[i].size() ; k++) {
-        strand[i].add(k, global_pos) ;
+        strand[i].add(k, final_pos) ;
       }
     }
   }
   
-  // get strand
+  /**
+   get strand
+   */
   Strand_DNA [] get() {
     return strand ;
   }
@@ -140,7 +151,11 @@ class Helix_DNA {
 
 
   // get pos
-  Vec3 [] get_pos() {
+  Vec3 get_final_pos() {
+    return final_pos ;
+  }
+  
+  Vec3 [] get_nuc_pos() {
     int count = 0 ;
     Vec3 [] pos = new Vec3[num_nucleotide *num_strand] ;
     for(int i = 0 ; i < num_strand ; i++) {
@@ -153,7 +168,7 @@ class Helix_DNA {
     return pos ;
   }
 
-  Vec3 [] get_pos(int which_strand) {
+  Vec3 [] get_nuc_pos(int which_strand) {
     if(which_strand < num_strand) {
       Vec3 [] pos = new Vec3[strand[which_strand].size()] ;
       for(int i = 0 ; i < num_nucleotide ; i++) {
@@ -169,7 +184,9 @@ class Helix_DNA {
 
 
 
-
+  /**
+  private class Strand_DNA 0.1.0
+  */
   private class Strand_DNA {
     private Vec3 [] pos ;
     int num_nucleotide ; 

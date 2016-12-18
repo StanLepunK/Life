@@ -69,14 +69,25 @@ void draw() {
   /**
   special update for the flora from list
   */
-  sync_symbiosis() ;
-  update_symbiosis() ;
+
   
 
 
   // display
-  if(agent_display) show_agent() ;
-  if(host_display) show_host(info_agent) ;
+  if(agent_display) {
+    show_agent() ;
+  }
+  if(host_display) {
+    show_host(info_agent) ;
+  }
+
+  if(host_display && agent_display) {
+    sync_symbiosis() ;
+    update_symbiosis() ;
+  }
+
+
+
 }
 
 
