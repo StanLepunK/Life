@@ -1,5 +1,5 @@
 /**
-GENETIC 0.5.0.2
+GENETIC 0.5.0.3
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Digital-Life-Processing/tree/master/GENETIC_SYSTEM
 */
@@ -211,10 +211,12 @@ class Helix_DNA {
     }
 
     void set_angle(float start_angle) {
-      Vec3 [] temp_pos = new Vec3[pos.length] ;
-      temp_pos = helix(num_nucleotide, nucleotide_by_revolution, spacing, radius, start_angle) ;
-      for(int i = 0 ; i < temp_pos.length ; i++) {
-        pos[i].set(temp_pos[i]) ;
+      if(pos != null) {
+        Vec3 [] temp_pos = new Vec3[pos.length] ;
+        temp_pos = helix(num_nucleotide, nucleotide_by_revolution, spacing, radius, start_angle) ;
+        for(int i = 0 ; i < temp_pos.length ; i++) {
+          pos[i].set(temp_pos[i]) ;
+        }
       }
     }
 
