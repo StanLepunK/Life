@@ -1,5 +1,5 @@
 /**
-CLASS AGENT 0.1.3.0
+CLASS AGENT 0.1.3.1
 */
 /**
 
@@ -1415,16 +1415,19 @@ COMMON HUNT & SEARCH
 
   
   /**
-  MOTION
+  MOTION 1.0.0
 
   */
-  void rebound(Vec6 l, boolean rebound_on_limit) {
-    if(ENVIRONMENT == 2 ) rebound(l.a, l.b, l.c, l.d, 0, 0, rebound_on_limit) ;
-    else if(ENVIRONMENT == 3) rebound(l.a, l.b, l.c, l.d, l.e, l.f,  rebound_on_limit) ;
+  void rebound(Vec6 limit, boolean rebound_on_limit) {
+    if(ENVIRONMENT == 2 ) {
+      rebound(limit.a, limit.b, limit.c, limit.d, 0, 0, rebound_on_limit) ;
+    } else if(ENVIRONMENT == 3) {
+      rebound(limit.a, limit.b, limit.c, limit.d, limit.e, limit.f, rebound_on_limit) ;
+    }
   }
   
   void rebound(float left, float right, float top, float bottom, float front, float back, boolean rebound_on_limit) {
-    Vec3 pos_temp = Vec3(pos.x, pos.y,pos.z);
+    Vec3 pos_temp = Vec3(pos.x, pos.y, pos.z);
     Vec3 dir_temp = Vec3(dir.x, dir.y, dir.z);
     
     if(rebound_on_limit) {
@@ -1450,14 +1453,23 @@ COMMON HUNT & SEARCH
     back +=effect;
 
     // detection x
-    if(pos.x > right ) dir.x *= -1 ;
-    else if (pos.x < left ) dir.x *= -1 ;
+    if(pos.x > right) {
+      dir.x *= -1 ;
+    } else if (pos.x < left) {
+      dir.x *= -1 ;
+    }
     // detection y
-    if(pos.y > bottom) dir.y *= -1 ;
-    else if (pos.y < top ) dir.y *= -1 ;
+    if(pos.y > bottom) {
+      dir.y *= -1 ;
+    } else if (pos.y < top) {
+      dir.y *= -1 ;
+    }
     // detection z
-    if(pos.z > front) dir.z *= -1 ;
-    else if (pos.z < back ) dir.z *= -1 ;
+    if(pos.z > front) {
+      dir.z *= -1 ;
+    } else if (pos.z < back) {
+      dir.z *= -1 ;
+    }
     return Vec3(dir) ;
   }
 
@@ -1472,14 +1484,23 @@ COMMON HUNT & SEARCH
     front -=effect;
     back +=effect;
 
-    if(motion.x > right ) motion.x = left ;
-    else if (motion.x < left ) motion.x = right ;
+    if(motion.x > right) {
+      motion.x = left ;
+    } else if (motion.x < left) {
+      motion.x = right ;
+    }
     // detection y
-    if(motion.y > bottom) motion.y = top ;
-    else if (motion.y < top ) motion.y = bottom  ;
+    if(motion.y > bottom) {
+      motion.y = top ;
+    } else if (motion.y < top) {
+      motion.y = bottom  ;
+    }
     // detection z
-    if(motion.z > back) motion.z = front ;
-    else if (motion.z < front ) motion.z = back ;
+    if(motion.z > back) {
+      motion.z = front ;
+    } else if (motion.z < front) {
+      motion.z = back ;
+    }
     return Vec3(motion) ;
   }
 

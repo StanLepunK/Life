@@ -56,7 +56,7 @@ Info_dict dead_carac = new Info_dict() ;
 void ecosystem_setting(Biomass b) {
   clear_agent() ;
   set_caracteristic_agent() ;
-  b.set_humus(BOX.x *BOX.y *.01) ;
+  b.set_humus(ECO_BOX_SIZE.x *ECO_BOX_SIZE.y *.01) ;
   
 
   // FLORA
@@ -359,25 +359,45 @@ void build_environment(Vec2 pos, Vec2 size) {
   Vec3 size_3D = Vec3(size.x, size.y,0) ;
   build_environment(pos_3D, size_3D) ;
   // write here to be sure the Environment have a good info
-  set_environment(P3D) ;
 }
 
 void build_environment(Vec3 pos, Vec3 size) {
   build_box(pos, size) ;
 
-  float left = get_box_pos().x - (get_box_size().x *.5) ;
-  float right = get_box_pos().x + (get_box_size().x *.5) ;
-  float top = get_box_pos().y - (get_box_size().y *.5) ;
-  float bottom = get_box_pos().y + (get_box_size().y *.5) ;
-  float front = get_box_pos().z - (get_box_size().z *.5) ;
-  float back = get_box_pos().z + (get_box_size().z *.5) ;
+  float front = box_front() ;
+  float back = box_back() ;
 
-  set_box(left, right, top,  bottom, front, back) ;
-  set_horizon_depth(int(abs(back) +abs(front))) ;
-  set_rebound(false) ;
+  set_limit_box(box_left() , box_right(), box_top(),  box_bottom(), front, back) ;
+  int dist_to_horizon = int(abs(back) +abs(front)) ;
+  set_horizon(dist_to_horizon) ;
+  set_rebound(true) ;
   set_textSize_info(18) ; 
   // b.set_humus(BOX.x *BOX.y *.01) ;
   // b.humus_max = b.humus = BOX.x *BOX.y *.01 ;
+}
+
+float box_left() {
+  return get_box_pos().x - (get_box_size().x *.5) ;
+}
+
+float box_right() {
+  return get_box_pos().x + (get_box_size().x *.5) ;
+}
+
+float box_top() {
+  return get_box_pos().y - (get_box_size().y *.5) ;
+}
+
+float box_bottom() {
+  return get_box_pos().y + (get_box_size().y *.5) ;
+}
+
+float box_front() {
+  return get_box_pos().z - (get_box_size().z *.5) ;
+}
+
+float box_back() {
+  return get_box_pos().z + (get_box_size().z *.5) ;
 }
 
 
@@ -396,7 +416,7 @@ void set_environment() {
   
   if (ENVIRONMENT == 3) {
     Vec3 pos_box = Vec3(width/2,height/2,0) ;
-    int scale_box = 2 ;
+    float scale_box = .5 ;
     Vec3 size_box = Vec3(width *scale_box,height *scale_box,width *scale_box) ;
     build_environment(pos_box, size_box) ;
   } else {

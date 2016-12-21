@@ -21,7 +21,7 @@ void setup() {
 
 
   set_environment() ;
-  set_horizon(true) ;
+  use_horizon(true) ;
   set_frameRate_log(600) ;
 
   set_host() ;
