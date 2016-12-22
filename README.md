@@ -9,9 +9,12 @@ Ecosystem is a multi-agent system with predator, prey. Where the death is a begi
 
 SET ECOSYSTEM
 --
-set_horizon(boolean horizon) ;
+void use_horizon(boolean horizon) ;
 >you can use this method to ask agent to dissapear smoothly when this one approche to the hozizon.
 >Can be use only in P3D mode.
+
+void use_rebound(boolean horizon) ;
+>turn on or off the rebound effect on the wall box
 
 To look the agent behavior and why that's must happen
 INFO_DISPLAY_AGENT = false ; 

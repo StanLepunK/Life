@@ -370,7 +370,7 @@ void build_environment(Vec3 pos, Vec3 size) {
   set_limit_box(box_left() , box_right(), box_top(),  box_bottom(), front, back) ;
   int dist_to_horizon = int(abs(back) +abs(front)) ;
   set_horizon(dist_to_horizon) ;
-  set_rebound(true) ;
+  use_rebound(true) ;
   set_textSize_info(18) ; 
   // b.set_humus(BOX.x *BOX.y *.01) ;
   // b.humus_max = b.humus = BOX.x *BOX.y *.01 ;

@@ -1,6 +1,6 @@
 /**
 
-ECOSYSTEM UTIL 0.1.1
+ECOSYSTEM UTIL 1.0.0
 
 * HOST and SYMBIOSIS
 * WORLD
@@ -262,7 +262,7 @@ void set_horizon(int value) {
    HORIZON = value ;
 }
 
-void set_rebound(boolean rebound) {
+void use_rebound(boolean rebound) {
   REBOUND = rebound ;
 }
 
