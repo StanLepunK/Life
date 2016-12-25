@@ -16,75 +16,102 @@ void use_horizon(boolean horizon) ;
 void use_rebound(boolean horizon) ;
 >turn on or off the rebound effect on the wall box
 
+void use_style(boolean style) ;
+>to use external aspect for your agents if it's true. If it's false Ecosystem use the genetic information for the aspect.
+
 To look the agent behavior and why that's must happen
 INFO_DISPLAY_AGENT = false ; 
 
-To choice between 2D or 3D mode
-ENVIRONMENT = 2 ; for 2D
-ENVIRONMENT = 3 ; for 3D
-
-CLOCK
-> to set the time, slower or faster...
 
 
 
 
-
-SET ECOSYTEM
+LIST
 --
-void ecosystem_setting()
-> in this method you can set your different creatures.
+ArrayList<Agent> AGENT_LIST = new ArrayList<Agent>() ;
 
-// QUANTITY
-int num_flora = 200 ;
-int num_herbivore = 100 ; 
-int num_carnivore = 3 ; 
-int num_bacterium = 5 ;
+ArrayList<Dead> DEAD_LIST = new ArrayList<Dead>() ;
 
-// Colour, the value depend of your color environment
-Vec4 colour_flora = Vec4(100,100,80,100) ;
-Vec4 colour_herbivore = Vec4(50,100,100,100) ;
-Vec4 colour_carnivore = Vec4(0,100,100,100)  ; 
-Vec4 colour_bacterium = Vec4(30,0,30,100) ;
+STYLE
+--
+Info_obj style_agent
 
-// Size, like health
-int size_herbivore = 35 ;
-int size_carnivore = 55 ;
-int size_bacterium = 10 ;
-
-// Life, time before die !
-int stamina_herbivore = 30 ;
-int stamina_carnivore = 300 ;
-int stamina_bacterium = 600 ;
-
-// Velocity
-int velocity_herbivore = 5 ;
-int velocity_carnivore = 8 ;
-int velocity_bacterium = 2 ;
-
-// Radar, it's like a field vision to hunt or eat
-int sense_range_herbivore = 3 ;
-int sense_range_carnivore = 12 ;
-int sense_range_bacterium = 400 ;
-
-// COSTUME, choose from among 6
-flora_costume = 2 ;
-corpse_costume = 1 ;
-carnivore_costume = 5 ;
-herbivore_costume = 3 ;
-bacterium_costume = 4 ;
+CARACTERISTIC
+--
+Info_dict carac_agent = new Info_dict() ;
 
 
+CLEAR
+--
+agent_carac.clear() ;
 
-// INFO
-print_info_environment() ;
+AGENT_LIST.clear() ;
 
-print_list() ;
-> println the size of different list
 
-print_info_carnivore(CARNIVORE_CHILD_LIST) ;
-print_info_herbivore(HERBIVORE_CHILD_LIST) ;
-print_info_bacterium(BACTERIUM_LIST) ;
+SET CARACTERISTIC AGENT DYNAMIC
+--
+When you set the caracteric, you must be carefuly with the float and use the 'dot' if the value is like an interger. for '1' you must write like that '1.'
+agent_carac.add("name", "Human") ;
+>String
+
+agent_carac.add("size", Vec3(25)) ; 
+>Vec3
+
+agent_carac.add("density", .5) ; 
+>float around 1 it's use to create the mass of your agent by this way: size.x + size.y + size.z /3 *density
+
+agent_carac.add("melanin", Vec4(1)) ; 
+>Vec4 value. the component must be normalize, because the values are used to multiply the color 'r' 'g' 'b' 'a' or 'h' 's' 'b' 'a'
+
+agent_carac.add("first_colour", Vec4()) ; 
+>Vec4 value. 
+
+agent_carac.add("second_colour", Vec4()) ; 
+>Vec4 value. 
+
+agent_carac.add("third_colour", Vec4()) ; 
+>Vec4 value. 
+
+agent_carac.add("stamina", 200) ;
+>int
+
+agent_carac.add("life_expectancy", 800 *60) ; 
+>int value 
+
+agent_carac.add("velocity", 8) ;
+>int value 
+
+agent_carac.add("nutrient_quality", 20) ; 
+>int value 
+
+agent_carac.add("sense_range", 1000) ; 
+>int value 
+
+agent_carac.add("gourmet", 2.5) ; 
+>float value 
+
+agent_carac.add("attack", 5) ; 
+>int value 
+
+agent_carac.add("starving", 3) ; 
+>int value 
+
+agent_carac.add("digestion", 6.5) ; 
+>float value. Capacity to use calories from food
+
+agent_carac.add("sex_appeal", Vec2(45, 4)) ;
+>Vec2 value, vec.x is for 'female' and vec.y is for 'male' 
+
+agent_carac.add("multiple_pregnancy", 10.5) ; 
+>float value. It's mutiplicator value to give a change to have an other child in reproduction period
+
+
+
+
+
+
+
+
 
 
 
