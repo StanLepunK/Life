@@ -25,6 +25,24 @@ INFO_DISPLAY_AGENT = false ;
 
 
 
+HOST
+--
+symbiosis
+--
+void set_symbiosis_area(Vec3 [] target_host_list) ;
+
+void update_symbiosis_area(Vec3 [] target_host_list) ;
+
+void symbiosis(ArrayList<Agent> symbiotic_agent_list, Vec3 [] list_coord_host, int [] address) ;
+
+void sync_symbiosis(ArrayList<Agent> symbiotic_agent_list, Vec3 pos) ;
+
+void sync_symbiosis(ArrayList<Agent> symbiotic_agent_list) ;
+
+
+
+
+
 
 LIST
 --
