@@ -699,6 +699,15 @@ return a Vec3 pos of the Helix
 Vec3 get_radius() {;
 >return radius of the helix
 
+float get_height() {;
+>return the helix height
+
+float get_width() {;
+>return the helix width
+
+float get_depth() {;
+>return the helix depth
+
 DNA get_DNA(int which_strand) ;
 >return dna sequence of specific strand
 
