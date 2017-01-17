@@ -83,7 +83,7 @@ DNA
 Vec3 color_strand_a = Vec3(30, 10, 80) ;
 Vec3 color_strand_b = Vec3(0, 10, 20) ;
 
-Helix_DNA strand_DNA ;
+Helix strand_DNA ;
 
 
 
@@ -95,7 +95,7 @@ void create_dna(int num_helix, int num, Vec3 pos, Vec3 size, int height_dna, int
 
 
 
-  strand_DNA = new Helix_DNA(num_strand, nucleotide, revolution) ;
+  strand_DNA = new Helix(num_strand, nucleotide, revolution) ;
   strand_DNA.set_radius(radius_dna) ;
   strand_DNA.set_height(height_dna) ;
   strand_DNA.set_final_pos(pos) ;
@@ -136,7 +136,7 @@ void show_dna(Vec3 pos, int height_dna, int radius_dna, float speed_host, int di
 
 
 
-void costume_DNA(Helix_DNA strand, int target, Vec3 pos, int which_costume, boolean info) {
+void costume_DNA(Helix strand, int target, Vec3 pos, int which_costume, boolean info) {
   /**
   printTempo(60, "costume_DNA(Helix_DNA strand, int target, Vec3 pos, int which_costume, boolean info)") ;
   if(frameCount%60== 0 ) {

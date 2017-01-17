@@ -677,7 +677,7 @@ void set_colour(Vec4 colour)
 --
 Class Helix DNA
 --
-Helix_DNA (int num_strand, int num_nucleotide, int nucleotide_by_revolution)
+Helix (int num_strand, int num_nucleotide, int nucleotide_by_revolution)
 
 Get
 --
