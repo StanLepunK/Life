@@ -52,7 +52,8 @@ ArrayList<Dead> DEAD_LIST = new ArrayList<Dead>() ;
 
 STYLE
 --
-Info_obj style_agent
+Info_obj style_agent = new Info_obj("Blabla name", int costume, Vec4 fill, Vec4 stroke, float thickness, Vec3 alpha_behavior, boolean fill_is, bolean stroke_is) ;  
+
 
 CARACTERISTIC
 --

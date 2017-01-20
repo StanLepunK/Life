@@ -1,6 +1,7 @@
 /**
-RPE UTILS 1.21.4.1
-Rope – Romanesco Processing Environment – 2015–2016
+RPE UTILS  2015 – 2017
+v 1.23.1.1
+Rope – Romanesco Processing Environment – 
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Utils_rope
 */
@@ -14,29 +15,13 @@ final float ROOT2 = sqrt(2); //...and the square root of two, the famous first i
 final float EULER = 2.718281828459045235360287471352; // Constant d'Euler
 // about constant https://en.wikipedia.org/wiki/Mathematical_constant
 
+
+
 /**
 
 COLOR 0.2.0
 
 */
-/**
-aspect 0.0.1
-*/
-void aspect(int fill, int stroke, float thickness) {
-  //checkfill color
-  if(alpha(fill) <=0)  {
-    noFill() ; 
-  } else {
-    fill(fill) ;
-  } 
-  //check stroke color
-  if(alpha(stroke) <=0 || thickness <= 0 ) {
-    noStroke() ;
-  } else {
-    stroke(stroke) ;
-    strokeWeight(thickness) ;
-  }
-}
 /**
 camaieu 0.1.1
 */
@@ -51,8 +36,113 @@ float camaieu(float max, float color_ref, float range) {
 }
 
 /**
-color pool 0.1.1
+color pool 0.2.0
 */
+// color pool Vec4 RGB
+Vec4 [] color_pool_RGB(int num) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  float key_hue = -1 ;
+  return color_pool_RGB(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+Vec4 [] color_pool_RGB(int num, float key_hue) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  return color_pool_RGB(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_RGB(int num, int num_group, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float key_hue = -1 ;
+  return color_pool_RGB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_RGB(int num, int num_group, float key_hue, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  return color_pool_RGB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+Vec4 [] color_pool_RGB(int num, int num_group, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  float key_hue = -1 ;
+  return color_pool_RGB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_RGB(int num, int num_group, float key_hue, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  Vec4 [] list = new Vec4[num]  ;
+  int [] c = color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+  for(int i = 0 ; i <list.length ; i++) {
+    list[i] = new Vec4(red(c[i]),green(c[i]),blue(c[i]),alpha(c[i])) ;
+  }
+  return list ;
+}
+
+// color pool Vec4 HSB
+Vec4 [] color_pool_HSB(int num) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  float key_hue = -1 ;
+  return color_pool_HSB(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+Vec4 [] color_pool_HSB(int num, float key_hue) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  return color_pool_HSB(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_HSB(int num, int num_group, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float key_hue = -1 ;
+  return color_pool_HSB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_HSB(int num, int num_group, float key_hue, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  return color_pool_HSB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+Vec4 [] color_pool_HSB(int num, int num_group, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  float key_hue = -1 ;
+  return color_pool_HSB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_HSB(int num, int num_group, float key_hue, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  Vec4 [] list = new Vec4[num]  ;
+  int [] c = color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+  for(int i = 0 ; i <list.length ; i++) {
+    list[i] = new Vec4(hue(c[i]),saturation(c[i]),brightness(c[i]),alpha(c[i])) ;
+  }
+  return list ;
+}
+
+// color pool int
 int [] color_pool(int num) {
   Vec2 sat_range = Vec2(g.colorModeY) ;
   Vec2 bright_range = Vec2(g.colorModeZ) ;
@@ -60,6 +150,15 @@ int [] color_pool(int num) {
   float range = g.colorModeX *.5 ;
   int num_group = 1 ;
   float key_hue = -1 ;
+  return color_pool(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+int [] color_pool(int num, float key_hue) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
   return color_pool(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
 }
 
@@ -71,12 +170,18 @@ int [] color_pool(int num, int num_group, float hue_range) {
   return color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
 }
 
+int [] color_pool(int num, int num_group, float key_hue, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  return color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
 int [] color_pool(int num, int num_group, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
   float key_hue = -1 ;
   return color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
 
 }
-
 
 // color pool by group
 int [] color_pool(int num, int num_group, float key_hue, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
@@ -99,10 +204,9 @@ int [] color_pool(int num, int num_group, float key_hue, float hue_range, Vec2 s
       color_ref[i] = color_ref[i -1] + step ;
       if(color_ref[i] > g.colorModeX) {
         color_ref[i] = color_ref[i] - g.colorModeX ;
-      }
+      }      
     }
   }
-
 
   int [] list = new int[num] ;
   int count = 0 ;
@@ -110,7 +214,6 @@ int [] color_pool(int num, int num_group, float key_hue, float hue_range, Vec2 s
   int next_stop = step ; ;
   for(int i = 0 ; i < list.length ; i++) {
     if(i > next_stop) {
-      count++ ;
       next_stop += step ;
     }
     float saturation = random(sat_range) ;
@@ -118,6 +221,9 @@ int [] color_pool(int num, int num_group, float key_hue, float hue_range, Vec2 s
     float alpha = random(alpha_range) ;
     float hue = camaieu(g.colorModeX, color_ref[count], hue_range) ;
     list[i] = color(hue, saturation,brightness, alpha) ;
+    count++ ;
+    if(count >= color_ref.length) count = 0 ;
+
   }
   colorMode(ref,x,y,z,a) ;
   return list ;
@@ -190,7 +296,7 @@ boolean hue_range(float min, float max, int colour) {
 
 
 /**
-convert color
+convert color 0.0.1
 */
 //convert color HSB to RVB
 Vec3 HSB_to_RGB(float hue, float saturation, float brightness) {
@@ -205,7 +311,6 @@ Vec4 HSB_to_RGB(float hue, float saturation, float brightness, float alpha) {
   colorMode(RGB,255) ;
   Vec4 vecRGBa = Vec4 (red(c), green(c), blue(c), alpha(c)) ;
   // return to the previous colorMode
-  // colorMode(HSB,HSBmode.r,HSBmode.r,HSBmode.b,HSBmode.a) ;
   colorMode(HSB,ref.r, ref.g, ref.b, ref.a) ;
   return vecRGBa ;
 }
@@ -587,7 +692,7 @@ void write_row(TableRow row, String col_name, Object o) {
 
 
 /**
-print tempo 0.0.2
+print tempo 0.0.3
 
 */
 void printTempo(int tempo, Object... var) {
@@ -602,6 +707,25 @@ void printArrayTempo(int tempo, Object[] var) {
   }
 }
 
+void printArrayTempo(int tempo, float[] var) {
+  if(frameCount%tempo == 0 ) {
+    printArray(var) ;
+  }
+}
+
+void printArrayTempo(int tempo, int[] var) {
+  if(frameCount%tempo == 0 ) {
+    printArray(var) ;
+  }
+}
+
+void printArrayTempo(int tempo, String[] var) {
+  if(frameCount%tempo == 0 ) {
+    printArray(var) ;
+  }
+}
+
+
 
 
 
@@ -609,7 +733,7 @@ void printArrayTempo(int tempo, Object[] var) {
 
 
 /**
-Info_dict 0.2.3
+Info_dict 0.2.4
 
 */
 public class Info_dict {
@@ -647,6 +771,10 @@ public class Info_dict {
   }
   void add(String name, Object a, Object b, Object c, Object d, Object e, Object f) {
     Info_obj info = new Info_obj(name, a,b,c,d,e,f) ;
+    list.add(info) ;
+  }
+  void add(String name, Object a, Object b, Object c, Object d, Object e, Object f, Object g) {
+    Info_obj info = new Info_obj(name, a,b,c,d,e,f,g) ;
     list.add(info) ;
   }
 
@@ -766,6 +894,10 @@ public class Info_int_dict extends Info_dict {
     Info_int info = new Info_int(name, a,b,c,d,e,f) ;
     list_int.add(info) ;
   }
+  void add(String name, int a, int b, int c, int d, int e, int f, int g) {
+    Info_int info = new Info_int(name, a,b,c,d,e,f,g) ;
+    list_int.add(info) ;
+  }
 
 
   // size
@@ -868,6 +1000,10 @@ public class Info_float_dict extends Info_dict {
   }
   void add(String name, float a, float b, float c, float d, float e, float f) {
     Info_float info = new Info_float(name, a,b,c,d,e,f) ;
+    list_float.add(info) ;
+  }
+  void add(String name, float a, float b, float c, float d, float e, float f, float g) {
+    Info_float info = new Info_float(name, a,b,c,d,e,f,g) ;
     list_float.add(info) ;
   }
 
@@ -975,6 +1111,10 @@ public class Info_String_dict extends Info_dict {
     Info_String info = new Info_String(name, a,b,c,d,e,f) ;
     list_String.add(info) ;
   }
+  void add(String name, String a, String b, String c, String d, String e, String f,String g) {
+    Info_String info = new Info_String(name, a,b,c,d,e,f,g) ;
+    list_String.add(info) ;
+  }
 
   // size
   int size() {
@@ -1078,6 +1218,10 @@ public class Info_Vec_dict extends Info_dict {
     Info_Vec info = new Info_Vec(name, a,b,c,d,e,f) ;
     list_Vec.add(info) ;
   }
+  void add(String name, Vec a, Vec b, Vec c, Vec d, Vec e, Vec f, Vec g) {
+    Info_Vec info = new Info_Vec(name, a,b,c,d,e,f,g) ;
+    list_Vec.add(info) ;
+  }
 
   // size
   int size() {
@@ -1148,7 +1292,7 @@ public class Info_Vec_dict extends Info_dict {
 
 
 /**
-Info 0.1.0
+Info 0.1.0.1
 
 */
 interface Info {
@@ -1164,7 +1308,7 @@ abstract class Info_method implements Info {
   String name  ;
   // error message
   String error_target = "Your target is beyond of my knowledge !" ;
-  String error_value = "This value is beyond of my power mate !" ;
+  String error_value_message = "This value is beyond of my power mate !" ;
   Info_method (String name) {
     this.name = name ;
   }
@@ -1182,7 +1326,7 @@ INFO int
 */
 class Info_int extends Info_method {
   char type = 'i' ;
-  int a, b, c, d, e, f ;
+  int a, b, c, d, e, f, g ;
   int num_value ;  
 
 
@@ -1192,19 +1336,24 @@ class Info_int extends Info_method {
 
   Info_int(String name, int... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
 
   // get
   int [] get_all() {
-    int [] list = new int[]{a,b,c,d,e,f} ;
+    int [] list = new int[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1221,6 +1370,8 @@ class Info_int extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
+    } else if(which == 6) {
+      return g ;
     } else {
       System.err.println(error_target) ;
       return 0 ;
@@ -1228,7 +1379,7 @@ class Info_int extends Info_method {
   }
   
   Object [] catch_all() {
-    Object [] list = new Object[]{a,b,c,d,e,f} ;
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1245,6 +1396,8 @@ class Info_int extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
+    } else if(which == 6) {
+      return g ;
     } else {
       System.err.println(error_target) ;
       return null ;
@@ -1267,8 +1420,11 @@ class Info_int extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g +" ]";
     } else {
-      System.err.println(error_value) ;
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
@@ -1279,7 +1435,7 @@ INFO String
 */
 class Info_String extends Info_method {
   char type = 's' ;
-  String a, b, c, d, e, f ;
+  String a, b, c, d, e, f, g ;
   int num_value ;  
 
   Info_String(String name) {
@@ -1288,19 +1444,24 @@ class Info_String extends Info_method {
 
   Info_String(String name, String... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
 
   // get
   String [] get_all() {
-    String [] list = new String[]{a,b,c,d,e,f} ;
+    String [] list = new String[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1317,14 +1478,16 @@ class Info_String extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
-    } else {
+    } else if(which == 6) {
+      return g ;
+    }else {
       System.err.println(error_target) ;
       return null ;
     }
   }
   
   Object [] catch_all() {
-    Object [] list = new Object[]{a,b,c,d,e,f} ;
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1341,7 +1504,9 @@ class Info_String extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
-    } else {
+    } else if(which == 6) {
+      return g ;
+    }else {
       System.err.println(error_target) ;
       return null ;
     }
@@ -1364,8 +1529,11 @@ class Info_String extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + " ]";
     } else {
-      System.err.println(error_value) ;
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
@@ -1376,7 +1544,7 @@ INFO float
 */
 class Info_float extends Info_method {
   char type = 'f' ;
-  float a, b, c, d, e, f ;
+  float a, b, c, d, e, f, g ;
   int num_value ; 
 
   Info_float(String name) {
@@ -1385,18 +1553,23 @@ class Info_float extends Info_method {
 
   Info_float(String name, float... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
   // get
   float [] get_all() {
-    float [] list = new float[]{a,b,c,d,e,f} ;
+    float [] list = new float[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1413,6 +1586,8 @@ class Info_float extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
+    } else if(which == 6) {
+      return g ;
     } else {
       System.err.println(error_target) ;
       return 0.0 ;
@@ -1420,7 +1595,7 @@ class Info_float extends Info_method {
   }
   
   Object [] catch_all() {
-    Object [] list = new Object[]{a,b,c,d,e,f} ;
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1437,6 +1612,8 @@ class Info_float extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
+    } else if(which == 6) {
+      return g ;
     } else {
       System.err.println(error_target) ;
       return null ;
@@ -1459,8 +1636,11 @@ class Info_float extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + " ]";
     } else {
-      System.err.println(error_value) ;
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
@@ -1471,7 +1651,7 @@ INFO Vec
 */
 class Info_Vec extends Info_method {
   char type = 'v' ;
-  Vec a, b, c, d, e, f ;
+  Vec a, b, c, d, e, f, g ;
   int num_value ;  
 
   Info_Vec(String name) {
@@ -1481,13 +1661,18 @@ class Info_Vec extends Info_method {
   // Vec value
   Info_Vec(String name, Vec... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
 
@@ -1495,7 +1680,7 @@ class Info_Vec extends Info_method {
 
   // get
   Vec [] get_all() {
-    Vec [] list = new Vec[]{a,b,c,d,e,f} ;
+    Vec [] list = new Vec[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1512,14 +1697,16 @@ class Info_Vec extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
-    } else {
+    } else if(which == 6) {
+      return g ;
+    }else {
       System.err.println(error_target) ;
       return null ;
     }
   }
   
   Object [] catch_all() {
-    Object [] list = new Object[]{a,b,c,d,e,f} ;
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1536,6 +1723,8 @@ class Info_Vec extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
+    } else if(which == 6) {
+      return g ;
     } else {
       System.err.println(error_target) ;
       return null ;
@@ -1558,8 +1747,11 @@ class Info_Vec extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + " ]";
     } else {
-      System.err.println(error_value) ;
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
@@ -1573,7 +1765,7 @@ INFO OBJECT
 */
 class Info_obj extends Info_method {
   char type = 'o' ;
-  Object a, b, c, d, e, f ;
+  Object a, b, c, d, e, f, g ;
   int num_value ;
 
   Info_obj(String name) {
@@ -1584,19 +1776,24 @@ class Info_obj extends Info_method {
   // Object value
   Info_obj(String name, Object... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
 
   // get
   Object [] get_all() {
-    Object [] list = new Object []{a,b,c,d,e,f} ;
+    Object [] list = new Object []{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1613,6 +1810,8 @@ class Info_obj extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
+    } else if(which == 6) {
+      return g ;
     } else {
       System.err.println(error_target) ;
       return null ;
@@ -1620,7 +1819,7 @@ class Info_obj extends Info_method {
   }
   
   Object [] catch_all() {
-    Object [] list = new Object[]{a,b,c,d,e,f} ;
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
     return list ;
   }
 
@@ -1637,6 +1836,8 @@ class Info_obj extends Info_method {
       return e ;
     } else if(which == 5) {
       return f ;
+    } else if(which == 6) {
+      return g ;
     } else {
       System.err.println(error_target) ;
       return null ;
@@ -1660,8 +1861,11 @@ class Info_obj extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + " ]";
     } else {
-      System.err.println(error_value) ;
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
