@@ -1,5 +1,6 @@
 /**
-GENETIC 0.5.1.0
+GENETIC 
+v 0.5.2.0
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Digital-Life-Processing/tree/master/GENETIC_SYSTEM
 */

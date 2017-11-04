@@ -1,5 +1,5 @@
 /**
-CLASS AGENT 1.0.1
+CLASS AGENT 1.0.2
 */
 /**
 
