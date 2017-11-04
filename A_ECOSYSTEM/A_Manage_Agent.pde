@@ -35,10 +35,10 @@ int num_bacterium = 10 ;
 int num_dead = 50 ;
 
 // Colour
-Info_obj style_carnivore, style_herbivore, style_omnivore ;
-Info_obj style_flora ;
-Info_obj style_dead ;
-Info_obj style_bacterium ;
+Info_Object style_carnivore, style_herbivore, style_omnivore ;
+Info_Object style_flora ;
+Info_Object style_dead ;
+Info_Object style_bacterium ;
 
 
 Info_dict flora_carac = new Info_dict() ;
@@ -72,7 +72,7 @@ void ecosystem_setting(Biomass b) {
     alpha_behavior_flora = Vec3(get_pos_host().z, -.4, .8) ;
   }
   
-  style_flora = new Info_obj("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
+  style_flora = new Info_Object("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
 
   // HERBIVORE
   costume = POINT_ROPE ;
@@ -80,28 +80,28 @@ void ecosystem_setting(Biomass b) {
   Vec4 fill_herbivore = Vec4(color_herbivore) ;
   Vec4 stroke_herbivore = Vec4(color_herbivore) ;
   Vec3 alpha_behavior_herbivore = Vec3(0, -1, 1) ;
-  style_herbivore = new Info_obj("Herbivore Aspect", costume, fill_herbivore, stroke_herbivore, thickness, alpha_behavior_herbivore) ;
+  style_herbivore = new Info_Object("Herbivore Aspect", costume, fill_herbivore, stroke_herbivore, thickness, alpha_behavior_herbivore) ;
   
   // OMNIVORE
   costume = PENTAGON_ROPE ;
   Vec4 fill_omnivore = Vec4(150, 100, 80, 100) ;
   Vec4 stroke_omnivore = Vec4(150, 100, 80, 100) ;
   Vec3 alpha_behavior_omnivore = Vec3(0, -1, 1) ;
-  style_omnivore = new Info_obj("Omnivore Aspect", costume, fill_omnivore, stroke_omnivore, thickness, alpha_behavior_omnivore) ;
+  style_omnivore = new Info_Object("Omnivore Aspect", costume, fill_omnivore, stroke_omnivore, thickness, alpha_behavior_omnivore) ;
 
   // CARNIVORE
   costume = HEPTAGON_ROPE ;
   Vec4 fill_carnivore = Vec4(0, 100, 100, 100) ;
   Vec4 stroke_carnivore = Vec4(0, 100, 100, 100) ;
   Vec3 alpha_behavior_carnivore = Vec3(0, -1, 1) ;
-  style_carnivore = new Info_obj("Carnivore Aspect", costume, fill_carnivore, stroke_carnivore, thickness, alpha_behavior_carnivore) ;
+  style_carnivore = new Info_Object("Carnivore Aspect", costume, fill_carnivore, stroke_carnivore, thickness, alpha_behavior_carnivore) ;
   
   // BACTERIUM
   costume = ELLIPSE_ROPE ;
   Vec4 fill_bacterium = Vec4(30, 0, 30, 100) ;
   Vec4 stroke_bacterium = Vec4(30, 0, 30, 100) ;
   Vec3 alpha_behavior_bacterium = Vec3(0, -1, 1) ;
-  style_bacterium = new Info_obj("Bacterium Aspect", costume, fill_bacterium, stroke_bacterium, thickness, alpha_behavior_bacterium) ;
+  style_bacterium = new Info_Object("Bacterium Aspect", costume, fill_bacterium, stroke_bacterium, thickness, alpha_behavior_bacterium) ;
   
 
   // DEAD
@@ -109,7 +109,7 @@ void ecosystem_setting(Biomass b) {
   Vec4 fill_dead = Vec4(0, 0, 30, 100) ;
   Vec4 stroke_dead = Vec4(0, 0, 30, 100) ;
   Vec3 alpha_behavior_dead = Vec3(0, -1, 1) ;
-  style_dead = new Info_obj("Dead Aspect", costume, fill_dead, stroke_dead, thickness, alpha_behavior_dead) ;
+  style_dead = new Info_Object("Dead Aspect", costume, fill_dead, stroke_dead, thickness, alpha_behavior_dead) ;
   
 
 
@@ -150,7 +150,6 @@ void random_flora_costume_and_colour() {
   fill_flora.a -= change_alpha ;
   stroke_flora.a -= change_alpha ;
 
-
   int costume = VIRUS_3_4_64_ROPE ;
   int new_costume = floor(random(8)) ;
   if(new_costume == 0 ) {
@@ -172,9 +171,8 @@ void random_flora_costume_and_colour() {
   }
   float thickness = 1. ;
 
-
   Vec3 alpha_behavior_flora = Vec3(get_pos_host().z, -.4, .8) ;
-  style_flora = new Info_obj("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
+  style_flora = new Info_Object("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
 }
 
 
