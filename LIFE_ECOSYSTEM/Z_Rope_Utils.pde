@@ -3,7 +3,7 @@ ROPE - Romanesco processing environment –
 * Copyleft (c) 2014-2017 
 * Stan le Punk > http://stanlepunk.xyz/
 Rope UTILS  2015 – 2017
-v 1.33.3
+v 1.33.4
 Rope – Romanesco Processing Environment – 
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Rope
@@ -2301,7 +2301,7 @@ void write_row(TableRow row, String col_name, Object o) {
 
 /**
 print
-v 0.0.5
+v 0.0.6
 */
 // print 
 void printErr(Object... obj_list) {
@@ -2316,37 +2316,37 @@ void printErr(Object... obj_list) {
 
 // print tempo
 void printErrTempo(int tempo, Object var) {
-  if(frameCount%tempo == 0) {
+  if(frameCount%tempo == 0 || frameCount <= 1) {
     System.err.println(var);
   }
 }
 
 void printTempo(int tempo, Object... var) {
-  if(frameCount%tempo == 0) {
+  if(frameCount%tempo == 0 || frameCount <= 1) {
     println(var);
   }
 }
 
 void printArrayTempo(int tempo, Object[] var) {
-  if(frameCount%tempo == 0) {
+  if(frameCount%tempo == 0 || frameCount <= 1) {
     printArray(var);
   }
 }
 
 void printArrayTempo(int tempo, float[] var) {
-  if(frameCount%tempo == 0) {
+  if(frameCount%tempo == 0 || frameCount <= 10) {
     printArray(var);
   }
 }
 
 void printArrayTempo(int tempo, int[] var) {
-  if(frameCount%tempo == 0) {
+  if(frameCount%tempo == 0 || frameCount <= 1) {
     printArray(var);
   }
 }
 
 void printArrayTempo(int tempo, String[] var) {
-  if(frameCount%tempo == 0) {
+  if(frameCount%tempo == 0 || frameCount <= 1) {
     printArray(var);
   }
 }
@@ -3657,7 +3657,7 @@ void freeze() {
 
 /**
 Gaussian randomize
-v 0.0.1
+v 0.0.2
 */
 @Deprecated
 float random_gaussian(float value) {
@@ -3669,7 +3669,7 @@ float random_gaussian(float value, float range) {
   /*
   * It's cannot possible to indicate a value result here, this part need from the coder ?
   */
-  System.err.println("This method must be improved or totaly deprecated");
+  printErrTempo(240,"float random_gaussian(); method must be improved or totaly deprecated");
   range = abs(range) ;
   float distrib = random(-1, 1) ;
   float result = 0 ;
