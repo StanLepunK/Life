@@ -80,7 +80,23 @@ class Image_Manager {
       return library.get(target);
     } else return null;
   }
+
+  // private class
+  private class PImage_lib {
+    String name = ("");
+    PImage img ;
+
+
+    private public void load(String path) {
+      this.img = loadImage(path) ;
+      String name_ext = path.split("/")[str.split("/").length -1];
+      this.name = name_ext.split("\\.")[0];
+    }
+  }
 }
+
+
+
 
 
 
