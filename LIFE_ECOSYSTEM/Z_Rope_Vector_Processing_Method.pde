@@ -3,7 +3,7 @@ ROPE - Romanesco processing environment –
 * Copyleft (c) 2014-2017 
 * Stan le Punk > http://stanlepunk.xyz/
 Vec, iVec and bVec method
-v 1.3.0.1
+v 1.3.2.0
 2016-2017
 the idea here is create method directly insprating from Processing to simplify the coder life
 * @author Stan le Punk
@@ -122,33 +122,9 @@ float random (Vec2 v) {
 float random (iVec2 v) {
   return random(v.x, v.y) ;
 }
-/**
-background
-*/
-// Vec
-void background(Vec4 c) {
-  background(c.r,c.g,c.b,c.a) ;
-}
 
-void background(Vec3 c) {
-  background(c.r,c.g,c.b) ;
-}
 
-void background(Vec2 c) {
-  background(c.x,c.y) ;
-}
-// iVec
-void background(iVec4 c) {
-  background(c.x,c.y,c.z,c.w) ;
-}
 
-void background(iVec3 c) {
-  background(c.x,c.y,c.z) ;
-}
-
-void background(iVec2 c) {
-  background(c.x,c.y) ;
-}
 
 /**
 Ellipse
@@ -495,52 +471,8 @@ void text(float num, iVec pos) {
   }  
 }
 
-/**
-image
-v 0.0.2
-*/
-void image(PImage img, iVec pos) {
-  if(pos instanceof iVec2) {
-    image(img, Vec2(pos.x, pos.y));
-  } else if(pos instanceof iVec3) {
-    image(img, Vec3(pos.x, pos.y, pos.z));
-  }
-}
-
-void image(PImage img, iVec pos, iVec2 size) {
-  if(pos instanceof iVec2) {
-    image(img, Vec2(pos.x, pos.y), Vec2(size.x, size.y));
-  } else if(pos instanceof iVec3) {
-    image(img, Vec3(pos.x, pos.y, pos.z), Vec2(size.x, size.y));
-  } 
-}
 
 
-void image(PImage img, Vec pos) {
-  if(pos instanceof Vec2) {
-    Vec2 p = (Vec2) pos ;
-    image(img, p.x, p.y) ;
-  } else if(pos instanceof Vec3) {
-    Vec3 p = (Vec3) pos ;
-    start_matrix() ;
-    translate(p) ;
-    image(img, 0,0) ;
-    stop_matrix() ;
-  }
-}
-
-void image(PImage img, Vec pos, Vec2 size) {
-  if(pos instanceof Vec2) {
-    Vec2 p = (Vec2) pos ;
-    image(img, p.x, p.y, size.x, size.y) ;
-  } else if(pos instanceof Vec3) {
-    Vec3 p = (Vec3) pos ;
-    start_matrix() ;
-    translate(p) ;
-    image(img, 0,0, size.x, size.y) ;
-    stop_matrix() ;
-  }
-}
 
 
 
@@ -626,7 +558,7 @@ void rotateXYZ(iVec3 rot) {
 
 /**
 Matrix
-
+v 0.1.0
 */
 // Vec
 void start_matrix_3D(Vec pos, Vec3 dir_cart) {
@@ -639,7 +571,7 @@ void start_matrix_3D(Vec pos, Vec3 dir_cart) {
     Vec3 p = (Vec3) pos ;
     translate(p) ;
   } else {
-    System.err.println("error in start_matrix_3D(), Vec pos is not an instance of Vec2 or Vec3, the matrix don't translate your object") ;
+    printErr("Error in void start_matrix_3D(), Vec pos is not an instance of Vec2 or Vec3, the matrix don't translate your object") ;
     exit() ;
   }
   float radius = sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
@@ -665,7 +597,7 @@ void start_matrix_3D(Vec pos, Vec2 dir_polar) {
     translate(p) ;
     rotateXY(dir_polar) ;
   } else {
-    System.err.println("error in start_matrix_3D(), Vec pos is not an instance of Vec2 or Vec3, the matrix cannot be init") ;
+    printErr("Error in void start_matrix_3D(), Vec pos is not an instance of Vec2 or Vec3, the matrix cannot be init") ;
     exit() ;
   }
 }
@@ -682,7 +614,7 @@ void start_matrix_2D(Vec pos, float orientation) {
     translate(p.x, p.y) ;
     rotate(orientation) ;
   } else {
-    System.err.println("Vec pos is not an instance of Vec2 or Vec3, the matrix cannot be init") ;
+    printErr("Error in void start_matrix_3D(), Vec pos is not an instance of Vec2 or Vec3, the matrix cannot be init") ;
     exit() ;
   }
 }
@@ -749,29 +681,29 @@ void matrix_3D_start(Vec3 pos, Vec3 dir_cart) {
   if (Float.isNaN(radius)) radius = 0 ;
   rotateX(latitude) ;
   rotateY(longitude) ;
-  System.err.println("Deprecated method matrix_3D_start(Vec3 arg, Vec3 cartesian_dir) is deprecated instead use start_matrix_3D(Vec3 arg, Vec3 cartesian_dir)") ;
+  printErr("void matrix_3D_start() is deprecated instead use start_matrix_3D()") ;
 }
 
 void matrix_3D_start(Vec3 pos, Vec2 dir_polar) {
   pushMatrix() ;
   translate(pos) ;
   rotateXY(dir_polar) ;
-  System.err.println("Deprecated method matrix_3D_start(Vec3 arg, Vec3 polar_dir) is deprecated instead use start_matrix_3D(Vec3 arg, Vec2 polar_dir)") ;
+  printErr("void matrix_3D_start() is deprecated instead use start_matrix_3D()") ;
 }
 
 void matrix_2D_start(Vec2 pos, float orientation) {
   pushMatrix() ;
   translate(pos) ;
   rotate(orientation) ;
-  System.err.println("Deprecated method matrix_2D_start(Vec2 pos, float orientation) is deprecated instead use start_matrix_2D(Vec2 pos, float orientation)") ;
+  printErr("void matrix_2D_start() is deprecated instead use start_matrix_2D()") ;
 }
 
 void matrix_end() {
   popMatrix() ;
-  System.err.println("Deprecated method matrix_end() is deprecated instead use stop_matrix()") ;
+  printErr("void matrix_end() is deprecated instead use stop_matrix()") ;
 }
 
 void matrix_start() {
   pushMatrix() ;
-  System.err.println("Deprecated method matrix_start() is deprecated instead use start_matrix()") ;
+  printErr("void matrix_start() is deprecated instead use start_matrix()") ;
 }

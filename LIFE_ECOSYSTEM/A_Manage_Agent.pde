@@ -105,7 +105,7 @@ void ecosystem_setting(Biomass b) {
   
 
   // DEAD
-  costume = CROSS_2_ROPE ;
+  costume = CROSS_RECT_ROPE;
   Vec4 fill_dead = Vec4(0, 0, 30, 100) ;
   Vec4 stroke_dead = Vec4(0, 0, 30, 100) ;
   Vec3 alpha_behavior_dead = Vec3(0, -1, 1) ;
