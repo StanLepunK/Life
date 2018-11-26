@@ -61,7 +61,10 @@ void ecosystem_setting(Biomass b) {
 
   // FLORA
   // int costume = ELLIPSE_ROPE ;
-  int costume = VIRUS_3_4_64_ROPE ;
+  Costume costume = new Costume(VIRUS_ROPE);
+  costume.set_num(2);
+  costume.set_node(3);
+  costume.set_mutation(64);
   float thickness = 1. ;
 
   Vec4 fill_flora = Vec4(color_flora) ;
@@ -75,7 +78,7 @@ void ecosystem_setting(Biomass b) {
   style_flora = new Info_Object("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
 
   // HERBIVORE
-  costume = POINT_ROPE ;
+  costume = new Costume(POINT_ROPE);
   Vec4 color_herbivore = Vec4(110, 100, 70, 100) ;
   Vec4 fill_herbivore = Vec4(color_herbivore) ;
   Vec4 stroke_herbivore = Vec4(color_herbivore) ;
@@ -83,21 +86,21 @@ void ecosystem_setting(Biomass b) {
   style_herbivore = new Info_Object("Herbivore Aspect", costume, fill_herbivore, stroke_herbivore, thickness, alpha_behavior_herbivore) ;
   
   // OMNIVORE
-  costume = PENTAGON_ROPE ;
+  costume = new Costume(PENTAGON_ROPE);
   Vec4 fill_omnivore = Vec4(150, 100, 80, 100) ;
   Vec4 stroke_omnivore = Vec4(150, 100, 80, 100) ;
   Vec3 alpha_behavior_omnivore = Vec3(0, -1, 1) ;
   style_omnivore = new Info_Object("Omnivore Aspect", costume, fill_omnivore, stroke_omnivore, thickness, alpha_behavior_omnivore) ;
 
   // CARNIVORE
-  costume = HEPTAGON_ROPE ;
+  costume = new Costume(HEPTAGON_ROPE);
   Vec4 fill_carnivore = Vec4(0, 100, 100, 100) ;
   Vec4 stroke_carnivore = Vec4(0, 100, 100, 100) ;
   Vec3 alpha_behavior_carnivore = Vec3(0, -1, 1) ;
   style_carnivore = new Info_Object("Carnivore Aspect", costume, fill_carnivore, stroke_carnivore, thickness, alpha_behavior_carnivore) ;
   
   // BACTERIUM
-  costume = ELLIPSE_ROPE ;
+  costume = new Costume(ELLIPSE_ROPE);
   Vec4 fill_bacterium = Vec4(30, 0, 30, 100) ;
   Vec4 stroke_bacterium = Vec4(30, 0, 30, 100) ;
   Vec3 alpha_behavior_bacterium = Vec3(0, -1, 1) ;
@@ -105,7 +108,7 @@ void ecosystem_setting(Biomass b) {
   
 
   // DEAD
-  costume = CROSS_RECT_ROPE;
+  costume = new Costume(CROSS_RECT_ROPE);
   Vec4 fill_dead = Vec4(0, 0, 30, 100) ;
   Vec4 stroke_dead = Vec4(0, 0, 30, 100) ;
   Vec3 alpha_behavior_dead = Vec3(0, -1, 1) ;
@@ -150,24 +153,52 @@ void random_flora_costume_and_colour() {
   fill_flora.a -= change_alpha ;
   stroke_flora.a -= change_alpha ;
 
-  int costume = VIRUS_3_4_64_ROPE ;
+  Costume costume = new Costume(VIRUS_ROPE);
+  costume.set_num(3);
+  costume.set_node(4);
+  costume.set_mutation(64);
+
   int new_costume = floor(random(8)) ;
   if(new_costume == 0 ) {
-    costume = VIRUS_3_4_32_ROPE ;
+    costume = new Costume(VIRUS_ROPE);
+    costume.set_num(3);
+    costume.set_node(4);
+    costume.set_mutation(32);
   } else if(new_costume == 1 ) {
-    costume = VIRUS_3_4_64_ROPE ;
+    costume = new Costume(VIRUS_ROPE);
+    costume.set_num(3);
+    costume.set_node(4);
+    costume.set_mutation(64);
   } else if(new_costume == 2 ) {
-    costume = VIRUS_3_4_128_ROPE ;
+    costume = new Costume(VIRUS_ROPE);
+    costume.set_num(3);
+    costume.set_node(4);
+    costume.set_mutation(128);
   } else if(new_costume == 3 ) {
-    costume = VIRUS_2_2_16_ROPE ;
+    costume = new Costume(VIRUS_ROPE);
+    costume.set_num(2);
+    costume.set_node(2);
+    costume.set_mutation(16);
   } else if(new_costume == 4 ) {
-    costume = VIRUS_3_8_16_ROPE ;
+    costume = new Costume(VIRUS_ROPE);
+    costume.set_num(3);
+    costume.set_node(8);
+    costume.set_mutation(16);
   } else if(new_costume == 5 ) {
-    costume = VIRUS_2_2_32_ROPE ;
+    costume = new Costume(VIRUS_ROPE);
+    costume.set_num(2);
+    costume.set_node(2);
+    costume.set_mutation(32);
   } else if(new_costume == 6 ) {
-    costume = VIRUS_3_8_64_ROPE ;
+    costume = new Costume(VIRUS_ROPE);
+    costume.set_num(3);
+    costume.set_node(8);
+    costume.set_mutation(64);
   } else if(new_costume == 7 ) {
-    costume = VIRUS_3_8_16_ROPE ;
+    costume = new Costume(VIRUS_ROPE);
+    costume.set_num(3);
+    costume.set_node(8);
+    costume.set_mutation(16);
   }
   float thickness = 1. ;
 

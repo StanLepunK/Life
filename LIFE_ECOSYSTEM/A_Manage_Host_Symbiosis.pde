@@ -168,17 +168,17 @@ void costume_DNA(Helix strand, int target, Vec3 pos, int which_costume, boolean 
   if(info) {
     fill(color_strand_a, alpha_a) ;
     String nuc_a = "" +strand.get_DNA(0).sequence_a.get(target).nac ;
-    costume_rope(pos_a, size, nuc_a) ;
+    costume(pos_a,size,nuc_a) ;
     fill(color_strand_b, alpha_b) ;
     String nuc_b = "" +strand.get_DNA(0).sequence_a.get(target).nac ;
-    costume_rope(pos_b, size, nuc_b) ;
+    costume(pos_b,size,nuc_b) ;
   } else {
     noFill() ;
     stroke(color_strand_a, alpha_a) ;
-    costume_rope(pos_a, size, which_costume) ;
+    costume(pos_a,size,which_costume) ;
     noFill() ;
     stroke(color_strand_b, alpha_b) ;
-    costume_rope(pos_b, size, which_costume) ;
+    costume(pos_b,size,which_costume) ;
   }
 }
 
