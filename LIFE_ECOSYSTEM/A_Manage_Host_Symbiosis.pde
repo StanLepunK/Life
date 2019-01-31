@@ -8,10 +8,10 @@ DECORUM
 
 
 void set_host() {
-  Vec3 size = Vec3(int(height *1.5)) ;
-  Vec3 canvas = Vec3(abs(HORIZON) / 8, height *1.5, abs(HORIZON) / 8) ;
-  Vec3 radius = canvas.copy() ;
-  Vec3 pos = Vec3(width / 2, height/2, -radius.x) ;
+  vec3 size = vec3(int(height *1.5)) ;
+  vec3 canvas = vec3(abs(HORIZON) / 8, height *1.5, abs(HORIZON) / 8) ;
+  vec3 radius = canvas.copy() ;
+  vec3 pos = vec3(width / 2, height/2, -radius.x) ;
   int num = 100 ;
   create_host(num, pos, size, canvas, radius) ; 
 }
@@ -31,7 +31,7 @@ HOST 0.1.1
 /**
 CREATE
 */
-void create_host(int num, Vec3 pos, Vec3 size, Vec3 canvas, Vec3 radius) {
+void create_host(int num, vec3 pos, vec3 size, vec3 canvas, vec3 radius) {
   // host
   pos_host(pos) ;
   size_host(size) ;
@@ -80,14 +80,14 @@ void sync_symbiosis() {
 DNA
 */
 // DNA host
-Vec3 color_strand_a = Vec3(30, 10, 80) ;
-Vec3 color_strand_b = Vec3(0, 10, 20) ;
+vec3 color_strand_a = vec3(30, 10, 80) ;
+vec3 color_strand_b = vec3(0, 10, 20) ;
 
 Helix strand_DNA ;
 
 
 
-void create_dna(int num_helix, int num, Vec3 pos, Vec3 size, int height_dna, int radius_dna) {
+void create_dna(int num_helix, int num, vec3 pos, vec3 size, int height_dna, int radius_dna) {
   int revolution = 60 ;
   int nucleotide = num ;
 
@@ -110,14 +110,14 @@ void show_host(float speed_rotation_host, int direction_host, int which_costume,
   
   int height_dna = (int)get_canvas_host().y ;
   int radius_dna = (int)get_radius_host().x ;
-  Vec3 pos = get_pos_host().copy() ;
+  vec3 pos = get_pos_host().copy() ;
   show_dna(pos, height_dna, radius_dna, speed_rotation_host, direction_host, which_costume, motion_bool_host, info) ;
 }
 
 
 
 float rotation_dna = 0 ;
-void show_dna(Vec3 pos, int height_dna, int radius_dna, float speed_host, int direction_host, int which_costume, boolean rotation_bool_dna, boolean info) {
+void show_dna(vec3 pos, int height_dna, int radius_dna, float speed_host, int direction_host, int which_costume, boolean rotation_bool_dna, boolean info) {
   // show DNA
   if(height_dna > 0 ) {
     if(rotation_bool_dna) {
@@ -136,15 +136,15 @@ void show_dna(Vec3 pos, int height_dna, int radius_dna, float speed_host, int di
 
 
 
-void costume_DNA(Helix strand, int target, Vec3 pos, int which_costume, boolean info) {
+void costume_DNA(Helix strand, int target, vec3 pos, int which_costume, boolean info) {
   /**
-  printTempo(60, "costume_DNA(Helix_DNA strand, int target, Vec3 pos, int which_costume, boolean info)") ;
+  printTempo(60, "costume_DNA(Helix_DNA strand, int target, vec3 pos, int which_costume, boolean info)") ;
   if(frameCount%60== 0 ) {
     printArray(strand.get_nuc_pos()) ;
   }
   */
-  Vec3 pos_a = strand.get_nuc_pos(0)[target] ;
-  Vec3 pos_b = strand.get_nuc_pos(1)[target] ;
+  vec3 pos_a = strand.get_nuc_pos(0)[target] ;
+  vec3 pos_b = strand.get_nuc_pos(1)[target] ;
 
   int size = 36 ;
   int size_link = 1 ;

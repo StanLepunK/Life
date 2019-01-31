@@ -49,7 +49,7 @@ Info_dict bacterium_carac = new Info_dict() ;
 Info_dict dead_carac = new Info_dict() ;
 
 
-  Vec4 color_flora = Vec4(0, 100, 80, 100) ;
+  vec4 color_flora = vec4(0, 100, 80, 100) ;
 
 
 // main method
@@ -67,51 +67,51 @@ void ecosystem_setting(Biomass b) {
   costume.set_mutation(64);
   float thickness = 1. ;
 
-  Vec4 fill_flora = Vec4(color_flora) ;
-  Vec4 stroke_flora = Vec4(color_flora) ;
+  vec4 fill_flora = vec4(color_flora) ;
+  vec4 stroke_flora = vec4(color_flora) ;
 
-  Vec3 alpha_behavior_flora = Vec3(0, -1, 1) ; // it's like 100% all the time
+  vec3 alpha_behavior_flora = vec3(0, -1, 1) ; // it's like 100% all the time
   if(get_pos_host()  != null) {
-    alpha_behavior_flora = Vec3(get_pos_host().z, -.4, .8) ;
+    alpha_behavior_flora = vec3(get_pos_host().z, -.4, .8) ;
   }
   
   style_flora = new Info_Object("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
 
   // HERBIVORE
   costume = new Costume(POINT_ROPE);
-  Vec4 color_herbivore = Vec4(110, 100, 70, 100) ;
-  Vec4 fill_herbivore = Vec4(color_herbivore) ;
-  Vec4 stroke_herbivore = Vec4(color_herbivore) ;
-  Vec3 alpha_behavior_herbivore = Vec3(0, -1, 1) ;
+  vec4 color_herbivore = vec4(110, 100, 70, 100) ;
+  vec4 fill_herbivore = vec4(color_herbivore) ;
+  vec4 stroke_herbivore = vec4(color_herbivore) ;
+  vec3 alpha_behavior_herbivore = vec3(0, -1, 1) ;
   style_herbivore = new Info_Object("Herbivore Aspect", costume, fill_herbivore, stroke_herbivore, thickness, alpha_behavior_herbivore) ;
   
   // OMNIVORE
   costume = new Costume(PENTAGON_ROPE);
-  Vec4 fill_omnivore = Vec4(150, 100, 80, 100) ;
-  Vec4 stroke_omnivore = Vec4(150, 100, 80, 100) ;
-  Vec3 alpha_behavior_omnivore = Vec3(0, -1, 1) ;
+  vec4 fill_omnivore = vec4(150, 100, 80, 100) ;
+  vec4 stroke_omnivore = vec4(150, 100, 80, 100) ;
+  vec3 alpha_behavior_omnivore = vec3(0, -1, 1) ;
   style_omnivore = new Info_Object("Omnivore Aspect", costume, fill_omnivore, stroke_omnivore, thickness, alpha_behavior_omnivore) ;
 
   // CARNIVORE
   costume = new Costume(HEPTAGON_ROPE);
-  Vec4 fill_carnivore = Vec4(0, 100, 100, 100) ;
-  Vec4 stroke_carnivore = Vec4(0, 100, 100, 100) ;
-  Vec3 alpha_behavior_carnivore = Vec3(0, -1, 1) ;
+  vec4 fill_carnivore = vec4(0, 100, 100, 100) ;
+  vec4 stroke_carnivore = vec4(0, 100, 100, 100) ;
+  vec3 alpha_behavior_carnivore = vec3(0, -1, 1) ;
   style_carnivore = new Info_Object("Carnivore Aspect", costume, fill_carnivore, stroke_carnivore, thickness, alpha_behavior_carnivore) ;
   
   // BACTERIUM
   costume = new Costume(ELLIPSE_ROPE);
-  Vec4 fill_bacterium = Vec4(30, 0, 30, 100) ;
-  Vec4 stroke_bacterium = Vec4(30, 0, 30, 100) ;
-  Vec3 alpha_behavior_bacterium = Vec3(0, -1, 1) ;
+  vec4 fill_bacterium = vec4(30, 0, 30, 100) ;
+  vec4 stroke_bacterium = vec4(30, 0, 30, 100) ;
+  vec3 alpha_behavior_bacterium = vec3(0, -1, 1) ;
   style_bacterium = new Info_Object("Bacterium Aspect", costume, fill_bacterium, stroke_bacterium, thickness, alpha_behavior_bacterium) ;
   
 
   // DEAD
   costume = new Costume(CROSS_RECT_ROPE);
-  Vec4 fill_dead = Vec4(0, 0, 30, 100) ;
-  Vec4 stroke_dead = Vec4(0, 0, 30, 100) ;
-  Vec3 alpha_behavior_dead = Vec3(0, -1, 1) ;
+  vec4 fill_dead = vec4(0, 0, 30, 100) ;
+  vec4 stroke_dead = vec4(0, 0, 30, 100) ;
+  vec3 alpha_behavior_dead = vec3(0, -1, 1) ;
   style_dead = new Info_Object("Dead Aspect", costume, fill_dead, stroke_dead, thickness, alpha_behavior_dead) ;
   
 
@@ -144,8 +144,8 @@ Manage AGENT STYLE / ASPECT / COSTUME
 
 boolean new_costume_virus = false ;
 void random_flora_costume_and_colour() {
-  Vec4 fill_flora = Vec4(color_flora) ;
-  Vec4 stroke_flora = Vec4(color_flora) ;
+  vec4 fill_flora = vec4(color_flora) ;
+  vec4 stroke_flora = vec4(color_flora) ;
   float change_hue = random(50) ;
   float change_alpha = random(100) ;
   fill_flora.x += change_hue ;
@@ -202,7 +202,7 @@ void random_flora_costume_and_colour() {
   }
   float thickness = 1. ;
 
-  Vec3 alpha_behavior_flora = Vec3(get_pos_host().z, -.4, .8) ;
+  vec3 alpha_behavior_flora = vec3(get_pos_host().z, -.4, .8) ;
   style_flora = new Info_Object("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
 }
 
@@ -281,14 +281,14 @@ void clear_agent() {
 
 void set_caracteristic_agent() {
   flora_carac.add("name", "Salad") ;
-  flora_carac.add("size", Vec3(50)) ;
+  flora_carac.add("size", vec3(50)) ;
   flora_carac.add("life_expectancy", 1000000 *60) ;
   flora_carac.add("nutrient_quality", 15) ;
   flora_carac.add("speed_growth", 2) ; // size point per cycle
   flora_carac.add("need", .3) ;
 
   herbivore_carac.add("name", "Sheep") ;
-  herbivore_carac.add("size", Vec3(20)) ;
+  herbivore_carac.add("size", vec3(20)) ;
   herbivore_carac.add("stamina", 100) ;
   herbivore_carac.add("life_expectancy", 1000 *60) ;
   herbivore_carac.add("velocity", 6) ;
@@ -297,11 +297,11 @@ void set_caracteristic_agent() {
   herbivore_carac.add("gourmet", 3.5) ;
   herbivore_carac.add("starving", 4) ;
   herbivore_carac.add("digestion", 2.5) ;
-  herbivore_carac.add("sex_appeal", Vec2(40, 5)) ;
+  herbivore_carac.add("sex_appeal", vec2(40, 5)) ;
   herbivore_carac.add("multiple_pregnancy", 50.) ;
 
   omnivore_carac.add("name", "Human") ;
-  omnivore_carac.add("size", Vec3(25)) ; // in pixel
+  omnivore_carac.add("size", vec3(25)) ; // in pixel
   omnivore_carac.add("stamina", 200) ; // point of life
   omnivore_carac.add("life_expectancy", 800 *60) ; // frame of live before die
   omnivore_carac.add("velocity", 8) ; // in pixel
@@ -311,11 +311,11 @@ void set_caracteristic_agent() {
   omnivore_carac.add("attack", 5) ; // attack point
   omnivore_carac.add("starving", 3) ; 
   omnivore_carac.add("digestion", 6.5) ; // calorie multiplicator, hight is good.
-  omnivore_carac.add("sex_appeal", Vec2(45, 4)) ; // multe the size to give the range in pixel
+  omnivore_carac.add("sex_appeal", vec2(45, 4)) ; // multe the size to give the range in pixel
   omnivore_carac.add("multiple_pregnancy", 10.5) ; // chance to have twin or better in pourcent
 
   carnivore_carac.add("name", "Alien") ;
-  carnivore_carac.add("size", Vec3(40)) ;
+  carnivore_carac.add("size", vec3(40)) ;
   carnivore_carac.add("stamina", 400) ;
   carnivore_carac.add("life_expectancy", 1200 *60) ;
   carnivore_carac.add("velocity", 10) ;
@@ -325,11 +325,11 @@ void set_caracteristic_agent() {
   carnivore_carac.add("attack", 10) ;
   carnivore_carac.add("starving", 4) ;
   carnivore_carac.add("digestion", 4.5) ;
-  carnivore_carac.add("sex_appeal", Vec2(30, 10)) ;
+  carnivore_carac.add("sex_appeal", vec2(30, 10)) ;
   carnivore_carac.add("multiple_pregnancy", 5.5) ;
 
   bacterium_carac.add("name", "Gnak Gnak") ;
-  bacterium_carac.add("size", Vec3(2)) ;
+  bacterium_carac.add("size", vec3(2)) ;
   bacterium_carac.add("stamina", 200) ;
   bacterium_carac.add("life_expectancy", 800 *60) ;
   bacterium_carac.add("velocity", 5) ;
@@ -339,7 +339,7 @@ void set_caracteristic_agent() {
   bacterium_carac.add("digestion", 12.5) ;
 
   dead_carac.add("name", "UNDEAD") ;
-  dead_carac.add("size",  Vec3(25)) ;
+  dead_carac.add("size",  vec3(25)) ;
   dead_carac.add("nutrient_quality", 40) ;
 }
 
@@ -383,14 +383,14 @@ ENVIRONMENT 0.0.3
 /**
 * Create enviromnent where the ecosystem will be live
 */
-void build_environment(Vec2 pos, Vec2 size) {
-  Vec3 pos_3D = Vec3(pos.x, pos.y,0) ;
-  Vec3 size_3D = Vec3(size.x, size.y,0) ;
+void build_environment(vec2 pos, vec2 size) {
+  vec3 pos_3D = vec3(pos.x, pos.y,0) ;
+  vec3 size_3D = vec3(size.x, size.y,0) ;
   build_environment(pos_3D, size_3D) ;
   // write here to be sure the Environment have a good info
 }
 
-void build_environment(Vec3 pos, Vec3 size) {
+void build_environment(vec3 pos, vec3 size) {
   build_box(pos, size) ;
 
   float front = box_front() ;
@@ -444,13 +444,13 @@ void set_environment() {
   biomass = new Biomass() ;
   
   if (ENVIRONMENT == 3) {
-    Vec3 pos_box = Vec3(width/2,height/2,0) ;
+    vec3 pos_box = vec3(width/2,height/2,0) ;
     float scale_box = .5 ;
-    Vec3 size_box = Vec3(width *scale_box,height *scale_box,width *scale_box) ;
+    vec3 size_box = vec3(width *scale_box,height *scale_box,width *scale_box) ;
     build_environment(pos_box, size_box) ;
   } else {
-    Vec2 pos_box = Vec2(width/2,height/2) ;
-    Vec2 size_box = Vec2(width,height) ;
+    vec2 pos_box = vec2(width/2,height/2) ;
+    vec2 size_box = vec2(width,height) ;
     build_environment(pos_box, size_box) ;
   }
 }
@@ -460,10 +460,10 @@ void set_environment() {
 /**
 BIOTOPE 
 */
-Vec4 biotope_colour(Biomass b) {
+vec4 biotope_colour(Biomass b) {
   float normal_humus_level = 1 - b.humus / b.humus_max ;
   float var_colour_ground = 90 *normal_humus_level ;
-  return Vec4(40,90, 5 +var_colour_ground,100) ;
+  return vec4(40,90, 5 +var_colour_ground,100) ;
 }
 
 
