@@ -1,3 +1,11 @@
+# LIFE 
+Life is project about DNA and ECOSYTEM
+
+
+[download](https://github.com/StanLepunK/Rope/blob/master/build_rope/Rope.zip)
+
+
+
 ECO-SYSTEME 0.0.6
 --
 GUIDE TO USE
