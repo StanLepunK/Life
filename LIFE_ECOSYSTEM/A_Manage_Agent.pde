@@ -1,5 +1,5 @@
 /**
-MANAGE ECO-SYSTEM BUILT 0.2.0
+MANAGE ECO-SYSTEM BUILT 0.2.1
 */
 
 /**
@@ -150,8 +150,8 @@ void random_flora_costume_and_colour() {
   float change_alpha = random(100) ;
   fill_flora.x += change_hue ;
   stroke_flora.x += change_hue ;
-  fill_flora.a -= change_alpha ;
-  stroke_flora.a -= change_alpha ;
+  fill_flora.w -= change_alpha ;
+  stroke_flora.w -= change_alpha ;
 
   Costume costume = new Costume(VIRUS_ROPE);
   costume.set_num(3);

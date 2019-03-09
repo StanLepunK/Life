@@ -1,12 +1,11 @@
 /**
 Rope UTILS 
-v 1.56.1
+v 1.56.2
 * Copyleft (c) 2014-2019
-* Stan le Punk > http://stanlepunk.xyz/
 Rope – Romanesco Processing Environment – 
-Processing 3.4
-* @author Stan le Punk
-* @see https://github.com/StanLepunK/Rope
+Processing 3.5.3
+* @author @stanlepunk
+* @see https://github.com/StanLepunK/Rope_framework
 */
 
 
@@ -1509,8 +1508,7 @@ int width_String(String font_name, String target, int size) {
   Font font = new Font(font_name, Font.BOLD, size) ;
   BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
   FontMetrics fm = img.getGraphics().getFontMetrics(font);
-  if(target ==null) {
-    printErr("method width_String(): String target =",target);
+  if(target == null) {
     target = "";
   }
   return fm.stringWidth(target);
