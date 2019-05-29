@@ -1,8 +1,8 @@
 /**
 * SHADER FX
-* @see http://stanlepunk.xyz
+* @see @stanlepunk
 * @see https://github.com/StanLepunK/Shader
-* v 0.7.4
+* v 0.9.2
 * 2019-2019
 *
 */
@@ -17,7 +17,10 @@ int FX_BLUR_CIRCULAR = 202;
 int FX_COLOUR_CHANGE_A = 300;
 int FX_COLOUR_CHANGE_B = 301;
 
+int FX_DATAMOSH = 400;
 int FX_DITHER_BAYER_8 = 408;
+
+int FX_FLIP = 600;
 
 int FX_GRAIN = 700;
 int FX_GRAIN_SCATTER = 701;
@@ -30,7 +33,8 @@ int FX_IMAGE = 900;
 
 int FX_LEVEL = 12_00;
 
-int FX_MIX = 13_00;
+int FX_MASK = 13_00;
+int FX_MIX = 13_01;
 
 int FX_PIXEL = 16_00;
 
@@ -157,8 +161,12 @@ void select_fx_post(PImage main, PImage layer_a, PImage layer_b, FX... fx) {
 				fx_colour_change_a(main,fx[i]);
 			} else if(fx[i].get_type() == FX_COLOUR_CHANGE_B) {
 				fx_colour_change_b(main,fx[i]);
+			} else if(fx[i].get_type() == FX_DATAMOSH) {
+				fx_datamosh(main,fx[i]);
 			} else if(fx[i].get_type() == FX_DITHER_BAYER_8) {
 				fx_dither_bayer_8(main,fx[i]);
+			} else if(fx[i].get_type() == FX_FLIP) {
+				fx_flip(main,fx[i]);
 			} else if(fx[i].get_type() == FX_GRAIN) {
 				 fx_grain(main,fx[i]);
 			} else if(fx[i].get_type() == FX_GRAIN_SCATTER) {
@@ -173,6 +181,8 @@ void select_fx_post(PImage main, PImage layer_a, PImage layer_b, FX... fx) {
 				fx_halftone_multi(main,fx[i]); 
 			} else if(fx[i].get_type() == FX_IMAGE) {
 				fx_image(main,fx[i]);
+			} else if(fx[i].get_type() == FX_MASK) {
+				fx_mask(main,layer_a,fx[i]); 
 			} else if(fx[i].get_type() == FX_PIXEL) {
 				fx_pixel(main,fx[i]);
 			} else if(fx[i].get_type() == FX_REAC_DIFF) {
@@ -243,8 +253,10 @@ void select_fx_background(FX fx) {
 
 /**
 prepare your setting
-v 0.1.0
+v 0.1.1
 */
+
+// single
 void fx_set_mode(ArrayList<FX> fx_list, String name, int mode) {
 	fx_set(fx_list,0,name,mode);
 }
@@ -257,59 +269,75 @@ void fx_set_quality(ArrayList<FX> fx_list, String name, float quality) {
 	fx_set(fx_list,2,name,quality);
 }
 
+void fx_set_time(ArrayList<FX> fx_list, String name, float time) {
+	fx_set(fx_list,3,name,time);
+}
+
+
+void fx_set_on_g(ArrayList<FX> fx_list, String name, boolean on_g) {
+	fx_set(fx_list,4,name,on_g);
+}
+
+void fx_set_pg_filter(ArrayList<FX> fx_list, String name, boolean filter_is) {
+	fx_set(fx_list,5,name,filter_is);
+}
+
+// double
 void fx_set_scale(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_2(10,fx_list,name,arg);
+	set_fx_float_2(fx_list,10,name,arg);
 }
 
 void fx_set_resolution(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_2(11,fx_list,name,arg);
+	set_fx_float_2(fx_list,11,name,arg);
 }
 
+// triple
 void fx_set_strength(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_3(20,fx_list,name,arg);
+	set_fx_float_3(fx_list,20,name,arg);
 }
 
 void fx_set_angle(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_3(21,fx_list,name,arg);
+	set_fx_float_3(fx_list,21,name,arg);
 }
 
 void fx_set_threshold(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_3(22,fx_list,name,arg);
+	set_fx_float_3(fx_list,22,name,arg);
 }
 
 void fx_set_pos(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_3(23,fx_list,name,arg);
+	set_fx_float_3(fx_list,23,name,arg);
 }
 
 void fx_set_size(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_3(24,fx_list,name,arg);
+	set_fx_float_3(fx_list,24,name,arg);
 }
 
 void fx_set_offset(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_3(25,fx_list,name,arg);
+	set_fx_float_3(fx_list,25,name,arg);
 }
 
 void fx_set_speed(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_3(26,fx_list,name,arg);
+	set_fx_float_3(fx_list,26,name,arg);
 }
 
+// quadruple
 void fx_set_level_source(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_4(30,fx_list,name,arg);
+	set_fx_float_4(fx_list,30,name,arg);
 }
 
 void fx_set_level_layer(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_4(31,fx_list,name,arg);
+	set_fx_float_4(fx_list,31,name,arg);
 }
 
 void fx_set_colour(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_4(32,fx_list,name,arg);
+	set_fx_float_4(fx_list,32,name,arg);
 }
 
 void fx_set_cardinal(ArrayList<FX> fx_list, String name, float... arg) {
-	set_fx_float_4(33,fx_list,name,arg);
+	set_fx_float_4(fx_list,33,name,arg);
 }
 
-
+// single
 void fx_set_hue(ArrayList<FX> fx_list, String name, float hue) {
 	fx_set(fx_list,200,name,hue);
 }
@@ -340,27 +368,29 @@ void fx_set_alpha(ArrayList<FX> fx_list, String name, float alpha) {
 
 
 // modulair param
+// triple
 void fx_set_matrix(ArrayList<FX> fx_list, String name, int target, float... arg) {
 	int which = 40+target;
-	set_fx_float_3(which,fx_list,name,arg);
+	set_fx_float_3(fx_list,which,name,arg);
 }
 
-
+// double
 void fx_set_pair(ArrayList<FX> fx_list, String name, int target, float... arg) {
 	int which = 50+target;
-	set_fx_float_2(which,fx_list,name,arg);
+	set_fx_float_2(fx_list,which,name,arg);
 }
 
-void fx_set_event(ArrayList<FX> fx_list, String name, int target, boolean arg) {
+// single boolean
+void fx_set_event(ArrayList<FX> fx_list, String name, int target, boolean... arg) {
 	int which = 100+target;
-	fx_set(fx_list,which,name,arg);
+	set_fx_boolean_4(fx_list,which,name,arg);
 }
 
 
 /**
 * main setting methode
 */
-void set_fx_float_2(int which, ArrayList<FX> fx_list, String name, float... arg) {
+void set_fx_float_2(ArrayList<FX> fx_list, int which, String name, float... arg) {
 	if(arg.length == 1) {
 		fx_set(fx_list,which,name,arg[0]);
 	} else if(arg.length == 2) {
@@ -370,7 +400,7 @@ void set_fx_float_2(int which, ArrayList<FX> fx_list, String name, float... arg)
 	}
 }
 
-void set_fx_float_3(int which, ArrayList<FX> fx_list, String name, float... arg) {
+void set_fx_float_3(ArrayList<FX> fx_list, int which, String name, float... arg) {
 	if(arg.length == 1) {
 		fx_set(fx_list,which,name,arg[0]);
 	} else if(arg.length == 2) {
@@ -382,7 +412,23 @@ void set_fx_float_3(int which, ArrayList<FX> fx_list, String name, float... arg)
 	}
 }
 
-void set_fx_float_4(int which, ArrayList<FX> fx_list, String name, float... arg) {
+void set_fx_float_4(ArrayList<FX> fx_list, int which, String name, float... arg) {
+	if(arg.length == 1) {
+		fx_set(fx_list,which,name,arg[0]);
+	} else if(arg.length == 2) {
+		fx_set(fx_list,which,name,arg[0],arg[1]);
+	} else if(arg.length == 3) {
+		fx_set(fx_list,which,name,arg[0],arg[1],arg[2]);
+	} else if(arg.length == 4) {
+		fx_set(fx_list,which,name,arg[0],arg[1],arg[2],arg[3]);
+	} else if(arg.length > 4) {
+		fx_set(fx_list,which,name,arg[0],arg[1],arg[2],arg[3]);
+	}
+}
+
+
+
+void set_fx_boolean_4(ArrayList<FX> fx_list, int which, String name, boolean... arg) {
 	if(arg.length == 1) {
 		fx_set(fx_list,which,name,arg[0]);
 	} else if(arg.length == 2) {
@@ -445,7 +491,7 @@ void fx_set(ArrayList<FX> fx_list, int which_setting, String name, Object... arg
 
 /**
 * path shader
-* v 0.3.1
+* v 0.3.2
 */
 // post fx path
 String fx_post_rope_path = null;
@@ -457,12 +503,13 @@ boolean fx_post_path_exist() {
 
 String get_fx_post_path() {
 	if(fx_post_rope_path == null) {
-		fx_post_rope_path = "shader/fx_post/";
+		fx_post_rope_path = "data/shader/fx_post/";
 		fx_post_rope_path_exists = true;
 	} else {
-		File f = new File(fx_post_rope_path);
-		if(!f.exists()) {
-			printErrTempo(60,"get_fx_post_path()",fx_post_rope_path,"no folder found");
+		File f = new File(sketchPath()+"/"+fx_post_rope_path);
+		if(!f.isDirectory()) {
+			fx_post_rope_path_exists = false;
+			printErrTempo(60,"method get_fx_post_path()",fx_post_rope_path,"no folder found");
 		} else {
 			fx_post_rope_path_exists = true;
 		}
@@ -523,21 +570,48 @@ void set_fx_bg_path(String path) {
 
 /**
 * send information to shader.glsl to flip the source in case this one is a PGraphics or PImage
-* v 0.0.1
+* v 0.2.1
 */
+void fx_shader_flip(PShader shader, boolean on_g, boolean filter_is, PImage source, PImage layer) {
+	if(on_g) {
+		set_shader_flip(shader,source);
+	}
+  // reverse for the case filter is active
+	if(!on_g && filter_is) {
+		shader.set("flip_source",1,0);
+	}
+
+  // case there is layer to manage
+	if(layer != null) {
+		if(graphics_is(layer).equals("PGraphics")) {
+			shader.set("flip_layer",0,0);
+		} else {
+			if(on_g) {
+				shader.set("flip_layer",1,0);
+			} 
+			if(!on_g && filter_is) {
+				shader.set("flip_layer",1,0);
+			}
+		}
+	} 
+}
+
+
+
+
 void set_shader_flip(PShader ps, PImage... img) {
 	int num = img.length;
-	ps.set("flip_source",true,false);
+	ps.set("flip_source",1,0);
 	
 	if(graphics_is(img[0]).equals("PGraphics") && !reverse_g_source_is()) {
-		ps.set("flip_source",false,false);
+		ps.set("flip_source",0,0);
 		reverse_g_source(true);
 	}
 
-	if(num == 2) {
-		ps.set("flip_layer",true,false);
+	if(num == 2 && img[1] != null) {
+		ps.set("flip_layer",1,0);
 		if(graphics_is(img[1]).equals("PGraphics") && !reverse_g_layer_is()) {
-			ps.set("flip_layer",false,false);
+			ps.set("flip_layer",0,0);
 			reverse_g_layer(true);
 		}
 	}
@@ -605,26 +679,41 @@ void reset_reverse_g(boolean state){
 
 
 /**
-* render shader
+* RENDER FX
 * this method test if the shader must be display on the main Processing render or return a PGraphics
-* v 0.0.5
+* v 0.1.0
 */
-void render_shader(PShader ps, PGraphics pg, PImage src, boolean on_g) {
-	if(pg != null && pg.width > 0 && pg.height > 0 && !on_g) {
+void render_shader(PShader shader, PGraphics pg, PImage src, boolean on_g, boolean filter_is) {
+	if(on_g) {
+		render_filter_g(shader);
+	} else {
+		if(filter_is) {
+			render_filter_pgraphics(shader,pg);
+		} else {
+			render_shader_pgraphics(shader,pg,src);
+		}
+	}
+}
+
+
+void render_shader_pgraphics(PShader ps, PGraphics pg, PImage src) {
+	if(pg != null) {
   	pg.beginDraw();
   	pg.shader(ps);
   	pg.image(src,0,0,src.width,src.height);
   	pg.resetShader();
   	pg.endDraw();
-  } else {
-  	filter(ps);
   }
 }
 
 
+void render_filter_pgraphics(PShader ps, PGraphics pg) {
+	if(pg != null) {
+  	pg.filter(ps);
+  } 
+}
 
 
-
-
-
-
+void render_filter_g(PShader ps) {
+	filter(ps);
+}
