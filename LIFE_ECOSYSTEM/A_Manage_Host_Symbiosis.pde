@@ -18,7 +18,7 @@ void set_host() {
 
 
 void show_host(boolean info_agent) {
-  show_host(speed_host, direction_host, ELLIPSE_ROPE, motion_bool_host, info_agent) ;
+  show_host(speed_host, direction_host, ELLIPSE, motion_bool_host, info_agent) ;
 }
 
 

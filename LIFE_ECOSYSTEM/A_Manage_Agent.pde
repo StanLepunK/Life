@@ -61,7 +61,7 @@ void ecosystem_setting(Biomass b) {
 
   // FLORA
   // int costume = ELLIPSE_ROPE ;
-  Costume costume = new Costume(this,VIRUS_ROPE);
+  Costume costume = new Costume(this,VIRUS);
   costume.set_num(2);
   costume.set_node(3);
   costume.set_mutation(64);
@@ -78,7 +78,7 @@ void ecosystem_setting(Biomass b) {
   style_flora = new Info_Object("Flora Aspect", costume, fill_flora, stroke_flora, thickness, alpha_behavior_flora) ;  
 
   // HERBIVORE
-  costume = new Costume(this,POINT_ROPE);
+  costume = new Costume(this,POINT);
   vec4 color_herbivore = vec4(110, 100, 70, 100) ;
   vec4 fill_herbivore = vec4(color_herbivore) ;
   vec4 stroke_herbivore = vec4(color_herbivore) ;
@@ -86,21 +86,21 @@ void ecosystem_setting(Biomass b) {
   style_herbivore = new Info_Object("Herbivore Aspect", costume, fill_herbivore, stroke_herbivore, thickness, alpha_behavior_herbivore) ;
   
   // OMNIVORE
-  costume = new Costume(this,PENTAGON_ROPE);
+  costume = new Costume(this,PENTAGON);
   vec4 fill_omnivore = vec4(150, 100, 80, 100) ;
   vec4 stroke_omnivore = vec4(150, 100, 80, 100) ;
   vec3 alpha_behavior_omnivore = vec3(0, -1, 1) ;
   style_omnivore = new Info_Object("Omnivore Aspect", costume, fill_omnivore, stroke_omnivore, thickness, alpha_behavior_omnivore) ;
 
   // CARNIVORE
-  costume = new Costume(this,HEPTAGON_ROPE);
+  costume = new Costume(this,HEPTAGON);
   vec4 fill_carnivore = vec4(0, 100, 100, 100) ;
   vec4 stroke_carnivore = vec4(0, 100, 100, 100) ;
   vec3 alpha_behavior_carnivore = vec3(0, -1, 1) ;
   style_carnivore = new Info_Object("Carnivore Aspect", costume, fill_carnivore, stroke_carnivore, thickness, alpha_behavior_carnivore) ;
   
   // BACTERIUM
-  costume = new Costume(this,ELLIPSE_ROPE);
+  costume = new Costume(this,ELLIPSE);
   vec4 fill_bacterium = vec4(30, 0, 30, 100) ;
   vec4 stroke_bacterium = vec4(30, 0, 30, 100) ;
   vec3 alpha_behavior_bacterium = vec3(0, -1, 1) ;
@@ -108,7 +108,7 @@ void ecosystem_setting(Biomass b) {
   
 
   // DEAD
-  costume = new Costume(this,CROSS_RECT_ROPE);
+  costume = new Costume(this,CROSS_RECT);
   vec4 fill_dead = vec4(0, 0, 30, 100) ;
   vec4 stroke_dead = vec4(0, 0, 30, 100) ;
   vec3 alpha_behavior_dead = vec3(0, -1, 1) ;
@@ -153,49 +153,49 @@ void random_flora_costume_and_colour() {
   fill_flora.w -= change_alpha ;
   stroke_flora.w -= change_alpha ;
 
-  Costume costume = new Costume(this,VIRUS_ROPE);
+  Costume costume = new Costume(this,VIRUS);
   costume.set_num(3);
   costume.set_node(4);
   costume.set_mutation(64);
 
   int new_costume = floor(random(8)) ;
   if(new_costume == 0 ) {
-    costume = new Costume(this,VIRUS_ROPE);
+    costume = new Costume(this,VIRUS);
     costume.set_num(3);
     costume.set_node(4);
     costume.set_mutation(32);
   } else if(new_costume == 1 ) {
-    costume = new Costume(this,VIRUS_ROPE);
+    costume = new Costume(this,VIRUS);
     costume.set_num(3);
     costume.set_node(4);
     costume.set_mutation(64);
   } else if(new_costume == 2 ) {
-    costume = new Costume(this,VIRUS_ROPE);
+    costume = new Costume(this,VIRUS);
     costume.set_num(3);
     costume.set_node(4);
     costume.set_mutation(128);
   } else if(new_costume == 3 ) {
-    costume = new Costume(this,VIRUS_ROPE);
+    costume = new Costume(this,VIRUS);
     costume.set_num(2);
     costume.set_node(2);
     costume.set_mutation(16);
   } else if(new_costume == 4 ) {
-    costume = new Costume(this,VIRUS_ROPE);
+    costume = new Costume(this,VIRUS);
     costume.set_num(3);
     costume.set_node(8);
     costume.set_mutation(16);
   } else if(new_costume == 5 ) {
-    costume = new Costume(this,VIRUS_ROPE);
+    costume = new Costume(this,VIRUS);
     costume.set_num(2);
     costume.set_node(2);
     costume.set_mutation(32);
   } else if(new_costume == 6 ) {
-    costume = new Costume(this,VIRUS_ROPE);
+    costume = new Costume(this,VIRUS);
     costume.set_num(3);
     costume.set_node(8);
     costume.set_mutation(64);
   } else if(new_costume == 7 ) {
-    costume = new Costume(this,VIRUS_ROPE);
+    costume = new Costume(this,VIRUS);
     costume.set_num(3);
     costume.set_node(8);
     costume.set_mutation(16);
